@@ -1,0 +1,84 @@
+/* 
+  Localizable.strings
+  LifeCompanion
+
+  Created by gayeugur on 26.10.2025.
+  
+*/
+
+"todo.title" = "To‑Do";
+"empty.title" = "No tasks yet";
+"empty.subtitle" = "Tap + to add a new task";
+
+"add.title" = "New Task";
+"add.cancel" = "Cancel";
+"add.save" = "Save";
+"add.ok" = "OK";
+"add.title.placeholder" = "Title (required)";
+"add.subtitle.placeholder" = "Subtitle (optional)";
+"add.priority" = "Priority";
+"add.reminder" = "Add reminder";
+"add.section.details" = "Task Details";
+"add.section.reminder" = "Reminder";
+"add.datetime" = "Date & Time";
+"add.validation.title" = "Title required";
+"add.validation.message" = "Please enter a title for the task.";
+"priority.low" = "Low";
+"priority.medium" = "Medium";
+"priority.high" = "High";
+"filter.time.all" = "All Tasks";
+"filter.time.today" = "Today";
+"filter.time.thisWeek" = "This Week";
+"filter.time.overdue" = "Overdue";
+"filter.status.all" = "All";
+"filter.status.completed" = "Completed";
+"filter.status.incomplete" = "Incomplete";
+"empty.noTasks" = "No tasks yet";
+"empty.addTaskPrompt" = "Tap the + button to get started";
+"app.title" = "Life Companion";
+"menu.todos" = "To-Do List";
+"menu.habits" = "Habits";
+"menu.health" = "Health";
+"menu.meditation" = "Meditation";
+"menu.memoryGame" = "Memory Game";
+"menu.settings" = "Settings";
+"menu.comingSoon" = "Coming Soon";
+
+//Habits
+"addHabit.title" = "New Habit";
+"addHabit.nameLabel" = "Title";
+"addHabit.namePlaceholder" = "Habit name";
+"addHabit.frequencyLabel" = "Frequency";
+"addHabit.daily" = "Daily";
+"addHabit.weekly" = "Weekly";
+"addHabit.montly" = "Monthly";
+"addHabit.targetLabel" = "Target";
+"addHabit.times" = "times";
+"addHabit.reminderLabel" = "Reminder";
+"addHabit.saveButton" = "Save";
+"habits.title" = "Habits";
+"habit.completed" = "Completed ✅";
+"habit.increment" = "Increment";
+"habit.delete" = "Delete";
+"habits.title" = "Habits";
+"habits.empty.title" = "No habits yet";
+"habits.empty.subtitle" = "Tap + to add a habit";
+"history.title" = "History";
+"history.empty" = "No history";
+"habit.status.done" = "Completed";
+"habit.status.active" = "Do";
+"habit.frequency.daily" = "Daily";
+"habit.frequency.weekly" = "Weekly";
+"habit.frequency.monthly" = "Monthly";
+"habit.add.title" = "Add Habit";
+"habit.add.subtitle" = "Build consistency";
+"habit.field.title" = "Title";
+"habit.title.placeholder" = "e.g. Drink water";
+"habit.field.frequency" = "Frequency";
+"habit.field.target" = "Target";
+"habit.target.count" = "Times";
+"habit.field.reminder" = "Reminder";
+"habit.field.color" = "Color";
+"habit.cancel" = "Cancel";
+"habit.save" = "Save";
+"action.delete" = "Delete";

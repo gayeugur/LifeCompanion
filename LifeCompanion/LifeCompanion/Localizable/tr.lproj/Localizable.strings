@@ -1,0 +1,83 @@
+/* 
+  Localizable.strings
+  LifeCompanion
+
+  Created by gayeugur on 26.10.2025.
+  
+*/
+
+"todo.title" = "To‑Do";
+"empty.title" = "No tasks yet";
+"empty.subtitle" = "Tap + to add a new task";
+
+"add.title" = "New Task";
+"add.cancel" = "Cancel";
+"add.save" = "Save";
+"add.ok" = "OK";
+"add.title.placeholder" = "Title (required)";
+"add.subtitle.placeholder" = "Subtitle (optional)";
+"add.priority" = "Priority";
+"add.reminder" = "Add reminder";
+"add.section.details" = "Task Details";
+"add.section.reminder" = "Reminder";
+"add.datetime" = "Date & Time";
+"add.validation.title" = "Title required";
+"add.validation.message" = "Please enter a title for the task.";
+"priority.low" = "Low";
+"priority.medium" = "Medium";
+"priority.high" = "High";
+"filter.time.all" = "Tüm Görevler";
+"filter.time.today" = "Bugün";
+"filter.time.thisWeek" = "Bu Hafta";
+"filter.time.overdue" = "Gecikenler";
+"filter.status.all" = "Tümü";
+"filter.status.completed" = "Tamamlanan";
+"filter.status.incomplete" = "Tamamlanmayan";
+"empty.noTasks" = "Henüz görev eklemediniz";
+"empty.addTaskPrompt" = "Başlamak için + butonuna tıklayın";
+"app.title" = "Life Companion";
+"menu.todos" = "Yapılacaklar";
+"menu.habits" = "Alışkanlıklar";
+"menu.health" = "Sağlık";
+"menu.meditation" = "Meditasyon";
+"menu.memoryGame" = "Hafıza Oyunu";
+"menu.settings" = "Ayarlar";
+"menu.comingSoon" = "Yakında";
+//Habits
+"addHabit.title" = "Yeni Alışkanlık";
+"addHabit.nameLabel" = "Başlık";
+"addHabit.namePlaceholder" = "Alışkanlık adı";
+"addHabit.frequencyLabel" = "Sıklık";
+"addHabit.daily" = "Günlük";
+"addHabit.weekly" = "Haftalık";
+"addHabit.montly" = "Aylık";
+"addHabit.targetLabel" = "Hedef";
+"addHabit.times" = "kere";
+"addHabit.reminderLabel" = "Hatırlatma";
+"addHabit.saveButton" = "Kaydet";
+"habits.title" = "Alışkanlıklar";
+"habit.completed" = "Tamamlandı ✅";
+"habit.increment" = "Artır";
+"habit.delete" = "Sil";
+"habits.title" = "Alışkanlıklar";
+"habits.empty.title" = "Henüz alışkanlık eklemediniz";
+"habits.empty.subtitle" = "Başlamak için + butonuna dokunun";
+"history.title" = "Geçmiş";
+"history.empty" = "Geçmiş bulunamadı";
+"habit.status.done" = "Tamamlandı";
+"habit.status.active" = "Yap";
+"habit.frequency.daily" = "Günlük";
+"habit.frequency.weekly" = "Haftalık";
+"habit.frequency.monthly" = "Aylık";
+"habit.add.title" = "Alışkanlık Ekle";
+"habit.add.subtitle" = "Alışkanlığını oluştur";
+"habit.field.title" = "Başlık";
+"habit.title.placeholder" = "örn. Su iç";
+"habit.field.frequency" = "Sıklık";
+"habit.field.target" = "Hedef";
+"habit.target.count" = "Kere";
+"habit.field.reminder" = "Hatırlatıcı";
+"habit.field.color" = "Renk";
+"habit.cancel" = "İptal";
+"habit.save" = "Kaydet";
+"action.delete" = "Sil";
