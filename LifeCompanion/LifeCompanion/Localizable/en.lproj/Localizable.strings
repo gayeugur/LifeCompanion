@@ -60,6 +60,7 @@
 "habit.completed" = "Completed ✅";
 "habit.increment" = "Increment";
 "habit.delete" = "Delete";
+"habit.edit" = "Edit";
 "habits.title" = "Habits";
 "habits.empty.title" = "No habits yet";
 "habits.empty.subtitle" = "Tap + to add a habit";
@@ -82,3 +83,261 @@
 "habit.cancel" = "Cancel";
 "habit.save" = "Save";
 "action.delete" = "Delete";
+
+//Edit Habit
+"editHabit.title" = "Edit Habit";
+"editHabit.nameLabel" = "Title";
+"editHabit.namePlaceholder" = "Habit name";
+"editHabit.frequencyLabel" = "Frequency";
+"editHabit.targetLabel" = "Target";
+"editHabit.times" = "times";
+"editHabit.reminderLabel" = "Reminder";
+"editHabit.updateButton" = "Update";
+
+//Confirmation Dialog
+"confirm.yes" = "Yes";
+"confirm.cancel" = "Cancel";
+"confirm.delete" = "Delete";
+"confirm.delete.habit.title" = "Delete Habit";
+"confirm.delete.habit.message" = "Are you sure you want to delete this habit? This action cannot be undone.";
+"confirm.delete.todo.title" = "Delete Task";
+"confirm.delete.todo.message" = "Are you sure you want to delete this task? This action cannot be undone.";
+
+//Habit Suggestions
+"habit.suggestions.title" = "Popular Habits";
+"habit.suggestions.subtitle" = "Choose a suggestion to get started";
+"habit.suggestions.button" = "Suggestions";
+"habit.suggestions.navigation.title" = "Habit Suggestions";
+"habit.category.health" = "Health";
+"habit.category.personal" = "Personal Development";
+"habit.category.productivity" = "Productivity";
+"habit.category.social" = "Social";
+
+//Habit Templates
+"habit.template.drink.water" = "Drink Water";
+"habit.template.brush.teeth" = "Brush Teeth";
+"habit.template.exercise" = "Exercise";
+"habit.template.sleep.early" = "Sleep Early";
+"habit.template.vitamins" = "Take Vitamins";
+"habit.template.read.book" = "Read Book (min)";
+"habit.template.meditation" = "Meditation";
+"habit.template.journal" = "Write Journal";
+"habit.template.learn.language" = "Learn Language (min)";
+"habit.template.no.social.media" = "No Social Media";
+"habit.template.plan.day" = "Plan Day";
+"habit.template.clean.room" = "Clean Room";
+"habit.template.call.family" = "Call Family";
+"habit.template.meet.friends" = "Meet Friends";
+
+//Todo Suggestions
+"todo.suggestions.title" = "Task Ideas";
+"todo.suggestions.subtitle" = "Choose a template to get started";
+"todo.suggestions.button" = "Ideas";
+"todo.suggestions.navigation.title" = "Task Templates";
+"todo.category.daily" = "Daily Tasks";
+"todo.category.work" = "Work";
+"todo.category.personal" = "Personal";
+"todo.category.entertainment" = "Entertainment & Hobbies";
+"todo.reminder" = "Reminder";
+
+//Todo Templates
+"todo.template.buy.groceries" = "Buy Groceries";
+"todo.template.buy.groceries.subtitle" = "Weekly shopping";
+"todo.template.pay.bills" = "Pay Bills";
+"todo.template.pay.bills.subtitle" = "Monthly payments";
+"todo.template.clean.house" = "Clean House";
+"todo.template.clean.house.subtitle" = "Weekly cleaning";
+"todo.template.walk.dog" = "Walk the Dog";
+"todo.template.walk.dog.subtitle" = "Daily exercise";
+"todo.template.meeting.prep" = "Prepare for Meeting";
+"todo.template.meeting.prep.subtitle" = "Review agenda";
+"todo.template.email.check" = "Check Emails";
+"todo.template.email.check.subtitle" = "Daily inbox review";
+"todo.template.project.review" = "Review Project";
+"todo.template.project.review.subtitle" = "Progress check";
+"todo.template.call.client" = "Call Client";
+"todo.template.call.client.subtitle" = "Follow up";
+"todo.template.doctor.appointment" = "Doctor Appointment";
+"todo.template.doctor.appointment.subtitle" = "Annual checkup";
+"todo.template.book.vacation" = "Book Vacation";
+"todo.template.book.vacation.subtitle" = "Plan holiday";
+"todo.template.birthday.gift" = "Buy Birthday Gift";
+"todo.template.birthday.gift.subtitle" = "For family/friend";
+"todo.template.car.maintenance" = "Car Maintenance";
+"todo.template.car.maintenance.subtitle" = "Service appointment";
+"todo.template.movie.night" = "Movie Night";
+"todo.template.movie.night.subtitle" = "Plan entertainment";
+"todo.template.gym.session" = "Gym Session";
+"todo.template.gym.session.subtitle" = "Workout routine";
+"todo.template.read.book" = "Read Book";
+"todo.template.read.book.subtitle" = "Continue reading";
+
+//Health Section
+"health.water.title" = "Water Intake";
+"health.water.remaining" = "left";
+"health.water.goal.reached" = "Goal Reached!";
+"health.water.add.glass" = "Add Glass";
+"health.quick.actions" = "Quick Actions";
+"health.action.coffee" = "Coffee";
+"health.action.walk" = "Walk";
+"health.action.sleep" = "Sleep";
+"health.weekly.progress" = "Weekly Progress";
+"health.tips.title" = "Health Tips";
+"health.tip.water" = "Drink water first thing in the morning";
+"health.tip.morning" = "Get sunlight within 30 minutes of waking";
+"health.tip.breathing" = "Take 3 deep breaths every hour";
+
+//Days of Week
+"health.day.mon" = "Mon";
+"health.day.tue" = "Tue";
+"health.day.wed" = "Wed";
+"health.day.thu" = "Thu";
+"health.day.fri" = "Fri";
+"health.day.sat" = "Sat";
+"health.day.sun" = "Sun";
+
+//Motivational Messages
+"health.water.start.title" = "Let's Start!";
+"health.water.start.message" = "Begin your hydration journey";
+"health.water.beginning.title" = "Great Start!";
+"health.water.beginning.message" = "You're on the right track";
+"health.water.quarter.title" = "Keep Going!";
+"health.water.quarter.message" = "You're making good progress";
+"health.water.half.title" = "Halfway There!";
+"health.water.half.message" = "You're doing amazing";
+"health.water.almost.title" = "Almost Done!";
+"health.water.almost.message" = "Just a few more glasses";
+"health.water.completed.title" = "Goal Achieved!";
+"health.water.completed.message" = "Excellent hydration today";
+"health.water.exceeded.title" = "Superstar!";
+"health.water.exceeded.message" = "You've exceeded your goal";
+
+//Quick Actions Status
+"health.completed" = "Done";
+"health.logged" = "Logged";
+"health.steps" = "steps";
+
+//Meditation Section
+"meditation.today" = "Today";
+"meditation.streak" = "Streak";
+"meditation.total" = "Total";
+"meditation.minutes" = "min";
+"meditation.days" = "days";
+"meditation.timer" = "Meditation Timer";
+"meditation.meditating" = "Meditating...";
+"meditation.ready" = "Ready to start";
+"meditation.start" = "Start";
+"meditation.pause" = "Pause";
+"meditation.stop" = "Stop";
+"meditation.breathing" = "Breathing Exercises";
+"meditation.cycle" = "Cycle:";
+"meditation.ambient.sounds" = "Ambient Sounds";
+"meditation.coming.soon" = "Coming Soon";
+"meditation.progress" = "Weekly Progress";
+
+//Breathing Techniques
+"meditation.breathing.478" = "4-7-8 Technique";
+"meditation.breathing.478.desc" = "Inhale 4s, hold 7s, exhale 8s";
+"meditation.breathing.box" = "Box Breathing";
+"meditation.breathing.box.desc" = "Inhale 4s, hold 4s, exhale 4s, hold 4s";
+"meditation.breathing.belly" = "Belly Breathing";
+"meditation.breathing.belly.desc" = "Deep diaphragmatic breathing";
+
+//Breathing Instructions
+"meditation.breathe.in" = "Breathe In";
+"meditation.breathe.hold" = "Hold";
+"meditation.breathe.out" = "Breathe Out";
+
+//Ambient Sounds
+"meditation.sound.none" = "Silent";
+"meditation.sound.rain" = "Rain";
+"meditation.sound.ocean" = "Ocean";
+"meditation.sound.forest" = "Forest";
+"meditation.sound.whitenoise" = "White Noise";
+"meditation.sound.birds" = "Birds";
+"meditation.sound.ambient" = "Ambient Pad";
+"meditation.volume" = "Volume";
+"meditation.now.playing" = "Now Playing";
+
+//Days of Week for Meditation
+"meditation.day.mon" = "Mon";
+"meditation.day.tue" = "Tue";
+"meditation.day.wed" = "Wed";
+"meditation.day.thu" = "Thu";
+"meditation.day.fri" = "Fri";
+"meditation.day.sat" = "Sat";
+"meditation.day.sun" = "Sun";
+
+//Daily Progress
+"meditation.daily.progress" = "Daily Progress";
+"meditation.goal" = "Goal";
+"meditation.progress.today" = "Today's Progress";
+"meditation.sessions.today" = "Today's Sessions";
+"meditation.sessions" = "sessions";
+"meditation.no.sessions" = "No sessions today yet";
+"meditation.goal.completed" = "Daily goal completed! 🎉";
+"meditation.minutes.remaining" = "minutes remaining for goal";
+
+//Add Habits Section (in ToDo)
+"add.habits.title" = "Add Habits";
+"add.habits.placeholder" = "Enter habit name...";
+"add.habits.info" = "Habits will be created as daily with 1 target count";
+"add.habit.swipe" = "Add Habit";
+
+//Goal Setting
+"meditation.goal.alert.title" = "Set Daily Goal";
+"meditation.goal.alert.message" = "Enter your daily meditation goal in minutes";
+"meditation.goal.alert.placeholder" = "Minutes";
+
+//Manual Session Entry
+"meditation.add.session.title" = "Add Meditation Session";
+"meditation.add.session.message" = "Enter the duration of your meditation session in minutes";
+"meditation.add.session.placeholder" = "Duration in minutes";
+
+//Health - Body Metrics
+"health.body.metrics" = "Body Metrics";
+"health.height" = "Height";
+"health.weight" = "Weight";
+"health.bmi" = "BMI";
+"health.edit" = "Edit";
+"health.water.goal" = "Water Goal Settings";
+"health.use.calculated" = "Use calculated goal";
+"health.calculated.goal" = "Calculated goal";
+"health.manual.goal" = "Manual goal";
+"health.bmi.underweight" = "Underweight";
+"health.bmi.normal" = "Normal";
+"health.bmi.overweight" = "Overweight";
+"health.bmi.obese" = "Obese";
+
+//Health - Medications
+"health.medications" = "Medications";
+"health.no.medications" = "No medications added yet";
+"health.next.dose" = "Next dose";
+"medication.frequency.once" = "Once daily";
+"medication.frequency.twice" = "Twice daily";
+"medication.frequency.thrice" = "Three times daily";
+"medication.frequency.asNeeded" = "As needed";
+
+//Body Metrics Editing
+"health.edit.body.metrics" = "Edit Body Metrics";
+"health.edit.body.description" = "Update your height and weight to automatically calculate your BMI and daily water goal";
+"health.preview" = "Preview";
+"common.cancel" = "Cancel";
+"common.save" = "Save";
+
+//Manual Water Goal
+"health.change" = "Change";
+"health.set.manual.goal" = "Set Manual Goal";
+"health.goal.placeholder" = "Goal in ml";
+"health.manual.goal.description" = "Enter your daily water goal in milliliters";
+
+//Add Medication
+"health.add.medication.title" = "Add Medication";
+"health.add.medication.subtitle" = "Track your medication schedule";
+"health.medication.name" = "Medication Name";
+"health.medication.name.placeholder" = "e.g. Aspirin";
+"health.medication.dosage" = "Dosage";
+"health.medication.dosage.placeholder" = "e.g. 500mg";
+"health.medication.frequency" = "Frequency";
+"health.medication.reminder" = "Reminder";
+"health.medication.reminder.time" = "Reminder Time";

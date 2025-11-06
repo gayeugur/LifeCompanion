@@ -13,6 +13,10 @@ import SwiftUI
 final class HabitListViewModel: ObservableObject {
     @Published var habits: [HabitItem] = []
     @Published var showingAddHabit: Bool = false
+    @Published var showingEditHabit: Bool = false
+    @Published var editingHabit: HabitItem? = nil
+    @Published var showingDeleteConfirmation: Bool = false
+    @Published var habitToDelete: HabitItem? = nil
 
     func fetchHabits(from context: ModelContext) {
         let fetchDescriptor = FetchDescriptor<HabitItem>(sortBy: [SortDescriptor(\.createdAt, order: .reverse)])
@@ -39,6 +43,36 @@ final class HabitListViewModel: ObservableObject {
         context.delete(habit)
         save(context)
         fetchHabits(from: context)
+    }
+    
+    func updateHabit(_ habit: HabitItem,
+                     title: String,
+                     frequency: HabitFrequency,
+                     targetCount: Int,
+                     reminderTime: Date?,
+                     in context: ModelContext) {
+        habit.title = title
+        habit.frequency = frequency
+        habit.targetCount = targetCount
+        habit.reminderTime = reminderTime
+        save(context)
+        fetchHabits(from: context)
+    }
+    
+    func startEditing(_ habit: HabitItem) {
+        editingHabit = habit
+        showingEditHabit = true
+    }
+    
+    func showDeleteConfirmation(for habit: HabitItem) {
+        habitToDelete = habit
+        showingDeleteConfirmation = true
+    }
+    
+    func confirmDelete(in context: ModelContext) {
+        guard let habit = habitToDelete else { return }
+        delete(habit, in: context)
+        habitToDelete = nil
     }
 
     func incrementCount(for habit: HabitItem, in context: ModelContext) {

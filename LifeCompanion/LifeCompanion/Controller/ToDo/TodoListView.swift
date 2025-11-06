@@ -5,6 +5,13 @@
 //  Created by gayeugur on 25.10.2025.
 //
 
+//
+//  TodoListView.swift
+//  LifeCompanion
+//
+//  Created by gayeugur on 25.10.2025.
+//
+
 import SwiftUI
 import SwiftData
 
@@ -12,6 +19,8 @@ struct TodoListView: View {
     @Environment(\.modelContext) private var modelContext
     @Query(sort: \TodoItem.createdAt, order: .forward) private var todos: [TodoItem]
     @StateObject private var viewModel = TodoListViewModel()
+    @State private var showingAddHabit = false
+    @State private var selectedTodoForHabit: TodoItem?
 
     var body: some View {
         let counts = viewModel.counts(for: todos)
@@ -19,114 +28,130 @@ struct TodoListView: View {
         let timeCounts = counts.time
         let sections = viewModel.sections(from: todos)
 
-        NavigationStack {
-            ZStack {
-                Color(.systemGroupedBackground)
-                    .ignoresSafeArea()
+        ZStack {
+            Color(.systemGroupedBackground)
+                .ignoresSafeArea()
 
-                VStack(spacing: 5) { // VStack spacing küçültüldü
-                    // MARK: - Time Filter Bar
-                    ScrollView(.horizontal, showsIndicators: false) {
-                        HStack(spacing: 4) { // HStack spacing azaltıldı
-                            ForEach(TimeFilter.allCases, id: \.self) { filter in
-                                let isSelected = viewModel.timeFilter == filter
-                                Button {
-                                    withAnimation(.spring(response: 0.3, dampingFraction: 0.8)) {
-                                        viewModel.apply(time: filter)
-                                    }
-                                } label: {
-                                    filterButton(
-                                        title: filter.localizedName,
-                                        icon: filter.iconName,
-                                        count: timeCounts[filter],
-                                        tint: filter.tint,
-                                        isSelected: isSelected
-                                    )
-                                }
-                            }
-                        }
-                        .padding(.horizontal, 10) // padding küçültüldü
-                        .padding(.vertical, 6)
-                    }
-                    .background(.ultraThinMaterial)
-                    .clipShape(RoundedRectangle(cornerRadius: 18))
-                    .padding(.horizontal, 10)
-
-                    // MARK: - Status Filter Bar
-                    HStack(spacing: 6) { // spacing azaltıldı
-                        ForEach(StatusFilter.allCases, id: \.self) { status in
-                            let isSelected = viewModel.statusFilter == status
+            VStack(spacing: 5) {
+                // MARK: - Time Filter Bar
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack(spacing: 4) {
+                        ForEach(TimeFilter.allCases, id: \.self) { filter in
+                            let isSelected = viewModel.timeFilter == filter
                             Button {
                                 withAnimation(.spring(response: 0.3, dampingFraction: 0.8)) {
-                                    viewModel.apply(status: status)
+                                    viewModel.apply(time: filter)
                                 }
                             } label: {
                                 filterButton(
-                                    title: status.localizedName,
-                                    icon: status.iconName,
-                                    count: statusCounts[status],
-                                    tint: status.tint,
+                                    title: filter.localizedName,
+                                    icon: filter.iconName,
+                                    count: timeCounts[filter],
+                                    tint: filter.tint,
                                     isSelected: isSelected
                                 )
                             }
                         }
                     }
                     .padding(.horizontal, 10)
-                    .padding(.vertical, 4)
-                    .background(.ultraThinMaterial)
-                    .clipShape(RoundedRectangle(cornerRadius: 18))
-                    .padding(.horizontal, 10)
-                    .padding(.bottom, 6)
-                    .lineLimit(1)
-                    .font(.system(size: 14, weight: .semibold)) // font biraz küçültüldü
-
-                    // MARK: - List / Empty
-                    if sections.isEmpty {
-                        emptyStateView
-                    } else {
-                        listView(sections: sections)
-                    }
+                    .padding(.vertical, 6)
                 }
+                .background(.ultraThinMaterial)
+                .clipShape(RoundedRectangle(cornerRadius: 18))
+                .padding(.horizontal, 10)
 
-                // MARK: - Floating Add Button
-                VStack {
-                    Spacer()
-                    HStack {
-                        Spacer()
+                // MARK: - Status Filter Bar
+                HStack(spacing: 6) {
+                    ForEach(StatusFilter.allCases, id: \.self) { status in
+                        let isSelected = viewModel.statusFilter == status
                         Button {
-                            withAnimation(.spring()) {
-                                viewModel.showingAddTodo = true
+                            withAnimation(.spring(response: 0.3, dampingFraction: 0.8)) {
+                                viewModel.apply(status: status)
                             }
                         } label: {
-                            Image(systemName: "plus")
-                                .font(.system(size: 22, weight: .bold))
-                                .foregroundColor(.white)
-                                .frame(width: 56, height: 56)
-                                .background(
-                                    Circle()
-                                        .fill(LinearGradient(
-                                            colors: [.accentColor, .accentColor.opacity(0.7)],
-                                            startPoint: .topLeading,
-                                            endPoint: .bottomTrailing
-                                        ))
-                                )
-                                .shadow(color: .accentColor.opacity(0.3), radius: 6, x: 0, y: 3)
-                                .overlay(
-                                    Circle()
-                                        .stroke(Color.white.opacity(0.2), lineWidth: 1)
-                                )
+                            filterButton(
+                                title: status.localizedName,
+                                icon: status.iconName,
+                                count: statusCounts[status],
+                                tint: status.tint,
+                                isSelected: isSelected
+                            )
                         }
-                        .padding(.trailing, 20)
-                        .padding(.bottom, 20)
                     }
                 }
+                .padding(.horizontal, 10)
+                .padding(.vertical, 4)
+                .background(.ultraThinMaterial)
+                .clipShape(RoundedRectangle(cornerRadius: 18))
+                .padding(.horizontal, 10)
+                .padding(.bottom, 6)
+                .lineLimit(1)
+                .font(.system(size: 14, weight: .semibold))
+
+                // MARK: - List / Empty
+                if sections.isEmpty {
+                    emptyStateView
+                } else {
+                    listView(sections: sections)
+                }
             }
-            .navigationTitle("menu.todos")
-            .navigationBarTitleDisplayMode(.large)
-            .sheet(isPresented: $viewModel.showingAddTodo) {
-                AddTodoView()
+
+            // MARK: - Floating Add Button
+            VStack {
+                Spacer()
+                HStack {
+                    Spacer()
+                    Button {
+                        withAnimation(.spring()) {
+                            viewModel.showingAddTodo = true
+                        }
+                    } label: {
+                        Image(systemName: "plus")
+                            .font(.system(size: 22, weight: .bold))
+                            .foregroundColor(.white)
+                            .frame(width: 56, height: 56)
+                            .background(
+                                Circle()
+                                    .fill(LinearGradient(
+                                        colors: [.accentColor, .accentColor.opacity(0.7)],
+                                        startPoint: .topLeading,
+                                        endPoint: .bottomTrailing
+                                    ))
+                            )
+                            .shadow(color: .accentColor.opacity(0.3), radius: 6, x: 0, y: 3)
+                            .overlay(
+                                Circle()
+                                    .stroke(Color.white.opacity(0.2), lineWidth: 1)
+                            )
+                    }
+                    .padding(.trailing, 20)
+                    .padding(.bottom, 20)
+                }
             }
         }
+        .navigationTitle("menu.todos")
+        .navigationBarTitleDisplayMode(.large)
+        .sheet(isPresented: $viewModel.showingAddTodo) {
+            AddTodoView()
+        }
+        .navigationDestination(isPresented: $showingAddHabit) {
+            if let selectedTodo = selectedTodoForHabit {
+                AddHabitView(initialTitle: selectedTodo.title) { title, freq, count, reminder in
+                    addHabitFromTodo(title: title, frequency: freq, targetCount: count, reminderTime: reminder)
+                }
+            }
+        }
+        .confirmationDialog(
+            isPresented: $viewModel.showingDeleteConfirmation,
+            title: "confirm.delete.todo.title",
+            message: "confirm.delete.todo.message",
+            confirmButtonTitle: "confirm.delete",
+            cancelButtonTitle: "confirm.cancel",
+            isDestructive: true,
+            confirmAction: {
+                viewModel.confirmDelete(in: modelContext)
+            }
+        )
     }
 
     // MARK: - Filter Button
@@ -137,10 +162,10 @@ struct TodoListView: View {
         tint: Color,
         isSelected: Bool
     ) -> some View {
-        HStack(spacing: 4) { // spacing küçültüldü
+        HStack(spacing: 4) {
             Image(systemName: icon)
             Text(title)
-                .font(.system(size: 13)) // font küçültüldü
+                .font(.system(size: 13))
             if let count, count > 0 {
                 Text("\(count)")
                     .font(.footnote)
@@ -171,10 +196,18 @@ struct TodoListView: View {
                             .listRowBackground(Color.clear)
                             .swipeActions(edge: .trailing) {
                                 Button(role: .destructive) {
-                                    viewModel.delete(todo, in: modelContext)
+                                    viewModel.showDeleteConfirmation(for: todo)
                                 } label: {
                                     Label("Sil", systemImage: "trash")
                                 }
+                                
+                                Button {
+                                    selectedTodoForHabit = todo
+                                    showingAddHabit = true
+                                } label: {
+                                    Label("add.habit.swipe".localized, systemImage: "plus.circle")
+                                }
+                                .tint(.green)
                             }
                             .onTapGesture {
                                 withAnimation(.spring()) {
@@ -219,5 +252,31 @@ struct TodoListView: View {
                 .foregroundColor(.secondary)
         }
         .padding(.vertical, 3)
+    }
+    
+    // MARK: - Add Habit from Todo Function
+    private func addHabitFromTodo(title: String, frequency: HabitFrequency, targetCount: Int, reminderTime: Date?) {
+        let habit = HabitItem(
+            title: title,
+            frequency: frequency,
+            targetCount: targetCount,
+            reminderTime: reminderTime
+        )
+        
+        modelContext.insert(habit)
+        
+        do {
+            try modelContext.save()
+            
+            // Haptic feedback for success
+            let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
+            impactFeedback.impactOccurred()
+            
+            // Reset state
+            selectedTodoForHabit = nil
+            showingAddHabit = false
+        } catch {
+            print("Error saving habit from todo: \(error)")
+        }
     }
 }

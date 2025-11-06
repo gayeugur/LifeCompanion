@@ -14,6 +14,8 @@ final class TodoListViewModel: ObservableObject {
     @Published var showingAddTodo: Bool = false
     @Published var timeFilter: TimeFilter = .all
     @Published var statusFilter: StatusFilter = .all
+    @Published var showingDeleteConfirmation: Bool = false
+    @Published var todoToDelete: TodoItem? = nil
 
     // MARK: - Public API
 
@@ -49,6 +51,17 @@ final class TodoListViewModel: ObservableObject {
     func delete(_ todo: TodoItem, in context: ModelContext) {
         context.delete(todo)
         try? context.save()
+    }
+    
+    func showDeleteConfirmation(for todo: TodoItem) {
+        todoToDelete = todo
+        showingDeleteConfirmation = true
+    }
+    
+    func confirmDelete(in context: ModelContext) {
+        guard let todo = todoToDelete else { return }
+        delete(todo, in: context)
+        todoToDelete = nil
     }
 
     func toggleCompletion(_ todo: TodoItem, in context: ModelContext) {

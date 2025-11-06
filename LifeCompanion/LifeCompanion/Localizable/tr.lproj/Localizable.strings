@@ -59,6 +59,7 @@
 "habit.completed" = "Tamamlandı ✅";
 "habit.increment" = "Artır";
 "habit.delete" = "Sil";
+"habit.edit" = "Düzenle";
 "habits.title" = "Alışkanlıklar";
 "habits.empty.title" = "Henüz alışkanlık eklemediniz";
 "habits.empty.subtitle" = "Başlamak için + butonuna dokunun";
@@ -81,3 +82,261 @@
 "habit.cancel" = "İptal";
 "habit.save" = "Kaydet";
 "action.delete" = "Sil";
+
+//Edit Habit
+"editHabit.title" = "Alışkanlığı Düzenle";
+"editHabit.nameLabel" = "Başlık";
+"editHabit.namePlaceholder" = "Alışkanlık adı";
+"editHabit.frequencyLabel" = "Sıklık";
+"editHabit.targetLabel" = "Hedef";
+"editHabit.times" = "kere";
+"editHabit.reminderLabel" = "Hatırlatma";
+"editHabit.updateButton" = "Güncelle";
+
+//Confirmation Dialog
+"confirm.yes" = "Evet";
+"confirm.cancel" = "İptal";
+"confirm.delete" = "Sil";
+"confirm.delete.habit.title" = "Alışkanlığı Sil";
+"confirm.delete.habit.message" = "Bu alışkanlığı silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.";
+"confirm.delete.todo.title" = "Görevi Sil";
+"confirm.delete.todo.message" = "Bu görevi silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.";
+
+//Habit Suggestions
+"habit.suggestions.title" = "Popüler Alışkanlıklar";
+"habit.suggestions.subtitle" = "Başlamak için bir öneri seçin";
+"habit.suggestions.button" = "Öneriler";
+"habit.suggestions.navigation.title" = "Alışkanlık Önerileri";
+"habit.category.health" = "Sağlık";
+"habit.category.personal" = "Kişisel Gelişim";
+"habit.category.productivity" = "Üretkenlik";
+"habit.category.social" = "Sosyal";
+
+//Habit Templates
+"habit.template.drink.water" = "Su İç";
+"habit.template.brush.teeth" = "Diş Fırçala";
+"habit.template.exercise" = "Egzersiz Yap";
+"habit.template.sleep.early" = "Erken Yat";
+"habit.template.vitamins" = "Vitamin Al";
+"habit.template.read.book" = "Kitap Oku (dk)";
+"habit.template.meditation" = "Meditasyon";
+"habit.template.journal" = "Günlük Yaz";
+"habit.template.learn.language" = "Dil Öğren (dk)";
+"habit.template.no.social.media" = "Sosyal Medyasız";
+"habit.template.plan.day" = "Gün Planla";
+"habit.template.clean.room" = "Oda Temizle";
+"habit.template.call.family" = "Ailey Ara";
+"habit.template.meet.friends" = "Arkadaşlarla Buluş";
+
+//Todo Suggestions
+"todo.suggestions.title" = "Görev Fikirleri";
+"todo.suggestions.subtitle" = "Başlamak için bir şablon seçin";
+"todo.suggestions.button" = "Fikirler";
+"todo.suggestions.navigation.title" = "Görev Şablonları";
+"todo.category.daily" = "Günlük Görevler";
+"todo.category.work" = "İş";
+"todo.category.personal" = "Kişisel";
+"todo.category.entertainment" = "Eğlence & Hobi";
+"todo.reminder" = "Hatırlatıcı";
+
+//Todo Templates
+"todo.template.buy.groceries" = "Market Alışverişi";
+"todo.template.buy.groceries.subtitle" = "Haftalık alışveriş";
+"todo.template.pay.bills" = "Fatura Öde";
+"todo.template.pay.bills.subtitle" = "Aylık ödemeler";
+"todo.template.clean.house" = "Ev Temizliği";
+"todo.template.clean.house.subtitle" = "Haftalık temizlik";
+"todo.template.walk.dog" = "Köpek Gezdirme";
+"todo.template.walk.dog.subtitle" = "Günlük egzersiz";
+"todo.template.meeting.prep" = "Toplantıya Hazırlan";
+"todo.template.meeting.prep.subtitle" = "Ajanda gözden geçir";
+"todo.template.email.check" = "Email Kontrol";
+"todo.template.email.check.subtitle" = "Günlük gelen kutusu";
+"todo.template.project.review" = "Proje İncelemesi";
+"todo.template.project.review.subtitle" = "İlerleme kontrolü";
+"todo.template.call.client" = "Müşteriyi Ara";
+"todo.template.call.client.subtitle" = "Takip görüşmesi";
+"todo.template.doctor.appointment" = "Doktor Randevusu";
+"todo.template.doctor.appointment.subtitle" = "Yıllık kontrol";
+"todo.template.book.vacation" = "Tatil Rezervasyonu";
+"todo.template.book.vacation.subtitle" = "Tatil planla";
+"todo.template.birthday.gift" = "Doğum Günü Hediyesi";
+"todo.template.birthday.gift.subtitle" = "Aile/arkadaş için";
+"todo.template.car.maintenance" = "Araç Bakımı";
+"todo.template.car.maintenance.subtitle" = "Servis randevusu";
+"todo.template.movie.night" = "Film Gecesi";
+"todo.template.movie.night.subtitle" = "Eğlence planla";
+"todo.template.gym.session" = "Spor Salonu";
+"todo.template.gym.session.subtitle" = "Egzersiz rutini";
+"todo.template.read.book" = "Kitap Okuma";
+"todo.template.read.book.subtitle" = "Okumaya devam et";
+
+//Health Section
+"health.water.title" = "Su Tüketimi";
+"health.water.remaining" = "kaldı";
+"health.water.goal.reached" = "Hedef Tamamlandı!";
+"health.water.add.glass" = "Bardak Ekle";
+"health.quick.actions" = "Hızlı İşlemler";
+"health.action.coffee" = "Kahve";
+"health.action.walk" = "Yürüyüş";
+"health.action.sleep" = "Uyku";
+"health.weekly.progress" = "Haftalık İlerleme";
+"health.tips.title" = "Sağlık İpuçları";
+"health.tip.water" = "Sabah kalktığınızda ilk iş su için";
+"health.tip.morning" = "Uyandıktan sonra 30 dakika içinde güneş ışığı alın";
+"health.tip.breathing" = "Her saat 3 derin nefes alın";
+
+//Days of Week
+"health.day.mon" = "Pzt";
+"health.day.tue" = "Sal";
+"health.day.wed" = "Çar";
+"health.day.thu" = "Per";
+"health.day.fri" = "Cum";
+"health.day.sat" = "Cmt";
+"health.day.sun" = "Paz";
+
+//Motivational Messages
+"health.water.start.title" = "Hadi Başlayalım!";
+"health.water.start.message" = "Hidrasyon yolculuğuna başla";
+"health.water.beginning.title" = "Harika Başlangıç!";
+"health.water.beginning.message" = "Doğru yoldasın";
+"health.water.quarter.title" = "Devam Et!";
+"health.water.quarter.message" = "İyi ilerleme kaydediyorsun";
+"health.water.half.title" = "Yarı Yol!";
+"health.water.half.message" = "Harika gidiyorsun";
+"health.water.almost.title" = "Neredeyse Bitti!";
+"health.water.almost.message" = "Sadece birkaç bardak kaldı";
+"health.water.completed.title" = "Hedef Başarıldı!";
+"health.water.completed.message" = "Bugün mükemmel hidrasyon";
+"health.water.exceeded.title" = "Süpersin!";
+"health.water.exceeded.message" = "Hedefini aştın";
+
+//Quick Actions Status
+"health.completed" = "Tamamlandı";
+"health.logged" = "Kaydedildi";
+"health.steps" = "adım";
+
+//Meditation Section
+"meditation.today" = "Bugün";
+"meditation.streak" = "Seri";
+"meditation.total" = "Toplam";
+"meditation.minutes" = "dk";
+"meditation.days" = "gün";
+"meditation.timer" = "Meditasyon Zamanlayıcı";
+"meditation.meditating" = "Meditasyon yapılıyor...";
+"meditation.ready" = "Başlamaya hazır";
+"meditation.start" = "Başla";
+"meditation.pause" = "Duraklat";
+"meditation.stop" = "Durdur";
+"meditation.breathing" = "Nefes Egzersizleri";
+"meditation.cycle" = "Döngü:";
+"meditation.ambient.sounds" = "Ortam Sesleri";
+"meditation.coming.soon" = "Yakında";
+"meditation.progress" = "Haftalık İlerleme";
+
+//Breathing Techniques
+"meditation.breathing.478" = "4-7-8 Tekniği";
+"meditation.breathing.478.desc" = "4sn nefes al, 7sn tut, 8sn ver";
+"meditation.breathing.box" = "Kutu Nefes Alma";
+"meditation.breathing.box.desc" = "4sn al, 4sn tut, 4sn ver, 4sn tut";
+"meditation.breathing.belly" = "Karın Nefesi";
+"meditation.breathing.belly.desc" = "Derin diyafram nefes alma";
+
+//Breathing Instructions
+"meditation.breathe.in" = "Nefes Al";
+"meditation.breathe.hold" = "Tut";
+"meditation.breathe.out" = "Nefes Ver";
+
+//Ambient Sounds
+"meditation.sound.none" = "Sessiz";
+"meditation.sound.rain" = "Yağmur";
+"meditation.sound.ocean" = "Okyanus";
+"meditation.sound.forest" = "Orman";
+"meditation.sound.whitenoise" = "Beyaz Gürültü";
+"meditation.sound.birds" = "Kuş Sesleri";
+"meditation.sound.ambient" = "Ambient Pad";
+"meditation.volume" = "Ses Seviyesi";
+"meditation.now.playing" = "Şimdi Çalıyor";
+
+//Days of Week for Meditation
+"meditation.day.mon" = "Pzt";
+"meditation.day.tue" = "Sal";
+"meditation.day.wed" = "Çar";
+"meditation.day.thu" = "Per";
+"meditation.day.fri" = "Cum";
+"meditation.day.sat" = "Cmt";
+"meditation.day.sun" = "Paz";
+
+//Daily Progress
+"meditation.daily.progress" = "Günlük İlerleme";
+"meditation.goal" = "Hedef";
+"meditation.progress.today" = "Bugünkü İlerleme";
+"meditation.sessions.today" = "Bugünkü Seanslar";
+"meditation.sessions" = "seans";
+"meditation.no.sessions" = "Bugün henüz seans yok";
+"meditation.goal.completed" = "Günlük hedef tamamlandı! 🎉";
+"meditation.minutes.remaining" = "dakika kaldı hedefe";
+
+//Add Habits Section (in ToDo)
+"add.habits.title" = "Alışkanlık Ekle";
+"add.habits.placeholder" = "Alışkanlık adını girin...";
+"add.habits.info" = "Alışkanlıklar günlük olarak 1 hedef sayısı ile oluşturulacak";
+"add.habit.swipe" = "Alışkanlık Ekle";
+
+//Goal Setting
+"meditation.goal.alert.title" = "Günlük Hedef Belirle";
+"meditation.goal.alert.message" = "Günlük meditasyon hedefinizi dakika olarak girin";
+"meditation.goal.alert.placeholder" = "Dakika";
+
+//Manual Session Entry
+"meditation.add.session.title" = "Meditasyon Seansı Ekle";
+"meditation.add.session.message" = "Meditasyon seansınızın süresini dakika olarak girin";
+"meditation.add.session.placeholder" = "Dakika cinsinden süre";
+
+//Health - Body Metrics
+"health.body.metrics" = "Vücut Ölçüleri";
+"health.height" = "Boy";
+"health.weight" = "Kilo";
+"health.bmi" = "VKİ";
+"health.edit" = "Düzenle";
+"health.water.goal" = "Su Hedefi Ayarları";
+"health.use.calculated" = "Hesaplanan hedefi kullan";
+"health.calculated.goal" = "Hesaplanan hedef";
+"health.manual.goal" = "Manuel hedef";
+"health.bmi.underweight" = "Zayıf";
+"health.bmi.normal" = "Normal";
+"health.bmi.overweight" = "Fazla kilolu";
+"health.bmi.obese" = "Obez";
+
+//Health - Medications
+"health.medications" = "İlaçlar";
+"health.no.medications" = "Henüz ilaç eklenmedi";
+"health.next.dose" = "Sonraki doz";
+"medication.frequency.once" = "Günde bir kez";
+"medication.frequency.twice" = "Günde iki kez";
+"medication.frequency.thrice" = "Günde üç kez";
+"medication.frequency.asNeeded" = "Gerektiğinde";
+
+//Body Metrics Editing
+"health.edit.body.metrics" = "Vücut Ölçülerini Düzenle";
+"health.edit.body.description" = "Boy ve kilonuzu güncelleyerek VKİ'nizi ve günlük su hedefinizi otomatik hesaplataabilirsiniz";
+"health.preview" = "Önizleme";
+"common.cancel" = "İptal";
+"common.save" = "Kaydet";
+
+//Manual Water Goal
+"health.change" = "Değiştir";
+"health.set.manual.goal" = "Manuel Hedef Belirle";
+"health.goal.placeholder" = "Hedef ml cinsinden";
+"health.manual.goal.description" = "Günlük su hedefinizi mililitre cinsinden girin";
+
+//Add Medication
+"health.add.medication.title" = "İlaç Ekle";
+"health.add.medication.subtitle" = "İlaç programınızı takip edin";
+"health.medication.name" = "İlaç Adı";
+"health.medication.name.placeholder" = "örn. Aspirin";
+"health.medication.dosage" = "Doz";
+"health.medication.dosage.placeholder" = "örn. 500mg";
+"health.medication.frequency" = "Sıklık";
+"health.medication.reminder" = "Hatırlatıcı";
+"health.medication.reminder.time" = "Hatırlatıcı Zamanı";

@@ -19,6 +19,7 @@ struct AddTodoView: View {
     @State private var dueDate: Date = Date().addingTimeInterval(60 * 60)
     @State private var enableReminder: Bool = false
     @State private var showValidationAlert: Bool = false
+    @State private var showingSuggestionsSheet: Bool = false
 
     // FOCUS STATE — yalnızca title & subtitle için kullanıyoruz (A seçimi)
     @FocusState private var isFieldFocused: Bool
@@ -35,9 +36,37 @@ struct AddTodoView: View {
                         // Başlık + Alt başlık
                         card {
                             VStack(alignment: .leading, spacing: 10) {
-                                Text("add.section.details".localized)
-                                    .font(.callout)
-                                    .foregroundStyle(.secondary)
+                                HStack {
+                                    Text("add.section.details".localized)
+                                        .font(.callout)
+                                        .foregroundStyle(.secondary)
+                                    
+                                    Spacer()
+                                    
+                                    // Öneriler butonu
+                                    Button(action: {
+                                        showingSuggestionsSheet = true
+                                    }) {
+                                        HStack(spacing: 5) {
+                                            Image(systemName: "lightbulb.fill")
+                                                .font(.system(size: 12))
+                                            Text("todo.suggestions.button".localized)
+                                                .font(.system(size: 12, weight: .semibold))
+                                        }
+                                        .foregroundColor(.blue)
+                                        .padding(.horizontal, 10)
+                                        .padding(.vertical, 6)
+                                        .background(
+                                            Capsule()
+                                                .fill(.ultraThinMaterial)
+                                                .overlay(
+                                                    Capsule()
+                                                        .stroke(Color.blue.opacity(0.4), lineWidth: 1)
+                                                )
+                                        )
+                                        .shadow(color: Color.blue.opacity(0.2), radius: 2, x: 0, y: 1)
+                                    }
+                                }
 
                                 TextField("add.title.placeholder".localized, text: $title)
                                     .focused($isFieldFocused) // <— odak bağlandı
@@ -136,6 +165,12 @@ struct AddTodoView: View {
             } message: {
                 Text("add.validation.message")
             }
+            .sheet(isPresented: $showingSuggestionsSheet) {
+                TodoSuggestionsSheet { template in
+                    applyTemplate(template)
+                    showingSuggestionsSheet = false
+                }
+            }
         }
     }
 
@@ -154,6 +189,31 @@ struct AddTodoView: View {
                 }
             )
             .shadow(color: .black.opacity(0.05), radius: 14, y: 4)
+    }
+
+    private func applyTemplate(_ template: TodoTemplate) {
+        withAnimation(.easeInOut) {
+            title = template.title.localized
+            subtitle = template.subtitle?.localized ?? ""
+            
+            // Priority mapping
+            switch template.priority {
+            case .low:
+                priority = .low
+            case .medium:
+                priority = .medium
+            case .high:
+                priority = .high
+            }
+            
+            enableReminder = template.hasReminder
+            if template.hasReminder {
+                // Set due date to 1 hour from now
+                dueDate = Date().addingTimeInterval(60 * 60)
+            }
+        }
+        // Klavye odağını kaldır
+        isFieldFocused = false
     }
 
     private func saveTodo() {

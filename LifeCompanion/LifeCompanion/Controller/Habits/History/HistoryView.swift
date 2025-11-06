@@ -14,15 +14,13 @@ struct HistoryView: View {
     @State private var sections: [HistorySection] = []
 
     var body: some View {
-        NavigationStack {
-            ZStack {
-                Color(.systemGroupedBackground).ignoresSafeArea()
-                contentView
-            }
-            .navigationTitle(NSLocalizedString("history.title", comment: "History"))
-            .navigationBarTitleDisplayMode(.large)
-            .onAppear { loadHistory() }
+        ZStack {
+            Color(.systemGroupedBackground).ignoresSafeArea()
+            contentView
         }
+        .navigationTitle(NSLocalizedString("history.title", comment: "History"))
+        .navigationBarTitleDisplayMode(.large)
+        .onAppear { loadHistory() }
     }
 
     @ViewBuilder

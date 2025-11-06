@@ -10,7 +10,8 @@ import SwiftUI
 struct HabitRowView: View {
     var habit: HabitItem
     var onIncrement: () -> Void
-    var onDelete: () -> Void
+    var onDeleteRequest: () -> Void
+    var onEdit: () -> Void
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
@@ -57,9 +58,14 @@ struct HabitRowView: View {
         )
         .shadow(color: .black.opacity(0.1), radius: 6, y: 2)
         .swipeActions(edge: .trailing) {
-            Button(role: .destructive) { onDelete() } label: {
+            Button(role: .destructive) { onDeleteRequest() } label: {
                 Label("habit.delete".localized, systemImage: "trash")
             }
+            
+            Button { onEdit() } label: {
+                Label("habit.edit".localized, systemImage: "pencil")
+            }
+            .tint(.blue)
         }
     }
 }

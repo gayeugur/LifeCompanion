@@ -19,7 +19,7 @@ struct ContentView: View {
     ]
     
     var body: some View {
-        NavigationView {
+        NavigationStack {
             GeometryReader { geometry in
                 ScrollView {
                     let spacing: CGFloat = 20
@@ -49,9 +49,9 @@ struct ContentView: View {
         case NSLocalizedString("menu.habits", comment: ""):
             HabitsView()
         case NSLocalizedString("menu.health", comment: ""):
-            HabitsView()
+            HealthView()
         case NSLocalizedString("menu.meditation", comment: ""):
-            HabitsView()
+            MeditationView()
         case NSLocalizedString("menu.memoryGame", comment: ""):
             HabitsView()
         case NSLocalizedString("menu.settings", comment: ""): 

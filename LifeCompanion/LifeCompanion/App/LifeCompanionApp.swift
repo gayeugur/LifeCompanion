@@ -16,7 +16,7 @@ struct LifeCompanionApp: App {
 
     init() {
         do {
-            container = try ModelContainer(for: TodoItem.self, HabitItem.self)
+            container = try ModelContainer(for: TodoItem.self, HabitItem.self, WaterIntake.self)
         } catch {
             fatalError("Could not initialize ModelContainer: \(error)")
         }

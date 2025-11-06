@@ -14,10 +14,17 @@ struct AddHabitView: View {
     @State private var frequency: HabitFrequency = .daily
     @State private var targetCount: Int = 1
     @State private var reminderTime: Date? = nil
+    @State private var showingSuggestionsSheet: Bool = false
     
-    @FocusState private var isFieldFocused: Bool     // <— EKLENDİ
+    @FocusState private var isFieldFocused: Bool
 
     var onSave: (String, HabitFrequency, Int, Date?) -> Void
+    var initialTitle: String?
+    
+    init(initialTitle: String? = nil, onSave: @escaping (String, HabitFrequency, Int, Date?) -> Void) {
+        self.initialTitle = initialTitle
+        self.onSave = onSave
+    }
 
     var body: some View {
         NavigationStack {
@@ -28,11 +35,40 @@ struct AddHabitView: View {
                         // Başlık
                         card {
                             VStack(alignment: .leading, spacing: 10) {
-                                Text("addHabit.nameLabel".localized)
-                                    .font(.callout)
-                                    .foregroundStyle(.secondary)
+                                HStack {
+                                    Text("addHabit.nameLabel".localized)
+                                        .font(.callout)
+                                        .foregroundStyle(.secondary)
+                                    
+                                    Spacer()
+                                    
+                                    // Öneriler butonu
+                                    Button(action: {
+                                        showingSuggestionsSheet = true
+                                    }) {
+                                        HStack(spacing: 5) {
+                                            Image(systemName: "lightbulb.fill")
+                                                .font(.system(size: 12))
+                                            Text("habit.suggestions.button".localized)
+                                                .font(.system(size: 12, weight: .semibold))
+                                        }
+                                        .foregroundColor(.orange)
+                                        .padding(.horizontal, 10)
+                                        .padding(.vertical, 6)
+                                        .background(
+                                            Capsule()
+                                                .fill(.ultraThinMaterial)
+                                                .overlay(
+                                                    Capsule()
+                                                        .stroke(Color.orange.opacity(0.4), lineWidth: 1)
+                                                )
+                                        )
+                                        .shadow(color: Color.orange.opacity(0.2), radius: 2, x: 0, y: 1)
+                                    }
+                                }
+                                
                                 TextField("addHabit.namePlaceholder".localized, text: $title)
-                                    .focused($isFieldFocused)             // <— EKLENDİ
+                                    .focused($isFieldFocused)
                                     .padding(14)
                                     .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 16))
                             }
@@ -129,15 +165,36 @@ struct AddHabitView: View {
                     Spacer()
                     Button("Done") { isFieldFocused = false }
                 }
-                
-                ToolbarItem(placement: .topBarLeading) {
-                    Button { dismiss() } label: {
-                        Image(systemName: "xmark")
-                            .font(.body.weight(.semibold))
-                    }
+            }
+            .onAppear {
+                if let initialTitle = initialTitle {
+                    title = initialTitle
+                }
+                // Set defaults for todo-based habits
+                if initialTitle != nil {
+                    frequency = .daily
+                    targetCount = 1
+                }
+            }
+            .sheet(isPresented: $showingSuggestionsSheet) {
+                HabitSuggestionsSheet { template in
+                    applyTemplate(template)
+                    showingSuggestionsSheet = false
                 }
             }
         }
+    }
+
+    // MARK: - Template Application
+    
+    private func applyTemplate(_ template: HabitTemplate) {
+        withAnimation(.easeInOut) {
+            title = template.title.localized
+            frequency = template.frequency
+            targetCount = template.targetCount
+        }
+        // Klavye odağını kaldır
+        isFieldFocused = false
     }
 
     @ViewBuilder
