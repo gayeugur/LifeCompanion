@@ -176,7 +176,8 @@
 "health.water.title" = "Water Intake";
 "health.water.remaining" = "left";
 "health.water.goal.reached" = "Goal Reached!";
-"health.water.add.glass" = "Add Glass";
+"health.water.add.glass" = "Add Water";
+"health.daily.goal" = "Daily Goal";
 "health.quick.actions" = "Quick Actions";
 "health.action.coffee" = "Coffee";
 "health.action.walk" = "Walk";
@@ -206,7 +207,7 @@
 "health.water.half.title" = "Halfway There!";
 "health.water.half.message" = "You're doing amazing";
 "health.water.almost.title" = "Almost Done!";
-"health.water.almost.message" = "Just a few more glasses";
+"health.water.almost.message" = "Just a little more water";
 "health.water.completed.title" = "Goal Achieved!";
 "health.water.completed.message" = "Excellent hydration today";
 "health.water.exceeded.title" = "Superstar!";
@@ -317,6 +318,23 @@
 "medication.frequency.twice" = "Twice daily";
 "medication.frequency.thrice" = "Three times daily";
 "medication.frequency.asNeeded" = "As needed";
+"medication.frequency.twiceWeekly" = "Twice weekly (Mon, Thu)";
+"medication.frequency.thriceWeekly" = "Three times weekly (Mon, Wed, Fri)";
+
+//Habit Notifications
+"habit.notification.reminder.title" = "Habit Reminder";
+"habit.notification.reminder.body" = "Time to complete your %@ habit!";
+"habit.notification.celebration.title" = "🎉 Streak Achievement!";
+"habit.notification.celebration.body" = "Amazing! You've reached a %d-day streak for %@! %@";
+
+//Medication Notifications
+"medication.notification.title" = "Medication Reminder";
+"medication.notification.body" = "Time to take your %@ (%@)";
+
+//Overdose Warnings
+"health.overdose.warning.title" = "Daily Dose Completed";
+"health.overdose.warning.message" = "You have already taken the recommended daily dose of %@. Taking extra doses may be harmful.";
+"health.take.anyway" = "Take Anyway";
 
 //Body Metrics Editing
 "health.edit.body.metrics" = "Edit Body Metrics";
@@ -341,3 +359,155 @@
 "health.medication.frequency" = "Frequency";
 "health.medication.reminder" = "Reminder";
 "health.medication.reminder.time" = "Reminder Time";
+
+//Delete Confirmation
+"health.delete.confirmation.title" = "Delete Medication";
+"health.delete.confirmation.message" = "Are you sure you want to delete %@? All scheduled reminders will be cancelled.";
+"common.delete" = "Delete";
+
+//Memory Game
+"memory.game.title" = "Memory Game";
+"memory.game.welcome" = "Welcome to Memory Game!";
+"memory.game.description" = "Match pairs of cards to win. Flip two cards at a time and try to remember their positions.";
+"memory.game.start" = "Start Game";
+"memory.game.pause" = "Pause";
+"memory.game.resume" = "Resume";
+"memory.game.reset" = "Reset";
+"memory.game.new" = "New Game";
+"memory.game.settings" = "Settings";
+"memory.game.complete.title" = "Game Complete!";
+"memory.game.complete.message" = "Time: %@\nMoves: %d\nAccuracy: %@";
+"memory.game.winner" = "%@ wins!";
+"memory.game.tie" = "It's a tie!";
+
+//Memory Game Stats
+"memory.stats.time" = "Time";
+"memory.stats.moves" = "Moves";
+"memory.stats.accuracy" = "Accuracy";
+"memory.cards" = "cards";
+
+//Memory Game Players
+"memory.player.one" = "Player 1";
+"memory.player.two" = "Player 2";
+
+//Memory Game Grid Sizes
+"memory.grid.small" = "3x2 (Easy)";
+"memory.grid.medium" = "3x4 (Medium)";
+"memory.grid.large" = "4x4 (Hard)";
+"memory.grid.extraLarge" = "4x5 (Expert)";
+"memory.grid.huge" = "5x6 (Master)";
+
+//Memory Game Difficulties
+"memory.difficulty.easy" = "Easy";
+"memory.difficulty.medium" = "Medium";
+"memory.difficulty.hard" = "Hard";
+"memory.difficulty.expert" = "Expert";
+"memory.difficulty.master" = "Master";
+
+//Memory Game Modes
+"memory.mode.single" = "Single Player";
+"memory.mode.two" = "Two Player";
+"memory.mode.single.desc" = "Play against time and try to get the best score";
+"memory.mode.two.desc" = "Take turns with a friend to see who gets more matches";
+
+//Memory Game Settings
+"memory.settings.title" = "Game Settings";
+"memory.settings.description" = "Customize your memory game experience";
+"memory.settings.gamemode" = "Game Mode";
+"memory.settings.gridsize" = "Grid Size";
+"memory.settings.current.game" = "Current Game";
+"memory.settings.active.warning" = "Changing settings will start a new game";
+"memory.settings.best.score" = "Best Score";
+"memory.settings.points" = "points";
+"memory.settings.no.score" = "No best score yet";
+"memory.settings.confirm.title" = "Start New Game?";
+"memory.settings.confirm.message" = "You have an active game. Starting new game will lose your current progress.";
+"memory.settings.new.game" = "Start New Game";
+
+//Memory Card
+"memory.card.tap" = "Tap to flip";
+
+//High Scores
+"highScores.title" = "High Scores";
+"highScores.subtitle" = "Your best performances";
+"highScores.empty.title" = "No Scores Yet";
+"highScores.empty.message" = "Play some games to see your high scores here!";
+"highScores.difficulty.easy" = "Easy";
+"highScores.difficulty.medium" = "Medium";
+"highScores.difficulty.hard" = "Hard";
+"highScores.difficulty.expert" = "Expert";
+"highScores.score" = "Score";
+"highScores.moves" = "moves";
+"highScores.done" = "Done";
+
+//Streaks
+"streak.start" = "Start your streak!";
+"streak.single" = "1 day streak!";
+"streak.days" = "%d day streak! %@";
+"streak.longest" = "Longest: %d";
+"streak.celebration.title" = "🎉 Streak Achievement!";
+"streak.celebration.message" = "You've completed a %d day streak for %@! %@";
+"streak.celebration.button" = "Awesome!";
+
+//Settings
+"settings.title" = "Settings";
+"settings.welcome.title" = "Customize Your Experience";
+"settings.welcome.subtitle" = "Personalize LifeCompanion to fit your lifestyle";
+"settings.general.title" = "General";
+"settings.general.darkmode" = "Dark Mode";
+"settings.general.language" = "Language";
+"settings.general.notifications" = "Notifications";
+"settings.general.sounds" = "Sound Effects";
+"settings.general.haptics" = "Haptic Feedback";
+"settings.general.haptics.description" = "Feel vibrations when completing habits and reaching milestones";
+"settings.habits.title" = "Habits";
+"settings.habits.reminder.time" = "Default Reminder Time";
+"settings.habits.celebrations" = "Streak Celebrations";
+"settings.habits.reset.time" = "Daily Reset Time";
+"settings.health.title" = "Health";
+"settings.health.water.goal" = "Daily Water Goal";
+"settings.memory.title" = "Memory Game";
+"settings.memory.grid.size" = "Default Grid Size";
+"settings.privacy.title" = "Privacy & Data";
+"settings.privacy.data.export" = "Export My Data";
+"settings.privacy.data.delete" = "Delete All Data";
+"settings.export.format.title" = "Export Format Selection";
+"settings.export.format.message" = "Choose export format. PDF provides a readable report, JSON contains raw data for backup and restore.\n\n⚠️ Files will be saved to your device and can be shared via the system share sheet.";
+"settings.export.format.pdf" = "PDF Format";
+"settings.export.format.json" = "JSON Format";
+
+// Export Options
+"choose_export_method" = "Choose Export Method";
+"save_to_files" = "Save to Files";
+"share" = "Share";
+"export_success_message" = "Your data has been successfully saved to the selected location.";
+"success" = "Success";
+"settings.about.title" = "About";
+"settings.about.app" = "About LifeCompanion";
+"settings.about.version" = "Version";
+"settings.about.privacy" = "Privacy Policy";
+"settings.about.support" = "Help & Support";
+"settings.about.description" = "LifeCompanion is your personal assistant for building better habits, tracking health, and maintaining mental wellness.";
+"settings.about.features" = "Features";
+"settings.about.feature.habits" = "Habit Tracking with Streaks";
+"settings.about.feature.health" = "Health & Medication Management";
+"settings.about.feature.memory" = "Brain Training Games";
+"settings.about.feature.todos" = "Smart Task Management";
+"settings.about.feature.meditation" = "Mindfulness & Meditation";
+"settings.language.title" = "Select Language";
+"settings.notification.permission.title" = "Notification Permission";
+"settings.notification.permission.message" = "Please enable notifications in Settings to receive reminders.";
+"settings.notification.permission.settings" = "Open Settings";
+"settings.privacy.delete.title" = "Delete All Data";
+"settings.privacy.delete.message" = "Are you sure you want to delete all your data? This action cannot be undone.";
+"settings.privacy.delete.confirm" = "Delete All";
+"settings.support.email.failed.title" = "Email Not Available";
+"settings.support.email.failed.message" = "No email app is configured on this device. Please set up Mail or install Gmail to contact support.";
+
+//Common
+"common.back" = "Back";
+"common.cancel" = "Cancel";
+"common.save" = "Save";
+"common.done" = "Done";
+"common.copy" = "Copy";
+"common.ok" = "OK";

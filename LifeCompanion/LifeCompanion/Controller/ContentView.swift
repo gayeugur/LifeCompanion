@@ -9,14 +9,23 @@ import SwiftUI
 
 // MARK: - Main View
 struct ContentView: View {
-    let menuItems = [
-        MenuItem(title: NSLocalizedString("menu.todos", comment: "To-Do List"), icon: "checklist", color: .blue),
-        MenuItem(title: NSLocalizedString("menu.habits", comment: "Habits"), icon: "chart.bar", color: .green),
-        MenuItem(title: NSLocalizedString("menu.health", comment: "Health"), icon: "heart.fill", color: .red),
-        MenuItem(title: NSLocalizedString("menu.meditation", comment: "Meditation"), icon: "leaf.fill", color: .purple),
-        MenuItem(title: NSLocalizedString("menu.memoryGame", comment: "Memory Game"), icon: "gamecontroller.fill", color: .orange),
-        MenuItem(title: NSLocalizedString("menu.settings", comment: "Settings"), icon: "gearshape.fill", color: .gray)
-    ]
+    @EnvironmentObject private var themeManager: ThemeManager
+    @EnvironmentObject private var feedbackManager: FeedbackManager
+    @EnvironmentObject private var settingsManager: SettingsManager
+    @EnvironmentObject private var dataManager: DataManager
+    @EnvironmentObject private var languageManager: LanguageManager
+    @State private var refreshKey = UUID()
+    
+    var menuItems: [MenuItem] {
+        [
+            MenuItem(title: "menu.todos".localized, icon: "checklist", color: .blue),
+            MenuItem(title: "menu.habits".localized, icon: "chart.bar", color: .green),
+            MenuItem(title: "menu.health".localized, icon: "heart.fill", color: .red),
+            MenuItem(title: "menu.meditation".localized, icon: "leaf.fill", color: .purple),
+            MenuItem(title: "menu.memoryGame".localized, icon: "gamecontroller.fill", color: .orange),
+            MenuItem(title: "menu.settings".localized, icon: "gearshape.fill", color: .gray)
+        ]
+    }
     
     var body: some View {
         NavigationStack {
@@ -37,27 +46,31 @@ struct ContentView: View {
                     .padding(spacing)
                 }
             }
-            .navigationTitle(NSLocalizedString("app.title", comment: "Life Companion"))
+            .navigationTitle("app.title".localized)
+            .id(refreshKey)
+            .onReceive(NotificationCenter.default.publisher(for: .languageDidChange)) { _ in
+                refreshKey = UUID()
+            }
         }
     }
     
     @ViewBuilder
     private func destinationView(for item: MenuItem) -> some View {
         switch item.title {
-        case NSLocalizedString("menu.todos", comment: ""):
+        case "menu.todos".localized:
             TodoListView()
-        case NSLocalizedString("menu.habits", comment: ""):
+        case "menu.habits".localized:
             HabitsView()
-        case NSLocalizedString("menu.health", comment: ""):
+        case "menu.health".localized:
             HealthView()
-        case NSLocalizedString("menu.meditation", comment: ""):
+        case "menu.meditation".localized:
             MeditationView()
-        case NSLocalizedString("menu.memoryGame", comment: ""):
-            HabitsView()
-        case NSLocalizedString("menu.settings", comment: ""): 
-            HabitsView()
+        case "menu.memoryGame".localized:
+            WorkingMemoryGameView()
+        case "menu.settings".localized: 
+            SettingsView()
         default:
-            Text(NSLocalizedString("menu.comingSoon", comment: "Coming Soon"))
+            Text("menu.comingSoon".localized)
         }
     }
 }

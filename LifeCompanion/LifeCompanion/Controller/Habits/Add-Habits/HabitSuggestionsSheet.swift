@@ -13,6 +13,20 @@ struct HabitSuggestionsSheet: View {
     
     var body: some View {
         NavigationStack {
+            ZStack {
+                // Green gradient background matching Habits theme
+                LinearGradient(
+                    colors: [
+                        Color.green.opacity(0.08),
+                        Color.green.opacity(0.04),
+                        Color.mint.opacity(0.02),
+                        Color.clear
+                    ],
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                )
+                .ignoresSafeArea()
+                
                 ScrollView {
                 VStack(spacing: 20) {
                     // Başlık ve açıklama
@@ -50,7 +64,7 @@ struct HabitSuggestionsSheet: View {
                 }
                 .padding(.bottom, 20)
             }
-            .background(Color(.systemGroupedBackground))
+        }
             .navigationTitle("habit.suggestions.navigation.title".localized)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {

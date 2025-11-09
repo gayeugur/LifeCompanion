@@ -19,15 +19,16 @@ struct MeditationView: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                // Background gradient
+                // Theme-adaptive purple gradient background
                 LinearGradient(
                     colors: [
+                        Color.primaryBackground,
                         Color.purple.opacity(0.1),
-                        Color.pink.opacity(0.05),
+                        Color.secondaryBackground.opacity(0.6),
                         Color.clear
                     ],
-                    startPoint: .top,
-                    endPoint: .bottom
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
                 )
                 .ignoresSafeArea()
                 
@@ -53,20 +54,50 @@ struct MeditationView: View {
                 }
                 .padding()
                 }
-            }
-            .navigationTitle("menu.meditation".localized)
-            .navigationBarTitleDisplayMode(.large)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button(action: {
-                        // Manual session entry
-                        showManualSessionEntry()
-                    }) {
-                        Image(systemName: "plus")
-                            .fontWeight(.semibold)
+                
+                // Floating Action Button
+                VStack {
+                    Spacer()
+                    HStack {
+                        Spacer()
+                        Button(action: {
+                            showManualSessionEntry()
+                        }) {
+                            Image(systemName: "plus")
+                                .font(.title2)
+                                .fontWeight(.semibold)
+                                .foregroundColor(.white)
+                                .frame(width: 56, height: 56)
+                                .background(
+                                    Circle()
+                                        .fill(
+                                            LinearGradient(
+                                                colors: [Color.purple, Color.indigo],
+                                                startPoint: .topLeading,
+                                                endPoint: .bottomTrailing
+                                            )
+                                        )
+                                        .overlay(
+                                            Circle()
+                                                .stroke(Color.white.opacity(0.2), lineWidth: 1)
+                                        )
+                                )
+                                .shadow(
+                                    color: Color.black.opacity(0.15),
+                                    radius: 12,
+                                    x: 0,
+                                    y: 6
+                                )
+                                .scaleEffect(1.0)
+                        }
+                        .buttonStyle(FloatingButtonStyle())
+                        .padding(.trailing, 20)
+                        .padding(.bottom, 20)
                     }
                 }
             }
+            .navigationTitle("menu.meditation".localized)
+            .navigationBarTitleDisplayMode(.large)
             .onDisappear {
                 viewModel.cleanup()
             }
@@ -792,3 +823,12 @@ struct MeditationView: View {
 // MARK: - Breathing Exercise Functions - Now handled by ViewModel
 
 // MARK: - Data Management - Now handled by ViewModel
+
+// MARK: - Custom Button Style
+struct FloatingButtonStyle: ButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .scaleEffect(configuration.isPressed ? 0.9 : 1.0)
+            .animation(.easeInOut(duration: 0.1), value: configuration.isPressed)
+    }
+}

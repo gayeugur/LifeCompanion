@@ -6,14 +6,35 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		A43E1DC32EAD0B820066B138 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A43E1DC42EAD0B820066B138 /* XCTest.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		A43E1DBD2EAD0B800066B138 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A43E1D9F2EAD0B700066B138 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A43E1DA62EAD0B700066B138;
+			remoteInfo = LifeCompanion;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
 		A43E1DA72EAD0B700066B138 /* LifeCompanion.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LifeCompanion.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A43E1DBA2EAD0B800066B138 /* LifeCompanionTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LifeCompanionTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		A43E1DC42EAD0B820066B138 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Platforms/iPhoneOS.platform/Developer/Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		A43E1DA92EAD0B700066B138 /* LifeCompanion */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = LifeCompanion;
+			sourceTree = "<group>";
+		};
+		A43E1DBB2EAD0B800066B138 /* LifeCompanionTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = LifeCompanionTests;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -26,6 +47,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		A43E1DB72EAD0B800066B138 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A43E1DC32EAD0B820066B138 /* XCTest.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -33,7 +62,9 @@
 			isa = PBXGroup;
 			children = (
 				A43E1DA92EAD0B700066B138 /* LifeCompanion */,
+				A43E1DBB2EAD0B800066B138 /* LifeCompanionTests */,
 				A43E1DA82EAD0B700066B138 /* Products */,
+				A43E1DC52EAD0B820066B138 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -41,8 +72,17 @@
 			isa = PBXGroup;
 			children = (
 				A43E1DA72EAD0B700066B138 /* LifeCompanion.app */,
+				A43E1DBA2EAD0B800066B138 /* LifeCompanionTests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		A43E1DC52EAD0B820066B138 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				A43E1DC42EAD0B820066B138 /* XCTest.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -70,6 +110,29 @@
 			productReference = A43E1DA72EAD0B700066B138 /* LifeCompanion.app */;
 			productType = "com.apple.product-type.application";
 		};
+		A43E1DB92EAD0B800066B138 /* LifeCompanionTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A43E1DC02EAD0B820066B138 /* Build configuration list for PBXNativeTarget "LifeCompanionTests" */;
+			buildPhases = (
+				A43E1DB62EAD0B800066B138 /* Sources */,
+				A43E1DB72EAD0B800066B138 /* Frameworks */,
+				A43E1DB82EAD0B800066B138 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				A43E1DBC2EAD0B800066B138 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				A43E1DBB2EAD0B800066B138 /* LifeCompanionTests */,
+			);
+			name = LifeCompanionTests;
+			packageProductDependencies = (
+			);
+			productName = LifeCompanionTests;
+			productReference = A43E1DBA2EAD0B800066B138 /* LifeCompanionTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -82,6 +145,10 @@
 				TargetAttributes = {
 					A43E1DA62EAD0B700066B138 = {
 						CreatedOnToolsVersion = 16.2;
+					};
+					A43E1DB92EAD0B800066B138 = {
+						CreatedOnToolsVersion = 16.2;
+						TestTargetID = A43E1DA62EAD0B700066B138;
 					};
 				};
 			};
@@ -101,12 +168,20 @@
 			projectRoot = "";
 			targets = (
 				A43E1DA62EAD0B700066B138 /* LifeCompanion */,
+				A43E1DB92EAD0B800066B138 /* LifeCompanionTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
 		A43E1DA52EAD0B700066B138 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A43E1DB82EAD0B800066B138 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -123,7 +198,22 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		A43E1DB62EAD0B800066B138 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		A43E1DBC2EAD0B800066B138 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A43E1DA62EAD0B700066B138 /* LifeCompanion */;
+			targetProxy = A43E1DBD2EAD0B800066B138 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		A43E1DB52EAD0B720066B138 /* Debug */ = {
@@ -305,6 +395,44 @@
 			};
 			name = Release;
 		};
+		A43E1DC12EAD0B820066B138 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = LXLATYPP3P;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = gayeugur.LifeCompanionTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/LifeCompanion.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/LifeCompanion";
+			};
+			name = Debug;
+		};
+		A43E1DC22EAD0B820066B138 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = LXLATYPP3P;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = gayeugur.LifeCompanionTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/LifeCompanion.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/LifeCompanion";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -322,6 +450,15 @@
 			buildConfigurations = (
 				A43E1DB82EAD0B720066B138 /* Debug */,
 				A43E1DB92EAD0B720066B138 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A43E1DC02EAD0B820066B138 /* Build configuration list for PBXNativeTarget "LifeCompanionTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A43E1DC12EAD0B820066B138 /* Debug */,
+				A43E1DC22EAD0B820066B138 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

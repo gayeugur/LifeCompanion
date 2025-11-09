@@ -11,26 +11,55 @@ import SwiftData
 @Model
 final class WaterIntake {
     var date: Date
-    var glassCount: Int
-    var dailyGoal: Int
+    var dailyGoal: Int // Daily goal in ml
+    var amount: Int // Total amount consumed in ml
     var createdAt: Date
     
-    init(date: Date = Date(), glassCount: Int = 0, dailyGoal: Int = 8) {
+    init(date: Date = Date(), dailyGoal: Int = 2000, amount: Int = 0) {
         self.date = Calendar.current.startOfDay(for: date)
-        self.glassCount = glassCount
-        self.dailyGoal = dailyGoal
+        self.dailyGoal = dailyGoal // Default 2000ml per day
+        self.amount = amount // Total ml consumed
         self.createdAt = Date()
     }
     
+    // Computed glass count for backwards compatibility (based on 250ml glasses)
+    var glassCount: Int {
+        return Int(ceil(Double(amount) / 250.0))
+    }
+    
     var isGoalReached: Bool {
-        return glassCount >= dailyGoal
+        return amount >= dailyGoal
     }
     
     var progressPercentage: Double {
-        return min(Double(glassCount) / Double(dailyGoal), 1.0)
+        return min(Double(amount) / Double(dailyGoal), 1.0)
     }
     
     var remainingGlasses: Int {
-        return max(dailyGoal - glassCount, 0)
+        let glassSize = 250 // Standard glass size in ml
+        let remainingMl = max(dailyGoal - amount, 0)
+        return Int(ceil(Double(remainingMl) / Double(glassSize)))
+    }
+    
+    // Amount-based properties (primary)
+    var totalAmountInMl: Int {
+        return amount
+    }
+    
+    var goalAmountInMl: Int {
+        return dailyGoal
+    }
+    
+    var remainingAmountInMl: Int {
+        return max(dailyGoal - amount, 0)
+    }
+    
+    var amountProgressPercentage: Double {
+        return min(Double(amount) / Double(dailyGoal), 1.0)
+    }
+    
+    // Equivalent glasses for display purposes (based on 250ml)
+    var equivalentGlasses: Double {
+        return Double(amount) / 250.0
     }
 }

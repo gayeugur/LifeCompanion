@@ -21,12 +21,13 @@ struct TodoRowView: View {
                 
                 VStack(alignment: .leading) {
                     Text(todo.title)
+                        .foregroundColor(Color.primaryText)
                         .strikethrough(todo.isCompleted)
                     
                     if let subtitle = todo.notes {
                         Text(subtitle)
                             .font(.caption2)
-                            .foregroundColor(.gray)
+                            .foregroundColor(Color.secondaryText)
                     }
                 }
                 

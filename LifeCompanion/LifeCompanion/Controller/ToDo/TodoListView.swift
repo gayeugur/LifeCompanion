@@ -29,8 +29,18 @@ struct TodoListView: View {
         let sections = viewModel.sections(from: todos)
 
         ZStack {
-            Color(.systemGroupedBackground)
-                .ignoresSafeArea()
+            // Theme-adaptive blue gradient background
+            LinearGradient(
+                colors: [
+                    Color.primaryBackground,
+                    Color.blue.opacity(0.1),
+                    Color.secondaryBackground.opacity(0.5),
+                    Color.clear
+                ],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+            .ignoresSafeArea()
 
             VStack(spacing: 5) {
                 // MARK: - Time Filter Bar
@@ -61,7 +71,7 @@ struct TodoListView: View {
                 .padding(.horizontal, 10)
 
                 // MARK: - Status Filter Bar
-                HStack(spacing: 6) {
+                HStack(spacing: 4) {
                     ForEach(StatusFilter.allCases, id: \.self) { status in
                         let isSelected = viewModel.statusFilter == status
                         Button {
@@ -69,7 +79,7 @@ struct TodoListView: View {
                                 viewModel.apply(status: status)
                             }
                         } label: {
-                            filterButton(
+                            statusFilterButton(
                                 title: status.localizedName,
                                 icon: status.iconName,
                                 count: statusCounts[status],
@@ -85,8 +95,6 @@ struct TodoListView: View {
                 .clipShape(RoundedRectangle(cornerRadius: 18))
                 .padding(.horizontal, 10)
                 .padding(.bottom, 6)
-                .lineLimit(1)
-                .font(.system(size: 14, weight: .semibold))
 
                 // MARK: - List / Empty
                 if sections.isEmpty {
@@ -175,14 +183,48 @@ struct TodoListView: View {
         .font(.system(size: 13, weight: .semibold))
         .padding(.vertical, 6)
         .padding(.horizontal, 10)
-        .background(isSelected ? tint.opacity(0.15) : Color.white)
-        .foregroundColor(isSelected ? tint : .primary)
+        .background(isSelected ? tint.opacity(0.15) : Color.cardBackground)
+        .foregroundColor(isSelected ? tint : Color.primaryText)
         .overlay(
             RoundedRectangle(cornerRadius: 8)
-                .stroke(isSelected ? tint : Color.gray.opacity(0.2), lineWidth: 1)
+                .stroke(isSelected ? tint : Color.borderColor, lineWidth: 1)
         )
         .cornerRadius(8)
-        .shadow(color: isSelected ? tint.opacity(0.15) : .clear, radius: 3, x: 0, y: 1)
+        .shadow(color: Color.black.opacity(isSelected ? 0.1 : 0.05), radius: 3, x: 0, y: 1)
+    }
+    
+    // MARK: - Status Filter Button (Compact)
+    private func statusFilterButton(
+        title: String,
+        icon: String,
+        count: Int?,
+        tint: Color,
+        isSelected: Bool
+    ) -> some View {
+        HStack(spacing: 3) {
+            Image(systemName: icon)
+                .font(.system(size: 12))
+            Text(title)
+                .font(.system(size: 11, weight: .medium))
+                .lineLimit(1)
+                .minimumScaleFactor(0.8)
+            if let count, count > 0 {
+                Text("\(count)")
+                    .font(.system(size: 10))
+                    .foregroundColor(.secondary)
+            }
+        }
+        .frame(maxWidth: .infinity)
+        .padding(.vertical, 8)
+        .padding(.horizontal, 6)
+        .background(isSelected ? tint.opacity(0.15) : Color.cardBackground)
+        .foregroundColor(isSelected ? tint : Color.primaryText)
+        .overlay(
+            RoundedRectangle(cornerRadius: 8)
+                .stroke(isSelected ? tint : Color.borderColor, lineWidth: 1)
+        )
+        .cornerRadius(8)
+        .shadow(color: Color.black.opacity(isSelected ? 0.1 : 0.05), radius: 2, x: 0, y: 1)
     }
 
     // MARK: - List View

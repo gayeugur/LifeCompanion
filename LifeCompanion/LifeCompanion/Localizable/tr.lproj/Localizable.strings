@@ -175,7 +175,8 @@
 "health.water.title" = "Su Tüketimi";
 "health.water.remaining" = "kaldı";
 "health.water.goal.reached" = "Hedef Tamamlandı!";
-"health.water.add.glass" = "Bardak Ekle";
+"health.water.add.glass" = "Su Ekle";
+"health.daily.goal" = "Günlük Hedef";
 "health.quick.actions" = "Hızlı İşlemler";
 "health.action.coffee" = "Kahve";
 "health.action.walk" = "Yürüyüş";
@@ -316,6 +317,23 @@
 "medication.frequency.twice" = "Günde iki kez";
 "medication.frequency.thrice" = "Günde üç kez";
 "medication.frequency.asNeeded" = "Gerektiğinde";
+"medication.frequency.twiceWeekly" = "Haftada iki kez (Pzt, Per)";
+"medication.frequency.thriceWeekly" = "Haftada üç kez (Pzt, Çar, Cum)";
+
+//Habit Notifications
+"habit.notification.reminder.title" = "Alışkanlık Hatırlatıcısı";
+"habit.notification.reminder.body" = "%@ alışkanlığınızı tamamlama zamanı!";
+"habit.notification.celebration.title" = "🎉 Seri Başarısı!";
+"habit.notification.celebration.body" = "Harika! %@ için %d günlük seriye ulaştın! %@";
+
+//Medication Notifications
+"medication.notification.title" = "İlaç Hatırlatıcısı";
+"medication.notification.body" = "%@ ilacınızı alma zamanı (%@)";
+
+//Overdose Warnings
+"health.overdose.warning.title" = "Günlük Doz Tamamlandı";
+"health.overdose.warning.message" = "%@ ilacının önerilen günlük dozunu zaten aldınız. Fazla doz almak zararlı olabilir.";
+"health.take.anyway" = "Yine de Al";
 
 //Body Metrics Editing
 "health.edit.body.metrics" = "Vücut Ölçülerini Düzenle";
@@ -340,3 +358,155 @@
 "health.medication.frequency" = "Sıklık";
 "health.medication.reminder" = "Hatırlatıcı";
 "health.medication.reminder.time" = "Hatırlatıcı Zamanı";
+
+//Delete Confirmation
+"health.delete.confirmation.title" = "İlacı Sil";
+"health.delete.confirmation.message" = "%@ ilacını silmek istediğinizden emin misiniz? Tüm zamanlanmış hatırlatıcılar iptal edilecektir.";
+"common.delete" = "Sil";
+
+//Memory Game
+"memory.game.title" = "Hafıza Oyunu";
+"memory.game.welcome" = "Hafıza Oyununa Hoş Geldiniz!";
+"memory.game.description" = "Kazanmak için kart çiftlerini eşleştirin. Aynı anda iki kart çevirin ve konumlarını hatırlamaya çalışın.";
+"memory.game.start" = "Oyunu Başlat";
+"memory.game.pause" = "Duraklat";
+"memory.game.resume" = "Devam Et";
+"memory.game.reset" = "Sıfırla";
+"memory.game.new" = "Yeni Oyun";
+"memory.game.settings" = "Ayarlar";
+"memory.game.complete.title" = "Oyun Tamamlandı!";
+"memory.game.complete.message" = "Süre: %@\nHamle: %d\nDoğruluk: %@";
+"memory.game.winner" = "%@ kazandı!";
+"memory.game.tie" = "Berabere!";
+
+//Memory Game Stats
+"memory.stats.time" = "Süre";
+"memory.stats.moves" = "Hamle";
+"memory.stats.accuracy" = "Doğruluk";
+"memory.cards" = "kart";
+
+//Memory Game Players
+"memory.player.one" = "Oyuncu 1";
+"memory.player.two" = "Oyuncu 2";
+
+//Memory Game Grid Sizes
+"memory.grid.small" = "3x2 (Kolay)";
+"memory.grid.medium" = "3x4 (Orta)";
+"memory.grid.large" = "4x4 (Zor)";
+"memory.grid.extraLarge" = "4x5 (Uzman)";
+"memory.grid.huge" = "5x6 (Usta)";
+
+//Memory Game Difficulties
+"memory.difficulty.easy" = "Kolay";
+"memory.difficulty.medium" = "Orta";
+"memory.difficulty.hard" = "Zor";
+"memory.difficulty.expert" = "Uzman";
+"memory.difficulty.master" = "Usta";
+
+//Memory Game Modes
+"memory.mode.single" = "Tek Kişi";
+"memory.mode.two" = "İki Kişi";
+"memory.mode.single.desc" = "Zamana karşı oynayın ve en iyi skoru almaya çalışın";
+"memory.mode.two.desc" = "Bir arkadaşınızla sırayla oynayın ve kim daha fazla eşleşme yapar görün";
+
+//Memory Game Settings
+"memory.settings.title" = "Oyun Ayarları";
+"memory.settings.description" = "Hafıza oyunu deneyiminizi özelleştirin";
+"memory.settings.gamemode" = "Oyun Modu";
+"memory.settings.gridsize" = "Grid Boyutu";
+"memory.settings.current.game" = "Mevcut Oyun";
+"memory.settings.active.warning" = "Ayarları değiştirmek yeni bir oyun başlatacak";
+"memory.settings.best.score" = "En İyi Skor";
+"memory.settings.points" = "puan";
+"memory.settings.no.score" = "Henüz en iyi skor yok";
+"memory.settings.confirm.title" = "Yeni Oyun Başlatılsın mı?";
+"memory.settings.confirm.message" = "Aktif bir oyununuz var. Yeni oyun başlatmak mevcut ilerlemenizi kaybettirecek.";
+"memory.settings.new.game" = "Yeni Oyun Başlat";
+
+//Memory Card
+"memory.card.tap" = "Çevirmek için dokun";
+
+//High Scores  
+"highScores.title" = "En Yüksek Skorlar";
+"highScores.subtitle" = "En iyi performansların";
+"highScores.empty.title" = "Henüz Skor Yok";
+"highScores.empty.message" = "En yüksek skorlarını görmek için oyun oyna!";
+"highScores.difficulty.easy" = "Kolay";
+"highScores.difficulty.medium" = "Orta";
+"highScores.difficulty.hard" = "Zor";
+"highScores.difficulty.expert" = "Uzman";
+"highScores.score" = "Skor";
+"highScores.moves" = "hamle";
+"highScores.done" = "Tamam";
+
+//Streaks
+"streak.start" = "Serini başlat!";
+"streak.single" = "1 günlük seri!";
+"streak.days" = "%d günlük seri! %@";
+"streak.longest" = "En uzun: %d";
+"streak.celebration.title" = "🎉 Seri Başarısı!";
+"streak.celebration.message" = "%@ için %d günlük seri tamamladın! %@";
+"streak.celebration.button" = "Harika!";
+
+//Settings
+"settings.title" = "Ayarlar";
+"settings.welcome.title" = "Deneyiminizi Kişiselleştirin";
+"settings.welcome.subtitle" = "LifeCompanion'ı yaşam tarzınıza göre ayarlayın";
+"settings.general.title" = "Genel";
+"settings.general.darkmode" = "Karanlık Mod";
+"settings.general.language" = "Dil";
+"settings.general.notifications" = "Bildirimler";
+"settings.general.sounds" = "Ses Efektleri";
+"settings.general.haptics" = "Titreşim Geri Bildirimi";
+"settings.general.haptics.description" = "Alışkanlıkları tamamladığınızda ve kilometre taşlarına ulaştığınızda titreşim hissedin";
+"settings.habits.title" = "Alışkanlıklar";
+"settings.habits.reminder.time" = "Varsayılan Hatırlatma Saati";
+"settings.habits.celebrations" = "Seri Kutlamaları";
+"settings.habits.reset.time" = "Günlük Sıfırlama Saati";
+"settings.health.title" = "Sağlık";
+"settings.health.water.goal" = "Günlük Su Hedefi";
+"settings.memory.title" = "Hafıza Oyunu";
+"settings.memory.grid.size" = "Varsayılan Izgara Boyutu";
+"settings.privacy.title" = "Gizlilik ve Veri";
+"settings.privacy.data.export" = "Verilerimi Dışa Aktar";
+"settings.privacy.data.delete" = "Tüm Verileri Sil";
+"settings.export.format.title" = "Dışa Aktarma Format Seçimi";
+"settings.export.format.message" = "Dışa aktarma formatını seçin. PDF okunabilir bir rapor sağlar, JSON yedekleme ve geri yükleme için ham veri içerir.\n\n⚠️ Dosyalar cihazınıza kaydedilecek ve sistem paylaşım sayfası aracılığıyla paylaşılabilecek.";
+"settings.export.format.pdf" = "PDF Formatı";
+"settings.export.format.json" = "JSON Formatı";
+
+// Export Options
+"choose_export_method" = "Dışa Aktarma Yöntemini Seç";
+"save_to_files" = "Dosyalara Kaydet";
+"share" = "Paylaş";
+"export_success_message" = "Verileriniz seçilen konuma başarıyla kaydedildi.";
+"success" = "Başarılı";
+"settings.about.title" = "Hakkında";
+"settings.about.app" = "LifeCompanion Hakkında";
+"settings.about.version" = "Sürüm";
+"settings.about.privacy" = "Gizlilik Politikası";
+"settings.about.support" = "Yardım ve Destek";
+"settings.about.description" = "LifeCompanion, daha iyi alışkanlıklar edinmek, sağlığı takip etmek ve zihinsel sağlığı korumak için kişisel asistanınızdır.";
+"settings.about.features" = "Özellikler";
+"settings.about.feature.habits" = "Seri Takipli Alışkanlık Yönetimi";
+"settings.about.feature.health" = "Sağlık ve İlaç Yönetimi";
+"settings.about.feature.memory" = "Beyin Antrenmanı Oyunları";
+"settings.about.feature.todos" = "Akıllı Görev Yönetimi";
+"settings.about.feature.meditation" = "Farkındalık ve Meditasyon";
+"settings.language.title" = "Dil Seçin";
+"settings.notification.permission.title" = "Bildirim İzni";
+"settings.notification.permission.message" = "Hatırlatıcıları almak için lütfen Ayarlar'dan bildirimleri etkinleştirin.";
+"settings.notification.permission.settings" = "Ayarları Aç";
+"settings.privacy.delete.title" = "Tüm Verileri Sil";
+"settings.privacy.delete.message" = "Tüm verilerinizi silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.";
+"settings.privacy.delete.confirm" = "Hepsini Sil";
+"settings.support.email.failed.title" = "E-posta Kullanılamıyor";
+"settings.support.email.failed.message" = "Bu cihazda e-posta uygulaması yapılandırılmamış. Desteğe ulaşmak için Mail uygulamasını ayarlayın veya Gmail yükleyin.";
+
+//Common
+"common.back" = "Geri";
+"common.cancel" = "İptal";
+"common.save" = "Kaydet";
+"common.done" = "Tamam";
+"common.copy" = "Kopyala";
+"common.ok" = "Tamam";

@@ -15,7 +15,19 @@ struct HistoryView: View {
 
     var body: some View {
         ZStack {
-            Color(.systemGroupedBackground).ignoresSafeArea()
+            // Green gradient background matching History (part of Habits) theme
+            LinearGradient(
+                colors: [
+                    Color.green.opacity(0.10),
+                    Color.green.opacity(0.05),
+                    Color.mint.opacity(0.03),
+                    Color.clear
+                ],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+            .ignoresSafeArea()
+            
             contentView
         }
         .navigationTitle(NSLocalizedString("history.title", comment: "History"))

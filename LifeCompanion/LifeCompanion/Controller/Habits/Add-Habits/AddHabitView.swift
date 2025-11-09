@@ -28,9 +28,22 @@ struct AddHabitView: View {
 
     var body: some View {
         NavigationStack {
-            VStack(spacing: 0) {
+            ZStack {
+                // Green gradient background matching Habits theme
+                LinearGradient(
+                    colors: [
+                        Color.green.opacity(0.08),
+                        Color.green.opacity(0.04),
+                        Color.mint.opacity(0.02),
+                        Color.clear
+                    ],
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                )
+                .ignoresSafeArea()
                 
-                ScrollView {
+                VStack(spacing: 0) {
+                    ScrollView {
                     VStack(spacing: 24) {
                         // Başlık
                         card {
@@ -123,17 +136,18 @@ struct AddHabitView: View {
                     }
                     .padding(20)
                 }
-                .onTapGesture {                // <— boşluğa tıklayınca klavye kapanır
+                .onTapGesture {
                     isFieldFocused = false
                 }
                 
                 // Kaydet butonu
                 Button {
-                    onSave(title.trimmingCharacters(in: .whitespacesAndNewlines),
-                           frequency,
-                           targetCount,
-                           reminderTime)
-                    dismiss()
+                    let trimmedTitle = title.trimmingCharacters(in: .whitespacesAndNewlines)
+                    if !trimmedTitle.isEmpty {
+                        print("💾 Saving habit with title: '\(trimmedTitle)'")
+                        onSave(trimmedTitle, frequency, targetCount, reminderTime)
+                        dismiss()
+                    }
                 } label: {
                     Text("addHabit.saveButton".localized)
                         .font(.headline)
@@ -154,6 +168,7 @@ struct AddHabitView: View {
                 .disabled(title.isEmpty)
                 .opacity(title.isEmpty ? 0.4 : 1)
                 .ignoresSafeArea(.keyboard, edges: .bottom)
+                }
             }
             .background(Color(.systemGroupedBackground))
             .navigationTitle("addHabit.title".localized)

@@ -16,13 +16,38 @@ struct HabitRowView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             HStack {
-                Text(habit.title)
-                    .font(.headline)
-                    .foregroundStyle(.primary)
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(habit.title)
+                        .font(.headline)
+                        .foregroundStyle(.primary)
+                    
+                    // Streak gösterimi
+                    if habit.currentStreak > 0 {
+                        HStack(spacing: 4) {
+                            Text(habit.streakEmoji)
+                                .font(.caption)
+                            Text(habit.streakDescription)
+                                .font(.caption)
+                                .foregroundColor(.orange)
+                                .fontWeight(.medium)
+                        }
+                    }
+                }
+                
                 Spacer()
-                Text(habit.frequency.displayName.localized)
-                    .font(.footnote)
-                    .foregroundColor(.secondary)
+                
+                VStack(alignment: .trailing, spacing: 2) {
+                    Text(habit.frequency.displayName.localized)
+                        .font(.footnote)
+                        .foregroundColor(.secondary)
+                    
+                    // En uzun seri
+                    if habit.longestStreak > 0 {
+                        Text(String(format: "streak.longest".localized, habit.longestStreak))
+                            .font(.caption2)
+                            .foregroundColor(.secondary)
+                    }
+                }
             }
 
             HStack {

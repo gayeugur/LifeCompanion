@@ -10,14 +10,27 @@ import SwiftData
 
 struct HabitsView: View {
     @Environment(\.modelContext) private var modelContext
+    @EnvironmentObject var settingsManager: SettingsManager
+    @EnvironmentObject var feedbackManager: FeedbackManager
     @StateObject private var viewModel = HabitListViewModel()
     @State private var showingHistory = false
+    @State private var showingStreakCelebration = false
+    @State private var celebratingHabit: HabitItem?
     
     var body: some View {
         ZStack {
-            // app background
-            Color(.systemGroupedBackground)
-                .ignoresSafeArea()
+            // Green gradient background matching Habits theme
+            LinearGradient(
+                colors: [
+                    Color.green.opacity(0.12),
+                    Color.green.opacity(0.06),
+                    Color.mint.opacity(0.04),
+                    Color.clear
+                ],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+            .ignoresSafeArea()
 
             if viewModel.habits.isEmpty {
                 VStack(spacing: 16) {
@@ -40,7 +53,15 @@ struct HabitsView: View {
                     ForEach(viewModel.habits) { habit in
                         HabitRowView(
                             habit: habit,
-                            onIncrement: { viewModel.incrementCount(for: habit, in: modelContext) },
+                            onIncrement: { 
+                                let oldStreak = habit.currentStreak
+                                viewModel.incrementCount(for: habit, in: modelContext) 
+                                
+                                // Check for streak milestones
+                                if habit.isCompleted && habit.currentStreak > oldStreak {
+                                    checkStreakMilestone(habit: habit)
+                                }
+                            },
                             onDeleteRequest: { viewModel.showDeleteConfirmation(for: habit) },
                             onEdit: { viewModel.startEditing(habit) }
                         )
@@ -101,7 +122,7 @@ struct HabitsView: View {
         }
         .onAppear {
             viewModel.fetchHabits(from: modelContext)
-            viewModel.resetIfNeeded(in: modelContext)
+            viewModel.checkAutoReset(in: modelContext, settingsManager: settingsManager)
         }
         .sheet(isPresented: $viewModel.showingAddHabit, content: {
             AddHabitView { title, freq, count, reminder in
@@ -142,6 +163,31 @@ struct HabitsView: View {
                 viewModel.confirmDelete(in: modelContext)
             }
         )
+        .alert("streak.celebration.title".localized, isPresented: $showingStreakCelebration) {
+            Button("streak.celebration.button".localized) { }
+        } message: {
+            if let habit = celebratingHabit {
+                Text(String(format: "streak.celebration.message".localized, habit.currentStreak, habit.title, habit.streakEmoji))
+            }
+        }
+    }
+    
+    private func checkStreakMilestone(habit: HabitItem) {
+        // Only celebrate if enabled in settings
+        guard settingsManager.shouldShowStreakCelebration(for: habit.currentStreak) else { return }
+        
+        celebratingHabit = habit
+        withAnimation(.spring()) {
+            showingStreakCelebration = true
+        }
+        
+        // Use feedback manager for haptic and sound
+        feedbackManager.streakCelebration()
+        
+        // Schedule celebration notification if notifications are enabled
+        if settingsManager.notificationsEnabled {
+            habit.scheduleStreakCelebrationNotification()
+        }
     }
 }
 

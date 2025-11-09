@@ -22,7 +22,21 @@ struct EditHabitView: View {
 
     var body: some View {
         NavigationStack {
-            VStack(spacing: 0) {
+            ZStack {
+                // Green gradient background matching Habits theme
+                LinearGradient(
+                    colors: [
+                        Color.green.opacity(0.08),
+                        Color.green.opacity(0.04),
+                        Color.mint.opacity(0.02),
+                        Color.clear
+                    ],
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                )
+                .ignoresSafeArea()
+                
+                VStack(spacing: 0) {
                 
                 ScrollView {
                     VStack(spacing: 24) {
@@ -120,7 +134,7 @@ struct EditHabitView: View {
                 .opacity(title.isEmpty ? 0.4 : 1)
                 .ignoresSafeArea(.keyboard, edges: .bottom)
             }
-            .background(Color(.systemGroupedBackground))
+        }
             .navigationTitle("editHabit.title".localized)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {

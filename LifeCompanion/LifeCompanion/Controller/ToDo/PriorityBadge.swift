@@ -23,16 +23,22 @@ struct PriorityBadge: View {
             .font(.caption)
             .padding(.horizontal, 8)
             .padding(.vertical, 4)
-            .background(priorityColor)
+            .background(
+                Capsule()
+                    .fill(priorityColor)
+                    .overlay(
+                        Capsule()
+                            .stroke(Color.borderColor.opacity(0.2), lineWidth: 0.5)
+                    )
+            )
             .foregroundColor(.white)
-            .clipShape(Capsule())
     }
 
     private var priorityColor: Color {
         switch priority {
-        case .low: return .blue
-        case .medium: return .orange
-        case .high: return .red
+        case .low: return Color.blue.opacity(0.9)
+        case .medium: return Color.warningColor
+        case .high: return Color.errorColor
         }
     }
 }

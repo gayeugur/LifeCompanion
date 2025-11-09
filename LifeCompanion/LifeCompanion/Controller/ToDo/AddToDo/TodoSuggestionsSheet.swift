@@ -13,7 +13,21 @@ struct TodoSuggestionsSheet: View {
     
     var body: some View {
         NavigationStack {
-            ScrollView {
+            ZStack {
+                // Blue gradient background matching Todo theme
+                LinearGradient(
+                    colors: [
+                        Color.blue.opacity(0.08),
+                        Color.blue.opacity(0.04),
+                        Color.cyan.opacity(0.02),
+                        Color.clear
+                    ],
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                )
+                .ignoresSafeArea()
+                
+                ScrollView {
                 VStack(spacing: 20) {
                     // Başlık ve açıklama
                     VStack(spacing: 8) {
@@ -50,7 +64,7 @@ struct TodoSuggestionsSheet: View {
                 }
                 .padding(.bottom, 20)
             }
-            .background(Color(.systemGroupedBackground))
+        }
             .navigationTitle("todo.suggestions.navigation.title".localized)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {

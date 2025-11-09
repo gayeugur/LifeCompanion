@@ -201,9 +201,9 @@ enum StatusFilter: String, CaseIterable, Identifiable {
     var id: String { rawValue }
     var localizedName: String {
         switch self {
-        case .all: return NSLocalizedString("filter.status.all", comment: "All statuses")
-        case .completed: return NSLocalizedString("filter.status.completed", comment: "Completed")
-        case .incomplete: return NSLocalizedString("filter.status.incomplete", comment: "Incomplete")
+        case .all: return "filter.status.all".localized
+        case .completed: return "filter.status.completed".localized
+        case .incomplete: return "filter.status.incomplete".localized
         }
     }
     var iconName: String {

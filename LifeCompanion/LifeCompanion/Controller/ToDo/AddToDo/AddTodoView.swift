@@ -30,8 +30,22 @@ struct AddTodoView: View {
 
     var body: some View {
         NavigationStack {
-            VStack(spacing: 0) {
-                ScrollView {
+            ZStack {
+                // Theme-adaptive blue gradient background
+                LinearGradient(
+                    colors: [
+                        Color.primaryBackground,
+                        Color.blue.opacity(0.06),
+                        Color.secondaryBackground.opacity(0.4),
+                        Color.clear
+                    ],
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                )
+                .ignoresSafeArea()
+                
+                VStack(spacing: 0) {
+                    ScrollView {
                     VStack(spacing: 24) {
                         // Başlık + Alt başlık
                         card {
@@ -71,12 +85,12 @@ struct AddTodoView: View {
                                 TextField("add.title.placeholder".localized, text: $title)
                                     .focused($isFieldFocused) // <— odak bağlandı
                                     .padding(14)
-                                    .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 16))
+                                    .background(Color.tertiaryBackground, in: RoundedRectangle(cornerRadius: 16))
 
                                 TextField("add.subtitle.placeholder".localized, text: $subtitle)
                                     .focused($isFieldFocused) // <— aynı focus state ile bağlandı
                                     .padding(14)
-                                    .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 16))
+                                    .background(Color.tertiaryBackground, in: RoundedRectangle(cornerRadius: 16))
                             }
                         }
 
@@ -138,12 +152,7 @@ struct AddTodoView: View {
                 .opacity(isSaveDisabled ? 0.4 : 1)
                 .ignoresSafeArea(.keyboard, edges: .bottom)
             }
-            .background(
-                LinearGradient(colors: [Color.blue.opacity(0.08), Color.blue.opacity(0.02)],
-                               startPoint: .top,
-                               endPoint: .bottom)
-                    .ignoresSafeArea()
-            )
+        }
             .navigationTitle("add.title".localized)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
@@ -183,12 +192,16 @@ struct AddTodoView: View {
             .background(
                 ZStack {
                     RoundedRectangle(cornerRadius: 20)
-                        .fill(.ultraThinMaterial)
+                        .fill(Color.cardBackground)
                     RoundedRectangle(cornerRadius: 20)
-                        .fill(Color.blue.opacity(0.05))
+                        .fill(Color.blue.opacity(0.03))
                 }
             )
-            .shadow(color: .black.opacity(0.05), radius: 14, y: 4)
+            .overlay(
+                RoundedRectangle(cornerRadius: 20)
+                    .stroke(Color.borderColor.opacity(0.1), lineWidth: 0.5)
+            )
+            .shadow(color: Color.black.opacity(0.03), radius: 8, x: 0, y: 2)
     }
 
     private func applyTemplate(_ template: TodoTemplate) {

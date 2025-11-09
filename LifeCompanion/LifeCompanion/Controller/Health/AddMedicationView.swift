@@ -22,7 +22,21 @@ struct AddMedicationView: View {
     
     var body: some View {
         NavigationView {
-            VStack(spacing: 0) {
+            ZStack {
+                // Red gradient background matching Health theme
+                LinearGradient(
+                    colors: [
+                        Color.red.opacity(0.08),
+                        Color.red.opacity(0.04),
+                        Color.pink.opacity(0.02),
+                        Color.clear
+                    ],
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                )
+                .ignoresSafeArea()
+                
+                VStack(spacing: 0) {
                 // Header
                 VStack(spacing: 16) {
                     Image(systemName: "pills.fill")
@@ -104,6 +118,7 @@ struct AddMedicationView: View {
                     .padding(.horizontal, 20)
                 }
             }
+        }
             .navigationTitle("health.add.medication.title".localized)
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarBackButtonHidden(true)
@@ -158,6 +173,9 @@ struct AddMedicationView: View {
             reminderTime: isReminderEnabled ? reminderTime : nil,
             isActive: true
         )
+        
+        print("💊 Saving medication: \(medicationName) - \(dosage) - \(selectedFrequency.localizedName)")
+        print("💊 Scheduled times: \(medication.scheduledTimes)")
         
         onSave(medication)
         dismiss()

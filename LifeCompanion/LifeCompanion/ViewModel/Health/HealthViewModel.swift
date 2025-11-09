@@ -11,6 +11,9 @@ import SwiftUI
 
 @MainActor
 final class HealthViewModel: ObservableObject {
+    // Settings Manager reference (injected from view)
+    private var settingsManager: SettingsManager?
+    
     // Water Tracking
     @Published var todayWaterIntake: WaterIntake?
     @Published var weeklyWaterData: [WaterIntake] = []
@@ -33,52 +36,80 @@ final class HealthViewModel: ObservableObject {
     private let stepIncrement = 100
     
     func fetchTodayWaterIntake(from context: ModelContext) {
-        let today = Calendar.current.startOfDay(for: Date())
-        
-        let predicate = #Predicate<WaterIntake> { intake in
-            intake.date == today
-        }
-        
-        let fetchDescriptor = FetchDescriptor<WaterIntake>(
-            predicate: predicate,
-            sortBy: [SortDescriptor(\.date, order: .reverse)]
-        )
-        
-        if let intakes = try? context.fetch(fetchDescriptor), let intake = intakes.first {
-            todayWaterIntake = intake
-        } else {
-            // Bugün için yeni kayıt oluştur
-            let newIntake = WaterIntake(date: today, dailyGoal: currentWaterGoal)
-            context.insert(newIntake)
-            save(context)
+        do {
+            let today = Calendar.current.startOfDay(for: Date())
+            
+            let predicate = #Predicate<WaterIntake> { intake in
+                intake.date == today
+            }
+            
+            let fetchDescriptor = FetchDescriptor<WaterIntake>(
+                predicate: predicate,
+                sortBy: [SortDescriptor(\.date, order: .reverse)]
+            )
+            
+            let intakes = try context.fetch(fetchDescriptor)
+            if let intake = intakes.first {
+                todayWaterIntake = intake
+            } else {
+                // Create new record for today with ml-based defaults
+                let defaultGoal = settingsManager?.dailyWaterGoal ?? 2000
+                let newIntake = WaterIntake(date: today, dailyGoal: defaultGoal, amount: 0)
+                context.insert(newIntake)
+                save(context)
+                todayWaterIntake = newIntake
+            }
+        } catch {
+            print("❌ Error fetching water intake: \(error)")
+            // Fallback - create a safe default
+            let today = Calendar.current.startOfDay(for: Date())
+            let defaultGoal = settingsManager?.dailyWaterGoal ?? 2000
+            let newIntake = WaterIntake(date: today, dailyGoal: defaultGoal, amount: 0)
             todayWaterIntake = newIntake
         }
     }
     
-    func addWaterGlass(in context: ModelContext) {
+    func addWaterAmount(_ amount: Int = 250, in context: ModelContext) {
         guard let intake = todayWaterIntake else { return }
-        intake.glassCount += 1
+        intake.amount += amount // Add ml directly
         save(context)
         
         // Haptic feedback
         let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
         impactFeedback.impactOccurred()
+        
+        print("💧 Added \(amount)ml water. Total: \(intake.amount)ml / \(intake.dailyGoal)ml")
     }
     
-    func removeWaterGlass(in context: ModelContext) {
-        guard let intake = todayWaterIntake, intake.glassCount > 0 else { return }
-        intake.glassCount -= 1
+    func removeWaterAmount(_ amount: Int = 250, in context: ModelContext) {
+        guard let intake = todayWaterIntake, intake.amount > 0 else { return }
+        intake.amount = max(0, intake.amount - amount) // Remove ml directly
         save(context)
         
-        // Hafif haptic feedback
+        // Light haptic feedback
         let impactFeedback = UIImpactFeedbackGenerator(style: .light)
         impactFeedback.impactOccurred()
+        
+        print("💧 Removed \(amount)ml water. Total: \(intake.amount)ml / \(intake.dailyGoal)ml")
     }
     
-    func updateDailyGoal(_ newGoal: Int, in context: ModelContext) {
+    func addCustomWaterAmount(in context: ModelContext, amount: Int) {
         guard let intake = todayWaterIntake else { return }
-        intake.dailyGoal = newGoal
+        intake.amount += amount // Add custom ml amount
         save(context)
+        
+        // Haptic feedback
+        let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
+        impactFeedback.impactOccurred()
+        
+        print("💧 Added \(amount)ml water. Total: \(intake.amount)ml / \(intake.dailyGoal)ml")
+    }
+    
+    func updateDailyGoal(_ newGoalInMl: Int, in context: ModelContext) {
+        guard let intake = todayWaterIntake else { return }
+        intake.dailyGoal = newGoalInMl // Store goal in ml
+        save(context)
+        print("💧 Updated daily goal to \(newGoalInMl)ml")
     }
     
     func fetchWeeklyData(from context: ModelContext) {
@@ -103,6 +134,7 @@ final class HealthViewModel: ObservableObject {
     func save(_ context: ModelContext) {
         do {
             try context.save()
+            print("✅ Context saved successfully")
         } catch {
             print("❌ Health save error: \(error)")
         }
@@ -114,7 +146,7 @@ final class HealthViewModel: ObservableObject {
             return ("health.water.start.title", "health.water.start.message", "💧")
         }
         
-        let progress = intake.progressPercentage
+        let progress = intake.amountProgressPercentage // Use ml-based progress
         
         switch progress {
         case 0.0:
@@ -207,6 +239,13 @@ final class HealthViewModel: ObservableObject {
         return useCalculatedGoal ? calculatedWaterGoal : manualWaterGoal
     }
     
+    var dailyWaterGoal: Int {
+        guard let settingsManager = settingsManager else {
+            return currentWaterGoal
+        }
+        return settingsManager.dailyWaterGoal
+    }
+    
     var bmi: Double {
         let heightInMeters = height / 100
         return weight / (heightInMeters * heightInMeters)
@@ -231,22 +270,26 @@ final class HealthViewModel: ObservableObject {
         UserDefaults.standard.set(height, forKey: "health_height")
         UserDefaults.standard.set(weight, forKey: "health_weight")
         
-        // Update current water intake goal if exists
+        // Update current water intake goal if exists (ml-based)
         if let todayIntake = todayWaterIntake {
-            todayIntake.dailyGoal = currentWaterGoal
+            todayIntake.dailyGoal = dailyWaterGoal // Already in ml
             save(context)
         }
+        
+        print("💧 Updated body metrics: \(height)cm, \(weight)kg - Water goal: \(dailyWaterGoal)ml")
     }
     
     func toggleGoalType(in context: ModelContext) {
         useCalculatedGoal.toggle()
         UserDefaults.standard.set(useCalculatedGoal, forKey: "health_use_calculated_goal")
         
-        // Update current water intake goal if exists
+        // Update current water intake goal if exists (ml-based)
         if let todayIntake = todayWaterIntake {
-            todayIntake.dailyGoal = currentWaterGoal
+            todayIntake.dailyGoal = dailyWaterGoal // Already in ml
             save(context)
         }
+        
+        print("💧 Toggled goal type. Use calculated: \(useCalculatedGoal), Goal: \(dailyWaterGoal)ml")
     }
     
     func updateManualGoal(_ goal: Int) {
@@ -268,19 +311,23 @@ final class HealthViewModel: ObservableObject {
     
     // MARK: - Medication Tracking
     func fetchTodayMedications(from context: ModelContext) {
-        let today = Calendar.current.startOfDay(for: Date())
-        let tomorrow = Calendar.current.date(byAdding: .day, value: 1, to: today)!
-        
         let predicate = #Predicate<MedicationEntry> { medication in
-            medication.isActive && medication.createdAt >= today && medication.createdAt < tomorrow
+            medication.isActive
         }
         
-        let request = FetchDescriptor<MedicationEntry>(predicate: predicate)
+        let request = FetchDescriptor<MedicationEntry>(
+            predicate: predicate,
+            sortBy: [SortDescriptor(\.createdAt, order: .reverse)]
+        )
         
         do {
             todayMedications = try context.fetch(request)
+            print("💊 Fetched \(todayMedications.count) active medications")
+            for med in todayMedications {
+                print("💊 - \(med.medicationName): \(med.dosage) (\(med.frequency.localizedName))")
+            }
         } catch {
-            print("Error fetching medications: \(error)")
+            print("❌ Error fetching medications: \(error)")
             todayMedications = []
         }
     }
@@ -292,5 +339,69 @@ final class HealthViewModel: ObservableObject {
         impactFeedback.impactOccurred()
     }
     
+    // Settings integration - update water goal from settings (ml-based)
+    func updateWaterGoalFromSettings(_ settingsManager: SettingsManager, context: ModelContext) {
+        // Use ml goal directly from settings
+        let mlGoal = settingsManager.dailyWaterGoal
+        
+        // Update today's water intake goal
+        if let intake = todayWaterIntake {
+            intake.dailyGoal = mlGoal // Store goal in ml
+            save(context)
+        }
+        
+        // Update manual goal for future use
+        manualWaterGoal = mlGoal
+        print("💧 Updated water goal from settings: \(mlGoal)ml")
+    }
+    
+    func updateFromSettings(_ settingsManager: SettingsManager) {
+        self.settingsManager = settingsManager
+        
+        // Update current water intake goal if exists and valid (ml-based)
+        if let todayIntake = todayWaterIntake, settingsManager.dailyWaterGoal > 0 {
+            todayIntake.dailyGoal = settingsManager.dailyWaterGoal // Store goal in ml
+        }
+        print("💧 Updated from settings: goal = \(settingsManager.dailyWaterGoal)ml")
+    }
+    
+    func checkAutoReset(context: ModelContext) {
+        guard let settingsManager = settingsManager else { return }
+        
+        let now = Date()
+        let calendar = Calendar.current
+        let autoResetTime = settingsManager.autoResetTime
+        
+        // Get reset time for today
+        let resetComponents = calendar.dateComponents([.hour, .minute], from: autoResetTime)
+        guard let todayResetTime = calendar.date(bySettingHour: resetComponents.hour ?? 0,
+                                                 minute: resetComponents.minute ?? 0,
+                                                 second: 0,
+                                                 of: now) else { return }
+        
+        let lastResetKey = "last_water_reset_date"
+        let lastResetString = UserDefaults.standard.string(forKey: lastResetKey) ?? ""
+        
+        // Create today's date string for comparison
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        let todayString = dateFormatter.string(from: now)
+        
+        // Check if we need to reset (new day and past reset time)
+        let needsReset = lastResetString != todayString && now >= todayResetTime
+        
+        if needsReset {
+            resetWaterIntake(context: context)
+            UserDefaults.standard.set(todayString, forKey: lastResetKey)
+            print("💧 Auto-reset performed at \(dateFormatter.string(from: now))")
+        }
+    }
+    
+    func resetWaterIntake(context: ModelContext) {
+        guard let intake = todayWaterIntake else { return }
+        intake.amount = 0 // Reset ml amount to 0
+        save(context)
+        print("💧 Water intake reset. Total: 0ml / \(intake.dailyGoal)ml")
+    }
 
 }

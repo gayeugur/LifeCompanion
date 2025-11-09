@@ -7,10 +7,21 @@
 
 import SwiftUI
 import SwiftData
+import UserNotifications
 
 struct HealthView: View {
     @Environment(\.modelContext) private var modelContext
     @StateObject private var viewModel = HealthViewModel()
+    @EnvironmentObject private var settingsManager: SettingsManager
+    
+    // SwiftData Query for medications - simplified
+    @Query(sort: \MedicationEntry.createdAt, order: .reverse) 
+    private var allMedications: [MedicationEntry]
+    
+    // Computed property for active medications
+    private var medications: [MedicationEntry] {
+        allMedications.filter { $0.isActive }
+    }
     
     // Edit Body Metrics Sheet
     @State private var showingBodyMetricsEdit = false
@@ -24,35 +35,60 @@ struct HealthView: View {
     // Add Medication
     @State private var showingAddMedication = false
     
+    // Overdose Alert
+    @State private var showingOverdoseAlert = false
+    @State private var selectedMedication: MedicationEntry?
+    
+    // Delete Confirmation
+    @State private var showingDeleteAlert = false
+    @State private var medicationToDelete: MedicationEntry?
+    
     var body: some View {
-        ScrollView {
-            VStack(spacing: 24) {
-                // Header
-                headerSection
-                
-                // Water Intake Card
-                waterIntakeCard
-                
-                // Quick Actions
-                quickActionsCard
-                
-                // Body Metrics & Goal Settings
-                bodyMetricsCard
-                
-                // Medication Tracking
-                medicationCard
-                
-                // Weekly Progress
-                weeklyProgressCard
-                
-                // Health Tips
-                healthTipsCard
+        Group {
+            if viewModel.todayWaterIntake != nil {
+                ScrollView {
+                    VStack(spacing: 24) {
+                        // Header
+                        headerSection
+                        
+                        // Water Intake Card
+                        waterIntakeCard
+                        
+                        // Quick Actions
+                        quickActionsCard
+                        
+                        // Body Metrics & Goal Settings
+                        bodyMetricsCard
+                        
+                        // Medication Tracking
+                        medicationCard
+                        
+                        // Weekly Progress
+                        weeklyProgressCard
+                        
+                        // Health Tips
+                        healthTipsCard
+                    }
+                    .padding(20)
+                }
+            } else {
+                // Loading state
+                VStack {
+                    ProgressView("Loading health data...")
+                        .foregroundColor(Color.primaryText)
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .background(Color.primaryBackground)
             }
-            .padding(20)
         }
         .background(
             LinearGradient(
-                colors: [Color.blue.opacity(0.1), Color.cyan.opacity(0.05)],
+                colors: [
+                    Color.red.opacity(0.12),
+                    Color.pink.opacity(0.08), 
+                    Color.red.opacity(0.04),
+                    Color.clear
+                ],
                 startPoint: .topLeading,
                 endPoint: .bottomTrailing
             )
@@ -61,11 +97,26 @@ struct HealthView: View {
         .navigationTitle("menu.health".localized)
         .navigationBarTitleDisplayMode(.large)
         .onAppear {
-            viewModel.fetchTodayWaterIntake(from: modelContext)
-            viewModel.fetchWeeklyData(from: modelContext)
-            viewModel.loadDailyQuickActions()
-            viewModel.loadBodyMetrics()
-            viewModel.fetchTodayMedications(from: modelContext)
+            Task { @MainActor in
+                do {
+                    // Settings manager integration first
+                    viewModel.updateFromSettings(settingsManager)
+                    
+                    // Load saved data
+                    viewModel.loadBodyMetrics()
+                    viewModel.loadDailyQuickActions()
+                    
+                    // Fetch data from context
+                    viewModel.fetchTodayWaterIntake(from: modelContext)
+                    viewModel.fetchWeeklyData(from: modelContext)
+                    viewModel.fetchTodayMedications(from: modelContext)
+                    
+                    // Check for auto reset
+                    viewModel.checkAutoReset(context: modelContext)
+                } catch {
+                    print("❌ Error in HealthView onAppear: \(error)")
+                }
+            }
         }
         .sheet(isPresented: $showingBodyMetricsEdit) {
             bodyMetricsEditSheet
@@ -88,14 +139,83 @@ struct HealthView: View {
         } message: {
             Text("health.manual.goal.description".localized)
         }
+        .alert("health.overdose.warning.title".localized, isPresented: $showingOverdoseAlert) {
+            Button("common.cancel".localized, role: .cancel) { }
+            
+            Button("health.take.anyway".localized, role: .destructive) {
+                if let medication = selectedMedication {
+                    takeMedication(medication)
+                }
+            }
+        } message: {
+            if let medication = selectedMedication {
+                Text(String(format: "health.overdose.warning.message".localized, medication.medicationName))
+            }
+        }
+        .alert("health.delete.confirmation.title".localized, isPresented: $showingDeleteAlert) {
+            Button("common.cancel".localized, role: .cancel) { }
+            
+            Button("common.delete".localized, role: .destructive) {
+                if let medication = medicationToDelete {
+                    deleteMedication(medication)
+                    medicationToDelete = nil
+                }
+            }
+        } message: {
+            if let medication = medicationToDelete {
+                Text(String(format: "health.delete.confirmation.message".localized, medication.medicationName))
+            }
+        }
         .sheet(isPresented: $showingAddMedication) {
             AddMedicationView { medication in
                 // Add medication to context
+                print("💊 Adding medication to context: \(medication.medicationName)")
                 modelContext.insert(medication)
-                viewModel.save(modelContext)
-                viewModel.fetchTodayMedications(from: modelContext)
+                
+                // Save - @Query will automatically update
+                do {
+                    try modelContext.save()
+                    print("✅ Medication saved successfully")
+                    
+                    // Request notification permission and schedule
+                    requestNotificationPermission { granted in
+                        if granted {
+                            medication.scheduleNotifications()
+                            print("📢 Notifications scheduled for \(medication.medicationName)")
+                        } else {
+                            print("⚠️ Cannot schedule notifications - permission denied")
+                        }
+                    }
+                } catch {
+                    print("❌ Failed to save medication: \(error)")
+                }
             }
         }
+    }
+    
+    // MARK: - Quick Water Button Helper
+    @ViewBuilder
+    private func quickWaterButton(amount: Int, in context: ModelContext) -> some View {
+        Button(action: {
+            viewModel.addWaterAmount(amount, in: context)
+        }) {
+            Text("\(amount)ml")
+                .font(.caption)
+                .fontWeight(.medium)
+                .foregroundColor(.blue)
+                .padding(.horizontal, 12)
+                .padding(.vertical, 6)
+                .background(
+                    RoundedRectangle(cornerRadius: 8)
+                        .fill(Color.blue.opacity(0.1))
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 8)
+                                .stroke(Color.blue.opacity(0.3), lineWidth: 1)
+                        )
+                )
+        }
+        .scaleEffect(0.9)
+        .animation(.easeInOut(duration: 0.1), value: viewModel.todayWaterIntake?.amount)
     }
     
     // MARK: - Header Section
@@ -154,10 +274,31 @@ struct HealthView: View {
                 Spacer()
                 
                 if let intake = viewModel.todayWaterIntake {
-                    Text("\(intake.glassCount)/\(intake.dailyGoal)")
+                    Text("\(intake.totalAmountInMl)ml/\(intake.goalAmountInMl)ml")
                         .font(.title3)
                         .fontWeight(.bold)
                         .foregroundColor(.blue)
+                        .onLongPressGesture {
+                            if intake.amount > 0 {
+                                withAnimation(.spring()) {
+                                    viewModel.resetWaterIntake(context: modelContext)
+                                }
+                            }
+                        }
+                }
+                
+                // Reset Button
+                if let intake = viewModel.todayWaterIntake, intake.amount > 0 {
+                    Button(action: {
+                        withAnimation(.spring()) {
+                            viewModel.resetWaterIntake(context: modelContext)
+                        }
+                    }) {
+                        Image(systemName: "arrow.clockwise.circle.fill")
+                            .font(.title3)
+                            .foregroundColor(.red.opacity(0.7))
+                    }
+                    .buttonStyle(.plain)
                 }
             }
             
@@ -171,7 +312,7 @@ struct HealthView: View {
                     
                     // Progress Circle
                     Circle()
-                        .trim(from: 0.0, to: intake.progressPercentage)
+                        .trim(from: 0.0, to: intake.amountProgressPercentage)
                         .stroke(
                             LinearGradient(
                                 colors: [.blue, .cyan],
@@ -182,17 +323,18 @@ struct HealthView: View {
                         )
                         .frame(width: 120, height: 120)
                         .rotationEffect(.degrees(-90))
-                        .animation(.easeInOut(duration: 0.8), value: intake.progressPercentage)
+                        .animation(.easeInOut(duration: 0.8), value: intake.amountProgressPercentage)
                     
                     // Center Content
                     VStack(spacing: 4) {
-                        Text("\(Int(intake.progressPercentage * 100))%")
+                        Text("\(Int(intake.amountProgressPercentage * 100))%")
                             .font(.title2)
                             .fontWeight(.bold)
                             .foregroundColor(.primary)
                         
-                        if intake.remainingGlasses > 0 {
-                            Text("\(intake.remainingGlasses) \("health.water.remaining".localized)")
+                        if intake.amountProgressPercentage < 1.0 {
+                            let remainingML = max(0, intake.goalAmountInMl - intake.totalAmountInMl)
+                            Text("\(remainingML)ml \("health.water.remaining".localized)")
                                 .font(.caption)
                                 .foregroundColor(.secondary)
                         } else {
@@ -205,51 +347,71 @@ struct HealthView: View {
                 }
             }
             
-            // Add/Remove Buttons
-            HStack(spacing: 20) {
-                Button(action: {
-                    viewModel.removeWaterGlass(in: modelContext)
-                }) {
-                    Image(systemName: "minus.circle.fill")
-                        .font(.title)
-                        .foregroundColor(.red)
-                }
-                .disabled(viewModel.todayWaterIntake?.glassCount == 0)
-                
-                Spacer()
-                
-                Button(action: {
-                    viewModel.addWaterGlass(in: modelContext)
-                }) {
-                    HStack(spacing: 8) {
-                        Image(systemName: "plus.circle.fill")
+            // Quick Add Buttons (ml-based)
+            VStack(spacing: 12) {
+                // Main add/remove buttons
+                HStack(spacing: 20) {
+                    Button(action: {
+                        viewModel.removeWaterAmount(250, in: modelContext)
+                    }) {
+                        Image(systemName: "minus.circle.fill")
                             .font(.title)
-                        Text("health.water.add.glass".localized)
-                            .font(.headline)
-                            .fontWeight(.semibold)
+                            .foregroundColor(.red)
                     }
-                    .foregroundColor(.white)
-                    .padding(.horizontal, 24)
-                    .padding(.vertical, 12)
-                    .background(
-                        LinearGradient(
-                            colors: [.blue, .cyan],
-                            startPoint: .leading,
-                            endPoint: .trailing
+                    .disabled(viewModel.todayWaterIntake?.amount == 0)
+                    
+                    Spacer()
+                    
+                    Button(action: {
+                        viewModel.addWaterAmount(250, in: modelContext)
+                    }) {
+                        VStack(spacing: 4) {
+                            HStack(spacing: 6) {
+                                Image(systemName: "plus.circle.fill")
+                                    .font(.title2)
+                            }
+                            .padding(.bottom, 2)
+                            
+                            VStack(spacing: 2) {
+                                Text("health.water.add.glass".localized)
+                                    .font(.subheadline)
+                                    .fontWeight(.semibold)
+                                Text("(250ml)")
+                                    .font(.caption)
+                                    .fontWeight(.medium)
+                            }
+                        }
+                        .foregroundColor(.white)
+                        .padding(.horizontal, 16)
+                        .padding(.vertical, 12)
+                        .background(
+                            LinearGradient(
+                                colors: [.blue, .cyan],
+                                startPoint: .leading,
+                                endPoint: .trailing
+                            )
                         )
-                    )
-                    .cornerRadius(25)
-                    .shadow(color: .blue.opacity(0.3), radius: 8, x: 0, y: 4)
+                        .cornerRadius(25)
+                        .shadow(color: .blue.opacity(0.3), radius: 8, x: 0, y: 4)
+                    }
+                    
+                    Spacer()
+                    
+                    Button(action: {
+                        // Goal setting functionality can be added here
+                    }) {
+                        Image(systemName: "target")
+                            .font(.title)
+                            .foregroundColor(.orange)
+                    }
                 }
                 
-                Spacer()
-                
-                Button(action: {
-                    // Goal setting functionality can be added here
-                }) {
-                    Image(systemName: "target")
-                        .font(.title)
-                        .foregroundColor(.orange)
+                // Quick ml amount buttons
+                HStack(spacing: 12) {
+                    quickWaterButton(amount: 100, in: modelContext)
+                    quickWaterButton(amount: 200, in: modelContext)
+                    quickWaterButton(amount: 500, in: modelContext)
+                    quickWaterButton(amount: 750, in: modelContext)
                 }
             }
         }
@@ -531,18 +693,14 @@ struct HealthView: View {
                     Spacer()
                 }
                 
-                if viewModel.useCalculatedGoal {
-                    Text("\("health.calculated.goal".localized): \(viewModel.calculatedWaterGoal)ml")
+                HStack {
+                    Text("\("health.daily.goal".localized): \(settingsManager.dailyWaterGoal)ml")
                         .font(.caption)
                         .foregroundColor(.secondary)
-                } else {
-                    HStack {
-                        Text("\("health.manual.goal".localized): \(viewModel.manualWaterGoal)ml")
-                            .font(.caption)
-                            .foregroundColor(.secondary)
-                        
-                        Spacer()
-                        
+                    
+                    Spacer()
+                    
+                    if !viewModel.useCalculatedGoal {
                         Button("health.change".localized) {
                             manualGoalInput = String(viewModel.manualWaterGoal)
                             showingManualGoalInput = true
@@ -585,7 +743,7 @@ struct HealthView: View {
                 }
             }
             
-            if viewModel.todayMedications.isEmpty {
+            if medications.isEmpty {
                 VStack(spacing: 8) {
                     Image(systemName: "pills")
                         .font(.system(size: 32))
@@ -599,9 +757,19 @@ struct HealthView: View {
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 20)
             } else {
-                ForEach(viewModel.todayMedications) { medication in
-                    medicationRow(medication)
+                // Use List for swipe actions
+                List {
+                    ForEach(medications) { medication in
+                        medicationRowForList(medication)
+                            .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+                                Button("Delete", role: .destructive) {
+                                    showDeleteAlert(for: medication)
+                                }
+                            }
+                    }
                 }
+                .listStyle(PlainListStyle())
+                .frame(height: CGFloat(medications.count * 80))
             }
         }
         .padding(20)
@@ -634,17 +802,34 @@ struct HealthView: View {
             Spacer()
             
             VStack(spacing: 4) {
-                Circle()
-                    .fill(medication.completionPercentage >= 1.0 ? Color.green : Color.gray.opacity(0.3))
-                    .frame(width: 12, height: 12)
+                let percentage = Int(medication.completionPercentage * 100)
                 
-                Text("\(Int(medication.completionPercentage * 100))%")
+                if medication.completionPercentage > 1.0 {
+                    // Over 100% - show warning
+                    Image(systemName: "exclamationmark.triangle.fill")
+                        .foregroundColor(.orange)
+                        .font(.title3)
+                } else {
+                    Circle()
+                        .fill(medication.completionPercentage >= 1.0 ? Color.green : Color.gray.opacity(0.3))
+                        .frame(width: 12, height: 12)
+                }
+                
+                Text("\(percentage)%")
                     .font(.caption2)
-                    .foregroundColor(.secondary)
+                    .foregroundColor(medication.completionPercentage > 1.0 ? .orange : .secondary)
             }
             
             Button(action: {
-                viewModel.markMedicationTaken(medication)
+                // Check for potential overdose
+                if medication.completionPercentage >= 1.0 {
+                    selectedMedication = medication
+                    showingOverdoseAlert = true
+                    return
+                }
+                
+                // Mark medication as taken
+                takeMedication(medication)
             }) {
                 Image(systemName: "checkmark.circle.fill")
                     .font(.title2)
@@ -652,6 +837,68 @@ struct HealthView: View {
             }
         }
         .padding(.vertical, 8)
+        .contextMenu {
+            Button("Delete", role: .destructive) {
+                showDeleteAlert(for: medication)
+            }
+        }
+    }
+    
+    private func medicationRowForList(_ medication: MedicationEntry) -> some View {
+        HStack(spacing: 12) {
+            VStack(alignment: .leading, spacing: 4) {
+                Text(medication.medicationName)
+                    .font(.subheadline)
+                    .fontWeight(.medium)
+                
+                Text(medication.dosage + " • " + medication.frequency.localizedName)
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+                
+                if let nextDose = medication.nextDoseTime {
+                    Text("\("health.next.dose".localized): \(nextDose, style: .time)")
+                        .font(.caption2)
+                        .foregroundColor(.red)
+                }
+            }
+            
+            Spacer()
+            
+            VStack(spacing: 4) {
+                let percentage = Int(medication.completionPercentage * 100)
+                
+                if medication.completionPercentage > 1.0 {
+                    // Over 100% - show warning
+                    Image(systemName: "exclamationmark.triangle.fill")
+                        .foregroundColor(.orange)
+                        .font(.title3)
+                } else {
+                    Circle()
+                        .fill(medication.completionPercentage >= 1.0 ? Color.green : Color.gray.opacity(0.3))
+                        .frame(width: 12, height: 12)
+                }
+                
+                Text("\(percentage)%")
+                    .font(.caption2)
+                    .foregroundColor(medication.completionPercentage > 1.0 ? .orange : .secondary)
+            }
+            
+            Button(action: {
+                // Check for potential overdose
+                if medication.completionPercentage >= 1.0 {
+                    selectedMedication = medication
+                    showingOverdoseAlert = true
+                } else {
+                    takeMedication(medication)
+                }
+            }) {
+                Image(systemName: "checkmark.circle.fill")
+                    .font(.title2)
+                    .foregroundColor(.green)
+            }
+        }
+        .listRowBackground(Color.clear)
+        .listRowSeparator(.hidden)
     }
     
     // MARK: - Health Tips Card
@@ -830,5 +1077,62 @@ struct HealthView: View {
     private func dayOfWeek(_ index: Int) -> String {
         let days = ["health.day.mon", "health.day.tue", "health.day.wed", "health.day.thu", "health.day.fri", "health.day.sat", "health.day.sun"]
         return days[index].localized
+    }
+    
+    // MARK: - Medication Actions
+    private func takeMedication(_ medication: MedicationEntry) {
+        // Mark medication as taken
+        medication.takenTimes.append(Date())
+        
+        // Save to context
+        do {
+            try modelContext.save()
+        } catch {
+            print("❌ Failed to save medication taken time: \(error)")
+        }
+        
+        // Haptic feedback
+        let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
+        impactFeedback.impactOccurred()
+    }
+    
+    private func showDeleteAlert(for medication: MedicationEntry) {
+        medicationToDelete = medication
+        showingDeleteAlert = true
+    }
+    
+    private func deleteMedication(_ medication: MedicationEntry) {
+        // Cancel all pending notifications for this medication
+        let identifiers = medication.getNotificationIdentifiers()
+        UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: identifiers)
+        
+        // Delete from SwiftData context
+        modelContext.delete(medication)
+        
+        // Save context
+        do {
+            try modelContext.save()
+        } catch {
+            print("❌ Failed to delete medication: \(error)")
+        }
+        
+        // Haptic feedback
+        let impactFeedback = UIImpactFeedbackGenerator(style: .light)
+        impactFeedback.impactOccurred()
+    }
+    
+    // MARK: - Notification Permission
+    private func requestNotificationPermission(completion: @escaping (Bool) -> Void) {
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { granted, error in
+            DispatchQueue.main.async {
+                if let error = error {
+                    print("❌ Notification permission error: \(error)")
+                    completion(false)
+                } else {
+                    print(granted ? "✅ Notification permission granted" : "❌ Notification permission denied")
+                    completion(granted)
+                }
+            }
+        }
     }
 }
