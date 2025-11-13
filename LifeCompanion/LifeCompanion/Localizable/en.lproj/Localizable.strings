@@ -435,6 +435,27 @@
 
 //Memory Game
 "memory.game.title" = "Memory Game";
+"memoryGame.title" = "Memory Game";
+"memoryGame.singlePlayer" = "Single Player";
+"memoryGame.time" = "Time";
+"memoryGame.moves" = "Moves";
+"memoryGame.matches" = "Matches";
+"memoryGame.newGame" = "New Game";
+"memoryGame.settings" = "Settings";
+"memoryGame.scores" = "🏆 Scores";
+"memoryGame.gameComplete" = "🎉 Game Complete!";
+"memoryGame.viewScores" = "View Scores";
+"memoryGame.congratulations" = "Congratulations! You completed the game in";
+"memoryGame.movesCount" = "moves and";
+"memoryGame.score" = "Your Score:";
+"memoryGame.points" = "points";
+"memoryGame.easy" = "3x3 (Easy)";
+"memoryGame.medium" = "4x4 (Medium)";
+"memoryGame.hard" = "5x5 (Hard)";
+"memoryGame.expert" = "6x6 (Expert)";
+"memoryGame.gameSettings" = "Game Settings";
+"memoryGame.gridSize" = "Grid Size";
+"memoryGame.cards" = "cards";
 "memory.game.welcome" = "Welcome to Memory Game!";
 "memory.game.description" = "Match pairs of cards to win. Flip two cards at a time and try to remember their positions.";
 "memory.game.start" = "Start Game";

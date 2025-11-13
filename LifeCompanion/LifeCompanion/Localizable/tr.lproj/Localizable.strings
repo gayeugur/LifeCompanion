@@ -319,7 +319,7 @@
 "meditation.sound.forest" = "Orman";
 "meditation.sound.whitenoise" = "Beyaz Gürültü";
 "meditation.sound.birds" = "Kuş Sesleri";
-"meditation.sound.ambient" = "Ambient Pad";
+"meditation.sound.ambient" = "Ortam Müziği";
 "meditation.volume" = "Ses Seviyesi";
 "meditation.now.playing" = "Şimdi Çalıyor";
 
@@ -435,6 +435,27 @@
 
 //Memory Game
 "memory.game.title" = "Hafıza Oyunu";
+"memoryGame.title" = "Hafıza Oyunu";
+"memoryGame.singlePlayer" = "Tek Kişi";
+"memoryGame.time" = "Süre";
+"memoryGame.moves" = "Hamle";
+"memoryGame.matches" = "Eşleşme";
+"memoryGame.newGame" = "Yeni Oyun";
+"memoryGame.settings" = "Ayarlar";
+"memoryGame.scores" = "🏆 Skorlar";
+"memoryGame.gameComplete" = "🎉 Oyun Tamamlandı!";
+"memoryGame.viewScores" = "Skorları Görüntüle";
+"memoryGame.congratulations" = "Tebrikler! Oyunu şu kadar hamle ile tamamladınız:";
+"memoryGame.movesCount" = "hamle ve süre";
+"memoryGame.score" = "Skorunuz:";
+"memoryGame.points" = "puan";
+"memoryGame.easy" = "3x3 (Kolay)";
+"memoryGame.medium" = "4x4 (Orta)";
+"memoryGame.hard" = "5x5 (Zor)";
+"memoryGame.expert" = "6x6 (Uzman)";
+"memoryGame.gameSettings" = "Oyun Ayarları";
+"memoryGame.gridSize" = "Izgara Boyutu";
+"memoryGame.cards" = "kart";
 "memory.game.welcome" = "Hafıza Oyununa Hoş Geldiniz!";
 "memory.game.description" = "Kazanmak için kart çiftlerini eşleştirin. Aynı anda iki kart çevirin ve konumlarını hatırlamaya çalışın.";
 "memory.game.start" = "Oyunu Başlat";

@@ -13,10 +13,6 @@ struct HistoryView: View {
     @StateObject private var viewModel = HabitListViewModel()
 
     @State private var sections: [HistorySection] = []
-    @State private var showingAddHistorySheet = false
-    @State private var selectedDate = Date()
-    @State private var selectedHabit: HabitItem?
-    @State private var allHabits: [HabitItem] = []
 
     var body: some View {
         ZStack {
@@ -37,29 +33,8 @@ struct HistoryView: View {
         }
         .navigationTitle("history.title".localized)
         .navigationBarTitleDisplayMode(.large)
-        .toolbar {
-            ToolbarItem(placement: .navigationBarTrailing) {
-                Button {
-                    showingAddHistorySheet = true
-                } label: {
-                    Image(systemName: "plus")
-                        .imageScale(.large)
-                }
-            }
-        }
         .onAppear { 
             loadHistory() 
-            loadHabits()
-        }
-        .sheet(isPresented: $showingAddHistorySheet) {
-            AddHistoryEntrySheet(
-                habits: allHabits,
-                selectedDate: $selectedDate,
-                selectedHabit: $selectedHabit
-            ) { habit, date, isCompleted in
-                viewModel.addHistoryEntry(for: habit, on: date, isCompleted: isCompleted, in: modelContext)
-                loadHistory() // Refresh after adding
-            }
         }
     }
 
@@ -163,10 +138,7 @@ struct HistoryView: View {
         }
     }
     
-    private func loadHabits() {
-        viewModel.fetchHabits(from: modelContext)
-        allHabits = viewModel.habits
-    }
+
 
     private static let headerFormatter: DateFormatter = {
         let df = DateFormatter()
