@@ -10,8 +10,10 @@ import SwiftUI
 struct GameSettingsView: View {
     @ObservedObject var viewModel: MemoryGameViewModel
     @Environment(\.dismiss) private var dismiss
+    @EnvironmentObject private var languageManager: LanguageManager
     
     @State private var showingConfirmation = false
+    @State private var refreshKey = UUID()
     
     var body: some View {
         ZStack {
@@ -92,6 +94,10 @@ struct GameSettingsView: View {
             Button("common.cancel".localized, role: .cancel) { }
         } message: {
             Text("memory.settings.confirm.message".localized)
+        }
+        .id(refreshKey)
+        .onReceive(NotificationCenter.default.publisher(for: .languageDidChange)) { _ in
+            refreshKey = UUID()
         }
     }
     

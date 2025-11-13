@@ -1,0 +1,56 @@
+{
+  "source": "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/LifeCompanion/Controller/MemoryGame/HighScoresView.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "🏆",
+        "location": {
+          "startingColumn": 34,
+          "startingLine": 43
+        }
+      },
+      {
+        "comment": "",
+        "key": "%lld×%lld",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 95
+        }
+      },
+      {
+        "comment": "",
+        "key": "%lld",
+        "location": {
+          "startingColumn": 18,
+          "startingLine": 119
+        }
+      },
+      {
+        "comment": "",
+        "key": "%@: %lld",
+        "location": {
+          "startingColumn": 26,
+          "startingLine": 131
+        }
+      },
+      {
+        "comment": "",
+        "key": "%lld %@",
+        "location": {
+          "startingColumn": 26,
+          "startingLine": 143
+        }
+      },
+      {
+        "comment": "",
+        "key": "🎯",
+        "location": {
+          "startingColumn": 18,
+          "startingLine": 161
+        }
+      }
+    ]
+  },
+  "version": 1
+}

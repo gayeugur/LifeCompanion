@@ -90,31 +90,21 @@ class MemoryGame: ObservableObject {
     
     // MARK: - Card Logic
     func flipCard(_ card: MemoryCard) {
-        print("🃏 Model: flipCard called for \(card.symbol)")
-        print("🃏 Game state: \(gameState)")
-        print("🃏 Card isFlipped: \(card.isFlipped), isMatched: \(card.isMatched)")
-        print("🃏 Flipped cards count: \(flippedCards.count)")
         
         guard gameState == .playing else { 
-            print("❌ Game not playing, state: \(gameState)")
             return 
         }
         guard !card.isFlipped && !card.isMatched else { 
-            print("❌ Card already flipped or matched")
             return 
         }
         guard flippedCards.count < 2 else { 
-            print("❌ Too many cards flipped already")
             return 
         }
         
         // Flip the card
         if let index = cards.firstIndex(where: { $0.id == card.id }) {
-            print("✅ Flipping card at index \(index)")
             cards[index].isFlipped = true
-            flippedCards.append(cards[index])
-        } else {
-            print("❌ Card not found in deck")
+            moves += 1
         }
         
         // Check for match if two cards are flipped

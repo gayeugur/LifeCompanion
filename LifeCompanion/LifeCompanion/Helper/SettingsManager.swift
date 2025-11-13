@@ -17,12 +17,23 @@ class SettingsManager: ObservableObject {
             }
         }
     }
-    @AppStorage("notificationsEnabled") var notificationsEnabled: Bool = true
+    @AppStorage("notificationsEnabled") var notificationsEnabled: Bool = true {
+        didSet { objectWillChange.send() }
+    }
     @AppStorage("defaultReminderTimeData") var defaultReminderTimeData: Data = Data()
-    @AppStorage("dailyWaterGoal") var dailyWaterGoal: Int = 2000
-    @AppStorage("streakCelebrationEnabled") var streakCelebrationEnabled: Bool = true
+    @AppStorage("dailyWaterGoal") var dailyWaterGoal: Int = 2000 {
+        didSet { objectWillChange.send() }
+    }
+    @AppStorage("streakCelebrationEnabled") var streakCelebrationEnabled: Bool = true {
+        didSet { objectWillChange.send() }
+    }
+    @AppStorage("showStreakInfo") var showStreakInfo: Bool = true {
+        didSet { objectWillChange.send() }
+    }
     @AppStorage("autoResetTimeData") var autoResetTimeData: Data = Data()
-    @AppStorage("memoryGameDefaultSize") var memoryGameDefaultSize: Int = 4
+    @AppStorage("memoryGameDefaultSize") var memoryGameDefaultSize: Int = 4 {
+        didSet { objectWillChange.send() }
+    }
     
     // Computed properties for easy access
     var defaultReminderTime: Date {

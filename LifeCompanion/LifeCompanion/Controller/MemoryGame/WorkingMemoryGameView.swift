@@ -12,6 +12,7 @@ struct WorkingMemoryGameView: View {
     @Environment(\.modelContext) private var modelContext
     @EnvironmentObject var settingsManager: SettingsManager
     @EnvironmentObject var feedbackManager: FeedbackManager
+    @EnvironmentObject private var languageManager: LanguageManager
     
     // Game settings
     @State private var gridSize: Int = 4
@@ -197,7 +198,6 @@ struct WorkingMemoryGameView: View {
         do {
             try modelContext.save()
         } catch {
-            print("Failed to save score: \(error)")
         }
     }
     

@@ -1,0 +1,16 @@
+{
+  "source": "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/LifeCompanion/Controller/ToDo/TodoRowView.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "⏰ %@",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 47
+        }
+      }
+    ]
+  },
+  "version": 1
+}

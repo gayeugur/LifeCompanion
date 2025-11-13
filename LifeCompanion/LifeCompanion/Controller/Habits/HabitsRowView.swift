@@ -12,6 +12,8 @@ struct HabitRowView: View {
     var onIncrement: () -> Void
     var onDeleteRequest: () -> Void
     var onEdit: () -> Void
+    
+    @EnvironmentObject var settingsManager: SettingsManager
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
@@ -22,7 +24,7 @@ struct HabitRowView: View {
                         .foregroundStyle(.primary)
                     
                     // Streak gösterimi
-                    if habit.currentStreak > 0 {
+                    if habit.currentStreak > 0 && settingsManager.showStreakInfo {
                         HStack(spacing: 4) {
                             Text(habit.streakEmoji)
                                 .font(.caption)
@@ -42,7 +44,7 @@ struct HabitRowView: View {
                         .foregroundColor(.secondary)
                     
                     // En uzun seri
-                    if habit.longestStreak > 0 {
+                    if habit.longestStreak > 0 && settingsManager.showStreakInfo {
                         Text(String(format: "streak.longest".localized, habit.longestStreak))
                             .font(.caption2)
                             .foregroundColor(.secondary)
@@ -63,11 +65,17 @@ struct HabitRowView: View {
                     Text("habit.completed".localized)
                         .foregroundColor(.green)
                         .font(.subheadline)
+                        .fontWeight(.medium)
                 } else {
-                    Button("habit.increment".localized) { onIncrement() }
-                        .buttonStyle(.borderedProminent)
-                        .tint(Color.green.opacity(0.85))
-
+                    Button(action: onIncrement) {
+                        Text("habit.increment".localized)
+                            .font(.subheadline)
+                            .fontWeight(.medium)
+                    }
+                    .buttonStyle(.borderedProminent)
+                    .tint(Color.green.opacity(0.85))
+                    .scaleEffect(1.0)
+                    .animation(.easeInOut(duration: 0.1), value: habit.isCompleted)
                 }
             }
             .font(.subheadline)

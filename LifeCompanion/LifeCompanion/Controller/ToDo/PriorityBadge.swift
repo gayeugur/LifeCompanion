@@ -12,9 +12,9 @@ struct PriorityBadge: View {
 
     private var localizedText: String {
         switch priority {
-        case .low: return NSLocalizedString("priority.low", comment: "")
-        case .medium: return NSLocalizedString("priority.medium", comment: "")
-        case .high: return NSLocalizedString("priority.high", comment: "")
+        case .low: return "priority.low".localized
+        case .medium: return "priority.medium".localized
+        case .high: return "priority.high".localized
         }
     }
 

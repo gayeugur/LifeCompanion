@@ -6,10 +6,14 @@
 //
 
 import SwiftUI
+import SwiftData
+import Observation
 
 struct TodoRowView: View {
     @Environment(\.modelContext) private var modelContext
     let todo: TodoItem
+    @State private var showingEditSheet = false
+    @State private var refreshID = UUID()
     
     var body: some View {
         VStack(alignment: .leading, spacing: 4) {
@@ -30,6 +34,9 @@ struct TodoRowView: View {
                             .foregroundColor(Color.secondaryText)
                     }
                 }
+                .onTapGesture {
+                    showingEditSheet = true
+                }
                 
                 Spacer()
                 
@@ -43,6 +50,14 @@ struct TodoRowView: View {
             }
         }
         .padding(.vertical, 4)
+        .id(refreshID)
+        .sheet(isPresented: $showingEditSheet, onDismiss: {
+            print("📱 TodoRowView: EditSheet dismissed, force refreshing view...")
+            // Force complete view refresh by changing ID
+            refreshID = UUID()
+        }) {
+            EditTodoView(todo: todo)
+        }
     }
     
     private func toggleCompletion() {

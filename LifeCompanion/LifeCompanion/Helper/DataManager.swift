@@ -9,61 +9,85 @@ import SwiftUI
 import SwiftData
 import UniformTypeIdentifiers
 import Foundation
+import UIKit
 
 class DataManager: ObservableObject {
     
     // MARK: - Data Export
     func exportUserData(context: ModelContext, format: ExportFormat = .json) -> URL? {
-        print("🔄 Starting data export in \(format.rawValue) format...")
+        print("🚀 ExportUserData called with format: \(format)")
+        print("📱 ModelContext provided: \(context)")
+        
         do {
-            print("📊 Gathering user data...")
+            print("🔄 Starting export with format: \(format)")
             let exportData = try gatherAllUserData(context: context)
-            
-            print("📈 Export summary:")
-            print("   - Habits: \(exportData.habits.count)")
-            print("   - Todos: \(exportData.todos.count)")
-            print("   - Medications: \(exportData.medications.count)")
-            print("   - Water Intakes: \(exportData.waterIntakes.count)")
-            print("   - Game Scores: \(exportData.gameScores.count)")
+            print("📊 Gathered data - Habits: \(exportData.habits.count), Todos: \(exportData.todos.count), Medications: \(exportData.medications.count), Water: \(exportData.waterIntakes.count), Games: \(exportData.gameScores.count)")
             
             let tempURL: URL
             
             switch format {
             case .json:
+                print("📄 Creating JSON export...")
                 tempURL = try createJSONExport(exportData: exportData)
             case .pdf:
+                print("📄 Creating Text Report export...")
                 tempURL = try createPDFExport(exportData: exportData)
             }
             
-            let fileSize = try FileManager.default.attributesOfItem(atPath: tempURL.path)[.size] as? Int ?? 0
-            print("✅ Export completed successfully!")
-            print("📂 File size: \(fileSize) bytes")
-            print("📍 Location: \(tempURL.path)")
+            print("✅ Export successful, file created at: \(tempURL)")
+            print("🔍 Absolute path: \(tempURL.absoluteString)")
+            
+            // Verify file exists
+            if !FileManager.default.fileExists(atPath: tempURL.path) {
+                print("❌ File does not exist at path: \(tempURL.path)")
+                return nil
+            }
+            
+            // Check file size
+            if let attributes = try? FileManager.default.attributesOfItem(atPath: tempURL.path),
+               let fileSize = attributes[.size] as? Int64 {
+                print("📄 File size: \(fileSize) bytes")
+                if fileSize == 0 {
+                    print("❌ File is empty!")
+                    return nil
+                }
+            } else {
+                print("⚠️ Could not get file attributes")
+            }
             
             return tempURL
         } catch {
-            print("❌ Export error: \(error)")
+            print("❌ Export failed with error: \(error)")
             print("❌ Error details: \(error.localizedDescription)")
+            if let decodingError = error as? DecodingError {
+                print("❌ Decoding error: \(decodingError)")
+            }
             return nil
         }
     }
     
     private func createJSONExport(exportData: ExportData) throws -> URL {
-        print("🔄 Encoding to JSON...")
-        let jsonData = try JSONEncoder().encode(exportData)
+        let encoder = JSONEncoder()
+        encoder.dateEncodingStrategy = .iso8601
+        encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
+        
+        let jsonData = try encoder.encode(exportData)
         
         let tempURL = FileManager.default.temporaryDirectory
             .appendingPathComponent("LifeCompanion_Export_\(dateString).json")
         
-        print("💾 Writing JSON to file: \(tempURL.path)")
+        print("📝 Writing JSON to: \(tempURL.path)")
         try jsonData.write(to: tempURL)
+        
+        // Verify file was written
+        if let jsonString = String(data: jsonData, encoding: .utf8) {
+            print("📄 JSON preview (first 200 chars): \(String(jsonString.prefix(200)))")
+        }
         
         return tempURL
     }
     
     private func createPDFExport(exportData: ExportData) throws -> URL {
-        print("🔄 Creating text-based export document...")
-        
         // Create a comprehensive text report
         var reportContent = """
         LifeCompanion Data Export Report
@@ -203,7 +227,9 @@ class DataManager: ObservableObject {
         let tempURL = FileManager.default.temporaryDirectory
             .appendingPathComponent("LifeCompanion_Export_\(dateString).txt")
         
-        print("💾 Writing text report to file: \(tempURL.path)")
+        print("📝 Writing text report to: \(tempURL.path)")
+        print("📄 Report preview (first 300 chars): \(String(reportContent.prefix(300)))")
+        
         try reportContent.write(to: tempURL, atomically: true, encoding: .utf8)
         
         return tempURL
@@ -239,33 +265,86 @@ class DataManager: ObservableObject {
 
     
     private func gatherAllUserData(context: ModelContext) throws -> ExportData {
-        print("🔍 Fetching data from SwiftData...")
+        print("🔄 Starting to gather user data...")
         
         // Gather all data from different models
-        let habits = try context.fetch(FetchDescriptor<HabitItem>())
-        print("   ✓ Found \(habits.count) habits")
-        
-        let todos = try context.fetch(FetchDescriptor<TodoItem>())
-        print("   ✓ Found \(todos.count) todos")
-        
-        let medications = try context.fetch(FetchDescriptor<MedicationEntry>())
-        print("   ✓ Found \(medications.count) medications")
-        
-        let waterIntakes = try context.fetch(FetchDescriptor<WaterIntake>())
-        print("   ✓ Found \(waterIntakes.count) water intakes")
-        
-        let gameScores = try context.fetch(FetchDescriptor<GameScore>())
-        print("   ✓ Found \(gameScores.count) game scores")
-        
-        return ExportData(
-            exportDate: Date(),
-            appVersion: "1.0.0",
-            habits: habits.map { ExportHabit(from: $0) },
-            todos: todos.map { ExportTodo(from: $0) },
-            medications: medications.map { ExportMedication(from: $0) },
-            waterIntakes: waterIntakes.map { ExportWaterIntake(from: $0) },
-            gameScores: gameScores.map { ExportGameScore(from: $0) }
-        )
+        do {
+            let habits = try context.fetch(FetchDescriptor<HabitItem>())
+            print("✅ Fetched \(habits.count) habits")
+            
+            let todos = try context.fetch(FetchDescriptor<TodoItem>())
+            print("✅ Fetched \(todos.count) todos")
+            
+            let medications = try context.fetch(FetchDescriptor<MedicationEntry>())
+            print("✅ Fetched \(medications.count) medications")
+            
+            let waterIntakes = try context.fetch(FetchDescriptor<WaterIntake>())
+            print("✅ Fetched \(waterIntakes.count) water intakes")
+            
+            let gameScores = try context.fetch(FetchDescriptor<GameScore>())
+            print("✅ Fetched \(gameScores.count) game scores")
+            
+            print("📊 Raw data counts - Habits: \(habits.count), Todos: \(todos.count), Medications: \(medications.count), Water: \(waterIntakes.count), Games: \(gameScores.count)")
+            
+            print("🔄 Converting to export format...")
+            let exportData = ExportData(
+                exportDate: Date(),
+                appVersion: "1.0.0",
+                habits: habits.compactMap { 
+                    do {
+                        return ExportHabit(from: $0)
+                    } catch {
+                        print("❌ Error converting habit '\($0.title)': \(error)")
+                        return nil
+                    }
+                },
+                todos: todos.compactMap { 
+                    do {
+                        return ExportTodo(from: $0)
+                    } catch {
+                        print("❌ Error converting todo '\($0.title)': \(error)")
+                        return nil
+                    }
+                },
+                medications: medications.compactMap { 
+                    do {
+                        return ExportMedication(from: $0)
+                    } catch {
+                        print("❌ Error converting medication '\($0.medicationName)': \(error)")
+                        return nil
+                    }
+                },
+                waterIntakes: waterIntakes.compactMap { 
+                    do {
+                        return ExportWaterIntake(from: $0)
+                    } catch {
+                        print("❌ Error converting water intake: \(error)")
+                        return nil
+                    }
+                },
+                gameScores: gameScores.compactMap { 
+                    do {
+                        return ExportGameScore(from: $0)
+                    } catch {
+                        print("❌ Error converting game score: \(error)")
+                        return nil
+                    }
+                }
+            )
+            print("✅ Export data created successfully")
+            
+            // If no data exists, add some sample data indication
+            if exportData.habits.isEmpty && exportData.todos.isEmpty && 
+               exportData.medications.isEmpty && exportData.waterIntakes.isEmpty && 
+               exportData.gameScores.isEmpty {
+                print("⚠️ No user data found - export will show empty report")
+            }
+            
+            return exportData
+        } catch {
+            print("❌ Error fetching data: \(error)")
+            throw error
+        }
     }
     
     // MARK: - Data Deletion
@@ -302,7 +381,7 @@ class DataManager: ObservableObject {
         let keys = [
             "isDarkMode", "selectedLanguage", "notificationsEnabled",
             "soundEffectsEnabled", "hapticFeedbackEnabled", "defaultReminderTimeData",
-            "dailyWaterGoal", "streakCelebrationEnabled", "autoResetTimeData",
+            "dailyWaterGoal", "streakCelebrationEnabled", "showStreakInfo", "autoResetTimeData",
             "memoryGameDefaultSize", "hasRunStreakMigration", "lastResetDate"
         ]
         
@@ -320,12 +399,12 @@ class DataManager: ObservableObject {
 // MARK: - Export Format
 enum ExportFormat: String, CaseIterable {
     case json = "JSON"
-    case pdf = "PDF"
+    case pdf = "Text Report"
     
     var fileExtension: String {
         switch self {
         case .json: return "json"
-        case .pdf: return "pdf"
+        case .pdf: return "txt"
         }
     }
 }

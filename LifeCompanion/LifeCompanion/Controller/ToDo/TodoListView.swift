@@ -17,6 +17,7 @@ import SwiftData
 
 struct TodoListView: View {
     @Environment(\.modelContext) private var modelContext
+    @EnvironmentObject private var feedbackManager: FeedbackManager
     @Query(sort: \TodoItem.createdAt, order: .forward) private var todos: [TodoItem]
     @StateObject private var viewModel = TodoListViewModel()
     @State private var showingAddHabit = false
@@ -42,59 +43,101 @@ struct TodoListView: View {
             )
             .ignoresSafeArea()
 
-            VStack(spacing: 5) {
+            VStack(spacing: 12) {
                 // MARK: - Time Filter Bar
-                ScrollView(.horizontal, showsIndicators: false) {
-                    HStack(spacing: 4) {
-                        ForEach(TimeFilter.allCases, id: \.self) { filter in
-                            let isSelected = viewModel.timeFilter == filter
+                VStack(spacing: 8) {
+                    HStack {
+                        Image(systemName: "clock.fill")
+                            .font(.system(size: 14, weight: .medium))
+                            .foregroundColor(.blue)
+                        Text("todo.filter.time".localized)
+                            .font(.system(size: 14, weight: .semibold))
+                            .foregroundColor(.primary)
+                        Spacer()
+                    }
+                    .padding(.horizontal, 16)
+                    .padding(.top, 12)
+                    
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        HStack(spacing: 8) {
+                            ForEach(TimeFilter.allCases, id: \.self) { filter in
+                                let isSelected = viewModel.timeFilter == filter
+                                Button {
+                                    feedbackManager.lightHaptic()
+                                    withAnimation(.spring(response: 0.3, dampingFraction: 0.8)) {
+                                        viewModel.apply(time: filter)
+                                    }
+                                } label: {
+                                    modernFilterChip(
+                                        title: filter.localizedName,
+                                        icon: filter.iconName,
+                                        count: timeCounts[filter],
+                                        tint: filter.tint,
+                                        isSelected: isSelected
+                                    )
+                                }
+                            }
+                        }
+                        .padding(.horizontal, 16)
+                        .padding(.bottom, 12)
+                    }
+                }
+                .background(
+                    RoundedRectangle(cornerRadius: 20)
+                        .fill(.ultraThinMaterial)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 20)
+                                .stroke(Color.blue.opacity(0.2), lineWidth: 1)
+                        )
+                )
+                .padding(.horizontal, 16)
+
+                // MARK: - Status Filter Bar
+                VStack(spacing: 6) {
+                    HStack {
+                        Image(systemName: "list.bullet.circle.fill")
+                            .font(.system(size: 12, weight: .medium))
+                            .foregroundColor(.green)
+                        Text("todo.filter.status".localized)
+                            .font(.system(size: 12, weight: .semibold))
+                            .foregroundColor(.primary)
+                        Spacer()
+                    }
+                    .padding(.horizontal, 14)
+                    .padding(.top, 8)
+                    
+                    LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 6), count: 3), spacing: 6) {
+                        ForEach(StatusFilter.allCases, id: \.self) { status in
+                            let isSelected = viewModel.statusFilter == status
                             Button {
+                                feedbackManager.lightHaptic()
                                 withAnimation(.spring(response: 0.3, dampingFraction: 0.8)) {
-                                    viewModel.apply(time: filter)
+                                    viewModel.apply(status: status)
                                 }
                             } label: {
-                                filterButton(
-                                    title: filter.localizedName,
-                                    icon: filter.iconName,
-                                    count: timeCounts[filter],
-                                    tint: filter.tint,
+                                modernStatusCard(
+                                    title: status.localizedName,
+                                    icon: status.iconName,
+                                    count: statusCounts[status],
+                                    tint: status.tint,
                                     isSelected: isSelected
                                 )
                             }
                         }
                     }
-                    .padding(.horizontal, 10)
-                    .padding(.vertical, 6)
+                    .padding(.horizontal, 14)
+                    .padding(.bottom, 8)
                 }
-                .background(.ultraThinMaterial)
-                .clipShape(RoundedRectangle(cornerRadius: 18))
-                .padding(.horizontal, 10)
-
-                // MARK: - Status Filter Bar
-                HStack(spacing: 4) {
-                    ForEach(StatusFilter.allCases, id: \.self) { status in
-                        let isSelected = viewModel.statusFilter == status
-                        Button {
-                            withAnimation(.spring(response: 0.3, dampingFraction: 0.8)) {
-                                viewModel.apply(status: status)
-                            }
-                        } label: {
-                            statusFilterButton(
-                                title: status.localizedName,
-                                icon: status.iconName,
-                                count: statusCounts[status],
-                                tint: status.tint,
-                                isSelected: isSelected
-                            )
-                        }
-                    }
-                }
-                .padding(.horizontal, 10)
-                .padding(.vertical, 4)
-                .background(.ultraThinMaterial)
-                .clipShape(RoundedRectangle(cornerRadius: 18))
-                .padding(.horizontal, 10)
-                .padding(.bottom, 6)
+                .background(
+                    RoundedRectangle(cornerRadius: 20)
+                        .fill(.ultraThinMaterial)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 20)
+                                .stroke(Color.green.opacity(0.2), lineWidth: 1)
+                        )
+                )
+                .padding(.horizontal, 16)
+                .padding(.bottom, 8)
 
                 // MARK: - List / Empty
                 if sections.isEmpty {
@@ -137,15 +180,15 @@ struct TodoListView: View {
                 }
             }
         }
-        .navigationTitle("menu.todos")
+        .navigationTitle("menu.todos".localized)
         .navigationBarTitleDisplayMode(.large)
         .sheet(isPresented: $viewModel.showingAddTodo) {
             AddTodoView()
         }
         .navigationDestination(isPresented: $showingAddHabit) {
             if let selectedTodo = selectedTodoForHabit {
-                AddHabitView(initialTitle: selectedTodo.title) { title, freq, count, reminder in
-                    addHabitFromTodo(title: title, frequency: freq, targetCount: count, reminderTime: reminder)
+                AddHabitView(initialTitle: selectedTodo.title) { title, freq, count, reminder, reminderDates in
+                    addHabitFromTodo(title: title, frequency: freq, targetCount: count, reminderTime: reminder, reminderDates: reminderDates)
                 }
             }
         }
@@ -162,69 +205,110 @@ struct TodoListView: View {
         )
     }
 
-    // MARK: - Filter Button
-    private func filterButton(
+    // MARK: - Modern Filter Chip
+    private func modernFilterChip(
         title: String,
         icon: String,
         count: Int?,
         tint: Color,
         isSelected: Bool
     ) -> some View {
-        HStack(spacing: 4) {
-            Image(systemName: icon)
-            Text(title)
-                .font(.system(size: 13))
-            if let count, count > 0 {
-                Text("\(count)")
-                    .font(.footnote)
-                    .foregroundColor(.secondary)
+        HStack(spacing: 6) {
+            ZStack {
+                Circle()
+                    .fill(isSelected ? tint : Color.gray.opacity(0.2))
+                    .frame(width: 24, height: 24)
+                
+                Image(systemName: icon)
+                    .font(.system(size: 11, weight: .semibold))
+                    .foregroundColor(isSelected ? .white : .gray)
+            }
+            
+            VStack(alignment: .leading, spacing: 2) {
+                Text(title)
+                    .font(.system(size: 13, weight: .medium))
+                    .foregroundColor(isSelected ? tint : .primary)
+                
+                if let count, count > 0 {
+                    Text("\(count) " + "todo.filter.tasks".localized)
+                        .font(.system(size: 10, weight: .regular))
+                        .foregroundColor(.secondary)
+                }
             }
         }
-        .font(.system(size: 13, weight: .semibold))
-        .padding(.vertical, 6)
-        .padding(.horizontal, 10)
-        .background(isSelected ? tint.opacity(0.15) : Color.cardBackground)
-        .foregroundColor(isSelected ? tint : Color.primaryText)
-        .overlay(
-            RoundedRectangle(cornerRadius: 8)
-                .stroke(isSelected ? tint : Color.borderColor, lineWidth: 1)
+        .padding(.horizontal, 12)
+        .padding(.vertical, 10)
+        .background(
+            Capsule()
+                .fill(isSelected ? tint.opacity(0.1) : Color.gray.opacity(0.05))
+                .overlay(
+                    Capsule()
+                        .stroke(isSelected ? tint.opacity(0.3) : Color.gray.opacity(0.2), lineWidth: 1.5)
+                )
         )
-        .cornerRadius(8)
-        .shadow(color: Color.black.opacity(isSelected ? 0.1 : 0.05), radius: 3, x: 0, y: 1)
+        .scaleEffect(isSelected ? 1.05 : 1.0)
+        .shadow(
+            color: isSelected ? tint.opacity(0.3) : Color.black.opacity(0.1),
+            radius: isSelected ? 8 : 2,
+            x: 0,
+            y: isSelected ? 4 : 1
+        )
     }
     
-    // MARK: - Status Filter Button (Compact)
-    private func statusFilterButton(
+    // MARK: - Modern Status Card
+    private func modernStatusCard(
         title: String,
         icon: String,
         count: Int?,
         tint: Color,
         isSelected: Bool
     ) -> some View {
-        HStack(spacing: 3) {
-            Image(systemName: icon)
-                .font(.system(size: 12))
-            Text(title)
-                .font(.system(size: 11, weight: .medium))
-                .lineLimit(1)
-                .minimumScaleFactor(0.8)
-            if let count, count > 0 {
-                Text("\(count)")
-                    .font(.system(size: 10))
-                    .foregroundColor(.secondary)
+        VStack(spacing: 6) {
+            ZStack {
+                RoundedRectangle(cornerRadius: 10)
+                    .fill(isSelected ? tint.opacity(0.15) : Color.gray.opacity(0.05))
+                    .frame(width: 28, height: 28)
+                
+                Image(systemName: icon)
+                    .font(.system(size: 14, weight: .semibold))
+                    .foregroundColor(isSelected ? tint : .gray)
+            }
+            
+            VStack(spacing: 1) {
+                Text(title)
+                    .font(.system(size: 10, weight: .semibold))
+                    .foregroundColor(isSelected ? tint : .primary)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.7)
+                
+                if let count, count > 0 {
+                    Text("\(count)")
+                        .font(.system(size: 14, weight: .bold))
+                        .foregroundColor(isSelected ? tint : .secondary)
+                } else {
+                    Text("0")
+                        .font(.system(size: 14, weight: .bold))
+                        .foregroundColor(.gray.opacity(0.5))
+                }
             }
         }
         .frame(maxWidth: .infinity)
         .padding(.vertical, 8)
-        .padding(.horizontal, 6)
-        .background(isSelected ? tint.opacity(0.15) : Color.cardBackground)
-        .foregroundColor(isSelected ? tint : Color.primaryText)
-        .overlay(
-            RoundedRectangle(cornerRadius: 8)
-                .stroke(isSelected ? tint : Color.borderColor, lineWidth: 1)
+        .background(
+            RoundedRectangle(cornerRadius: 12)
+                .fill(isSelected ? tint.opacity(0.05) : Color.clear)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 12)
+                        .stroke(isSelected ? tint.opacity(0.4) : Color.gray.opacity(0.2), lineWidth: isSelected ? 1.5 : 1)
+                )
         )
-        .cornerRadius(8)
-        .shadow(color: Color.black.opacity(isSelected ? 0.1 : 0.05), radius: 2, x: 0, y: 1)
+        .scaleEffect(isSelected ? 1.02 : 1.0)
+        .shadow(
+            color: isSelected ? tint.opacity(0.15) : Color.black.opacity(0.03),
+            radius: isSelected ? 4 : 1,
+            x: 0,
+            y: isSelected ? 2 : 1
+        )
     }
 
     // MARK: - List View
@@ -240,7 +324,7 @@ struct TodoListView: View {
                                 Button(role: .destructive) {
                                     viewModel.showDeleteConfirmation(for: todo)
                                 } label: {
-                                    Label("Sil", systemImage: "trash")
+                                    Label("todo.action.delete".localized, systemImage: "trash")
                                 }
                                 
                                 Button {
@@ -297,12 +381,13 @@ struct TodoListView: View {
     }
     
     // MARK: - Add Habit from Todo Function
-    private func addHabitFromTodo(title: String, frequency: HabitFrequency, targetCount: Int, reminderTime: Date?) {
+    private func addHabitFromTodo(title: String, frequency: HabitFrequency, targetCount: Int, reminderTime: Date?, reminderDates: [Date]?) {
         let habit = HabitItem(
             title: title,
             frequency: frequency,
             targetCount: targetCount,
-            reminderTime: reminderTime
+            reminderTime: reminderTime,
+            reminderDates: reminderDates
         )
         
         modelContext.insert(habit)
@@ -318,7 +403,6 @@ struct TodoListView: View {
             selectedTodoForHabit = nil
             showingAddHabit = false
         } catch {
-            print("Error saving habit from todo: \(error)")
         }
     }
 }

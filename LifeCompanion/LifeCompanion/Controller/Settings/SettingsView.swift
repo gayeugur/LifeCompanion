@@ -25,15 +25,9 @@ struct SettingsView: View {
     @State private var showingAbout = false
     @State private var showingNotificationPermissionAlert = false
     @State private var showingDeleteConfirmation = false
-    @State private var showingExportSheet = false
-    @State private var showingDocumentPicker = false
-    @State private var exportURL: URL?
-    @State private var exportFormat: ExportFormat = .json
     @State private var showingEmailAlert = false
     @State private var showingExportFormatAlert = false
-    @State private var showingExportFailedAlert = false
-    @State private var showingSuccessAlert = false
-    @State private var selectedExportFormat: ExportFormat = .pdf
+    @State private var showingExportError = false
     
     private let languages = [
         ("system", "🌐 System Default", "Sistem Varsayılanı"),
@@ -45,33 +39,41 @@ struct SettingsView: View {
     private let gridSizeOptions = [3, 4, 5, 6]
     
     var body: some View {
-        NavigationView {
+        NavigationStack {
             settingsContent
+                .navigationTitle("menu.settings".localized)
+                .navigationBarTitleDisplayMode(.large)
+                .toolbar {
+                    ToolbarItem(placement: .topBarTrailing) {
+                        Button("common.done".localized) {
+                            dismiss()
+                        }
+                    }
+                }
         }
-        .navigationViewStyle(StackNavigationViewStyle())
-        .onAppear {
-            print("⚙️ SettingsView appeared")
-        }
-        .sheet(isPresented: $showingExportSheet) {
-            exportOptionsSheet
-        }
-        .sheet(isPresented: $showingDocumentPicker) {
-            documentPickerSheet
-        }
+        .onAppear { }
         .alert(LanguageManager.shared.getLocalizedString(for: "settings.export.format.title"), isPresented: $showingExportFormatAlert) {
             exportFormatAlert
         } message: {
             Text("settings.export.format.message".localized)
         }
-        .alert("Export Failed", isPresented: $showingExportFailedAlert) {
-            Button("common.ok".localized, role: .cancel) { }
-        } message: {
-            Text("Unable to export your data. Please try again or contact support if the issue persists.")
-        }
-        .alert(LanguageManager.shared.getLocalizedString(for: "success"), isPresented: $showingSuccessAlert) {
+        .alert("Export Error", isPresented: $showingExportError) {
             Button("OK", role: .cancel) { }
         } message: {
-            Text(LanguageManager.shared.getLocalizedString(for: "export_success_message"))
+            Text("Unable to export your data. Please try again.")
+        }
+        .alert("settings.support.email.failed.title".localized, isPresented: $showingEmailAlert) {
+            Button("common.copy".localized) {
+                UIPasteboard.general.string = "gayeugur00@gmail.com"
+                feedbackManager.successHaptic()
+            }
+            Button("common.ok".localized, role: .cancel) { }
+        } message: {
+            #if targetEnvironment(simulator)
+            Text("In simulator: Contact gayeugur00@gmail.com for support")
+            #else
+            Text("settings.support.email.failed.message".localized)
+            #endif
         }
     }
     
@@ -89,13 +91,10 @@ struct SettingsView: View {
                 startPoint: .topLeading,
                 endPoint: .bottomTrailing
             )
-            .ignoresSafeArea()
+            .ignoresSafeArea(.container, edges: .bottom)
             
             ScrollView {
-                VStack(spacing: 20) {
-                    // Header
-                    headerSection
-                    
+                LazyVStack(spacing: 20) {
                     // General Settings
                     generalSection
                     
@@ -115,8 +114,11 @@ struct SettingsView: View {
                     aboutSection
                 }
                 .padding(.horizontal, 16)
+                .padding(.top, 8)
                 .padding(.bottom, 30)
             }
+            .scrollContentBackground(.hidden)
+            .clipped()
         }
         .onAppear {
             loadTimeDefaults()
@@ -148,178 +150,20 @@ struct SettingsView: View {
         }
     }
     
-    @ViewBuilder
-    private var exportOptionsSheet: some View {
-        VStack(spacing: 20) {
-            VStack(spacing: 8) {
-                Text(LanguageManager.shared.getLocalizedString(for: "choose_export_method"))
-                    .font(.headline)
-                
-                Text("Select how you want to save your data export")
-                    .font(.subheadline)
-                    .foregroundColor(.secondary)
-                    .multilineTextAlignment(.center)
-            }
-            .padding(.top)
-            
-            VStack(spacing: 12) {
-                Button(action: {
-                    print("🔄 User selected 'Save to Files'")
-                    showingExportSheet = false
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                        showingDocumentPicker = true
-                    }
-                }) {
-                    VStack(spacing: 8) {
-                        HStack {
-                            Image(systemName: "folder.fill")
-                                .font(.title2)
-                            VStack(alignment: .leading, spacing: 2) {
-                                Text(LanguageManager.shared.getLocalizedString(for: "save_to_files"))
-                                    .font(.headline)
-                                Text("Save directly to Files app")
-                                    .font(.caption)
-                                    .opacity(0.8)
-                            }
-                            Spacer()
-                        }
-                    }
-                    .frame(maxWidth: .infinity)
-                    .padding(16)
-                    .background(Color.blue)
-                    .foregroundColor(.white)
-                    .cornerRadius(12)
-                }
-                
-                Button(action: {
-                    print("🔄 User selected 'Share'")
-                    showingExportSheet = false
-                    if let url = exportURL {
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                            showShareSheet(url: url)
-                        }
-                    }
-                }) {
-                    VStack(spacing: 8) {
-                        HStack {
-                            Image(systemName: "square.and.arrow.up.fill")
-                                .font(.title2)
-                            VStack(alignment: .leading, spacing: 2) {
-                                Text(LanguageManager.shared.getLocalizedString(for: "share"))
-                                    .font(.headline)
-                                Text("Share via AirDrop, Email, etc.")
-                                    .font(.caption)
-                                    .opacity(0.8)
-                            }
-                            Spacer()
-                        }
-                    }
-                    .frame(maxWidth: .infinity)
-                    .padding(16)
-                    .background(Color.green)
-                    .foregroundColor(.white)
-                    .cornerRadius(12)
-                }
-            }
-            
-            Button("Cancel") {
-                showingExportSheet = false
-            }
-            .foregroundColor(.secondary)
-            .padding(.top, 8)
-            
-            Spacer()
-        }
-        .padding()
-        .presentationDetents([.height(300)])
-    }
-    
-    @ViewBuilder
-    private var documentPickerSheet: some View {
-        if let url = exportURL {
-            DocumentPicker(
-                sourceURL: url,
-                exportFormat: exportFormat,
-                onSuccess: { savedURL in
-                    print("✅ File saved successfully to: \(savedURL)")
-                    feedbackManager.successHaptic()
-                    DispatchQueue.main.async {
-                        showingSuccessAlert = true
-                    }
-                },
-                onError: { error in
-                    print("❌ Document picker error: \(error)")
-                    feedbackManager.errorHaptic()
-                    DispatchQueue.main.async {
-                        showingExportFailedAlert = true
-                    }
-                }
-            )
-        }
-    }
-    
     @ViewBuilder 
     private var exportFormatAlert: some View {
         Button(LanguageManager.shared.getLocalizedString(for: "settings.export.format.pdf")) {
-            selectedExportFormat = .pdf
+            print("🔥 PDF FORMAT SELECTED!")
             exportUserData(format: .pdf)
         }
         Button(LanguageManager.shared.getLocalizedString(for: "settings.export.format.json")) {
-            selectedExportFormat = .json
+            print("🔥 JSON FORMAT SELECTED!")
             exportUserData(format: .json)
         }
         Button("common.cancel".localized, role: .cancel) { }
-        .alert("settings.support.email.failed.title".localized, isPresented: $showingEmailAlert) {
-            Button("common.copy".localized) {
-                UIPasteboard.general.string = "gayeugur00@gmail.com"
-                feedbackManager.successHaptic()
-            }
-            Button("common.ok".localized, role: .cancel) { }
-        } message: {
-            #if targetEnvironment(simulator)
-            Text("In simulator: Contact gayeugur00@gmail.com for support")
-            #else
-            Text("settings.support.email.failed.message".localized)
-            #endif
-        }
-        .alert("settings.export.format.title".localized, isPresented: $showingExportFormatAlert) {
-            Button("settings.export.format.pdf".localized) {
-                selectedExportFormat = .pdf
-                exportUserData(format: .pdf)
-            }
-            Button("settings.export.format.json".localized) {
-                selectedExportFormat = .json
-                exportUserData(format: .json)
-            }
-            Button("common.cancel".localized, role: .cancel) { }
-        } message: {
-            Text("settings.export.format.message".localized)
-        }
-        .alert("Export Failed", isPresented: $showingExportFailedAlert) {
-            Button("common.ok".localized, role: .cancel) { }
-        } message: {
-            Text("Unable to export your data. Please try again or contact support if the issue persists.")
-        }
-        .alert(LanguageManager.shared.getLocalizedString(for: "success"), isPresented: $showingSuccessAlert) {
-            Button("OK", role: .cancel) { }
-        } message: {
-            Text(LanguageManager.shared.getLocalizedString(for: "export_success_message"))
-        }
     }
     
-    // MARK: - Header Section
-    @ViewBuilder
-    private var headerSection: some View {
-        HStack {
-            Text("menu.settings".localized)
-                .font(.largeTitle)
-                .fontWeight(.bold)
-                .foregroundColor(.primary)
-            Spacer()
-        }
-        .padding(.horizontal, 4)
-        .padding(.top, 8)
-    }
+
     
     // MARK: - General Section
     @ViewBuilder
@@ -344,15 +188,44 @@ struct SettingsView: View {
                     feedbackManager.buttonTap()
                     showingLanguageSheet = true 
                 }) {
-                    HStack {
-                        Label("settings.general.language".localized, systemImage: "globe")
+                    HStack(spacing: 16) {
+                        // Language icon with background
+                        ZStack {
+                            Circle()
+                                .fill(LinearGradient(
+                                    colors: [.blue.opacity(0.2), .purple.opacity(0.15)],
+                                    startPoint: .topLeading,
+                                    endPoint: .bottomTrailing
+                                ))
+                                .frame(width: 32, height: 32)
+                            
+                            Image(systemName: "globe")
+                                .foregroundColor(.blue)
+                                .font(.system(size: 16, weight: .medium))
+                        }
+                        
+                        // Language info
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text("settings.general.language".localized)
+                                .font(.system(size: 16, weight: .medium))
+                                .foregroundColor(.primary)
+                            
+                            Text(currentLanguageDisplayName)
+                                .font(.system(size: 14))
+                                .foregroundColor(.secondary)
+                        }
+                        
                         Spacer()
-                        Text(currentLanguageDisplayName)
-                            .foregroundColor(.secondary)
+                        
+                        // Current language flag
+                        Text(getCurrentLanguageFlag())
+                            .font(.system(size: 20))
+                        
                         Image(systemName: "chevron.right")
-                            .foregroundColor(.secondary)
-                            .font(.caption)
+                            .foregroundColor(Color.secondary.opacity(0.6))
+                            .font(.system(size: 12, weight: .medium))
                     }
+                    .padding(.vertical, 8)
                 }
                 .buttonStyle(PlainButtonStyle())
                 
@@ -369,42 +242,14 @@ struct SettingsView: View {
                                 requestNotificationPermission()
                             } else {
                                 settingsManager.notificationsEnabled = false
+                                cancelAllNotifications()
                             }
                         }
                     ))
                     .tint(.purple)
                 }
                 
-                Divider()
                 
-                // Sound Effects
-                HStack {
-                    Label("settings.general.sounds".localized, systemImage: "speaker.wave.2.fill")
-                    Spacer()
-                    Toggle("", isOn: $feedbackManager.soundEffectsEnabled)
-                        .tint(.purple)
-                        .onChange(of: feedbackManager.soundEffectsEnabled) { _, newValue in
-                            if newValue { feedbackManager.playSound(.click) }
-                        }
-                }
-                
-                Divider()
-                
-                // Haptic Feedback
-                VStack(alignment: .leading, spacing: 4) {
-                    HStack {
-                        Label("settings.general.haptics".localized, systemImage: "iphone.radiowaves.left.and.right")
-                        Spacer()
-                        Toggle("", isOn: $feedbackManager.hapticFeedbackEnabled)
-                            .tint(.purple)
-                            .onChange(of: feedbackManager.hapticFeedbackEnabled) { _, newValue in
-                                if newValue { feedbackManager.mediumHaptic() }
-                            }
-                    }
-                    Text("settings.general.haptics.description".localized)
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                }
             }
         }
     }
@@ -414,23 +259,14 @@ struct SettingsView: View {
     private var habitsSection: some View {
         SettingsCard(title: "settings.habits.title".localized, icon: "checkmark.circle") {
             VStack(spacing: 16) {
-                // Streak Celebrations
+                // Streak Info Display
                 HStack {
-                    Label("settings.habits.celebrations".localized, systemImage: "party.popper")
+                    Label("settings.habits.show_streak_info".localized, systemImage: "chart.line.uptrend.xyaxis")
                     Spacer()
-                    Toggle("", isOn: $settingsManager.streakCelebrationEnabled)
-                        .tint(.purple)
+                    Toggle("", isOn: $settingsManager.showStreakInfo)
+                        .tint(.green)
                 }
-                
-                Divider()
-                
-                // Auto Reset Time
-                VStack(alignment: .leading, spacing: 8) {
-                    Label("settings.habits.reset.time".localized, systemImage: "arrow.clockwise")
-                    DatePicker("", selection: $autoResetTime, displayedComponents: .hourAndMinute)
-                        .datePickerStyle(WheelDatePickerStyle())
-                        .labelsHidden()
-                }
+             
             }
         }
     }
@@ -453,8 +289,18 @@ struct SettingsView: View {
                     ], spacing: 8) {
                         ForEach(waterGoalOptions, id: \.self) { goal in
                             Button(action: {
+                                print("🎯 Settings: Water goal button pressed, changing to \(goal)ml")
                                 settingsManager.dailyWaterGoal = goal
+                                print("🎯 Settings: SettingsManager updated to \(settingsManager.dailyWaterGoal)ml")
                                 feedbackManager.lightHaptic()
+                                
+                                // Notify HealthViewModel about the change with context
+                                NotificationCenter.default.post(
+                                    name: NSNotification.Name("WaterGoalUpdated"), 
+                                    object: modelContext, 
+                                    userInfo: ["newGoal": goal]
+                                )
+                                print("🎯 Settings: Notification sent with goal \(goal)ml")
                             }) {
                                 VStack(spacing: 4) {
                                     Text("\(goal)")
@@ -472,6 +318,7 @@ struct SettingsView: View {
                                 )
                                 .foregroundColor(settingsManager.dailyWaterGoal == goal ? .white : .primary)
                             }
+                            .buttonStyle(PlainButtonStyle())
                         }
                     }
                 }
@@ -508,6 +355,7 @@ struct SettingsView: View {
         SettingsCard(title: "settings.privacy.title".localized, icon: "lock.shield") {
             VStack(spacing: 16) {
                 Button(action: {
+                    print("🔥 EXPORT BUTTON TAPPED!")
                     feedbackManager.buttonTap()
                     showingExportFormatAlert = true
                 }) {
@@ -591,37 +439,49 @@ struct SettingsView: View {
     // MARK: - Language Selection Sheet
     @ViewBuilder
     private var languageSelectionSheet: some View {
-        NavigationView {
-            List {
-                ForEach(languages, id: \.0) { code, englishName, turkishName in
-                    Button(action: {
-                        // Update settings first
-                        settingsManager.selectedLanguage = code
-                        
-                        // Update language manager (this will trigger UI refresh)
-                        languageManager.currentLanguage = code
-                        
-                        showingLanguageSheet = false
-                        feedbackManager.successHaptic()
-                        
-                        print("🌍 Language changed from Settings to: \(code)")
-                        
-                        // Force complete UI refresh
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-                            languageManager.objectWillChange.send()
-                            settingsManager.objectWillChange.send()
-                        }
-                    }) {
-                        HStack {
-                            Text(settingsManager.selectedLanguage == "tr" ? turkishName : englishName)
-                                .foregroundColor(.primary)
-                            Spacer()
-                            if settingsManager.selectedLanguage == code {
-                                Image(systemName: "checkmark")
+        NavigationStack {
+            ZStack {
+                // Gradient background
+                LinearGradient(
+                    colors: [
+                        Color.blue.opacity(0.08),
+                        Color.purple.opacity(0.06),
+                        Color.pink.opacity(0.04),
+                        Color.clear
+                    ],
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                )
+                .ignoresSafeArea()
+                
+                ScrollView {
+                    LazyVStack(spacing: 16) {
+                        // Header description
+                        VStack(alignment: .leading, spacing: 8) {
+                            HStack {
+                                Image(systemName: "globe")
                                     .foregroundColor(.blue)
+                                    .font(.title2)
+                                Text("settings.language.description".localized)
+                                    .font(.subheadline)
+                                    .foregroundColor(.secondary)
+                                Spacer()
                             }
                         }
+                        .padding(.horizontal, 20)
+                        .padding(.top, 10)
+                        
+                        // Language options
+                        ForEach(languages, id: \.0) { code, englishName, turkishName in
+                            languageOptionCard(
+                                code: code,
+                                englishName: englishName,
+                                turkishName: turkishName
+                            )
+                        }
                     }
+                    .padding(.horizontal, 20)
+                    .padding(.bottom, 30)
                 }
             }
             .navigationTitle("settings.language.title".localized)
@@ -631,9 +491,125 @@ struct SettingsView: View {
                     Button("common.done".localized) {
                         showingLanguageSheet = false
                     }
+                    .font(.system(size: 17, weight: .semibold))
+                    .foregroundColor(.blue)
                 }
             }
         }
+        .presentationDetents([.medium, .large])
+        .presentationDragIndicator(.visible)
+    }
+    
+    // MARK: - Language Option Card
+    @ViewBuilder
+    private func languageOptionCard(code: String, englishName: String, turkishName: String) -> some View {
+        Button(action: {
+            // Update settings first
+            settingsManager.selectedLanguage = code
+            
+            // Update language manager (this will trigger UI refresh)
+            languageManager.currentLanguage = code
+            
+            showingLanguageSheet = false
+            feedbackManager.successHaptic()
+            
+            // Force complete UI refresh
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                languageManager.objectWillChange.send()
+                settingsManager.objectWillChange.send()
+            }
+        }) {
+            HStack(spacing: 16) {
+                // Language flag/icon
+                Text(getLanguageFlag(for: code))
+                    .font(.system(size: 32))
+                    .frame(width: 50, height: 50)
+                    .background(
+                        Circle()
+                            .fill(Color(.systemBackground))
+                            .shadow(color: .black.opacity(0.1), radius: 2, x: 0, y: 1)
+                    )
+                
+                // Language info
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(settingsManager.selectedLanguage == "tr" ? turkishName : englishName)
+                        .font(.system(size: 17, weight: .medium))
+                        .foregroundColor(.primary)
+                    
+                    Text(getLanguageSubtitle(for: code))
+                        .font(.system(size: 14))
+                        .foregroundColor(.secondary)
+                }
+                
+                Spacer()
+                
+                // Selection indicator
+                ZStack {
+                    Circle()
+                        .fill(settingsManager.selectedLanguage == code ? Color.blue : Color.clear)
+                        .frame(width: 24, height: 24)
+                        .overlay(
+                            Circle()
+                                .stroke(settingsManager.selectedLanguage == code ? Color.blue : Color.secondary.opacity(0.3), lineWidth: 2)
+                        )
+                    
+                    if settingsManager.selectedLanguage == code {
+                        Image(systemName: "checkmark")
+                            .font(.system(size: 12, weight: .bold))
+                            .foregroundColor(.white)
+                    }
+                }
+            }
+            .padding(20)
+            .background(
+                RoundedRectangle(cornerRadius: 16)
+                    .fill(Color(.systemBackground))
+                    .shadow(color: .black.opacity(0.05), radius: 8, x: 0, y: 2)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 16)
+                            .stroke(
+                                settingsManager.selectedLanguage == code 
+                                ? LinearGradient(colors: [.blue, .purple], startPoint: .topLeading, endPoint: .bottomTrailing)
+                                : LinearGradient(colors: [Color.clear], startPoint: .topLeading, endPoint: .bottomTrailing),
+                                lineWidth: settingsManager.selectedLanguage == code ? 2 : 0
+                            )
+                    )
+            )
+            .scaleEffect(settingsManager.selectedLanguage == code ? 1.02 : 1.0)
+            .animation(.spring(response: 0.3, dampingFraction: 0.6), value: settingsManager.selectedLanguage == code)
+        }
+        .buttonStyle(PlainButtonStyle())
+    }
+    
+    // MARK: - Language Helpers
+    private func getLanguageFlag(for code: String) -> String {
+        switch code {
+        case "system":
+            return "🌐"
+        case "en":
+            return "🇺🇸"
+        case "tr":
+            return "🇹🇷"
+        default:
+            return "🌐"
+        }
+    }
+    
+    private func getLanguageSubtitle(for code: String) -> String {
+        switch code {
+        case "system":
+            return "settings.language.system.subtitle".localized
+        case "en":
+            return "English (United States)"
+        case "tr":
+            return "Turkish (Türkiye)"
+        default:
+            return ""
+        }
+    }
+    
+    private func getCurrentLanguageFlag() -> String {
+        return getLanguageFlag(for: settingsManager.selectedLanguage)
     }
     
     // MARK: - About Sheet
@@ -656,9 +632,17 @@ struct SettingsView: View {
                             .foregroundColor(.secondary)
                     }
                     
-                    Text("settings.about.description".localized)
-                        .multilineTextAlignment(.center)
-                        .padding(.horizontal)
+                    VStack(spacing: 8) {
+                        Text("settings.about.description".localized)
+                            .multilineTextAlignment(.center)
+                            .padding(.horizontal)
+                            .font(.body)
+                    }
+                    .padding()
+                    .background(
+                        RoundedRectangle(cornerRadius: 12)
+                            .fill(.regularMaterial)
+                    )
                     
                     VStack(alignment: .leading, spacing: 12) {
                         Text("settings.about.features".localized)
@@ -722,9 +706,14 @@ struct SettingsView: View {
     
     private func saveTime(_ time: Date, isReminderTime: Bool) {
         settingsManager.autoResetTime = time
-        if let encoded = try? JSONEncoder().encode(time) {
-            autoResetTimeData = encoded
-        }
+        feedbackManager.lightHaptic()
+        
+        // Notify HealthViewModel about reset time change
+        NotificationCenter.default.post(
+            name: NSNotification.Name("ResetTimeUpdated"),
+            object: modelContext,
+            userInfo: ["newResetTime": time]
+        )
     }
     
     private func requestNotificationPermission() {
@@ -742,43 +731,35 @@ struct SettingsView: View {
     }
     
     private func exportUserData(format: ExportFormat = .pdf) {
-        print("🔄 Starting export from SettingsView in \(format.rawValue) format...")
+        // Immediate feedback for better UX
         feedbackManager.buttonTap()
         
-        // Store format for document picker
-        self.exportFormat = format
-        
-        // Add small delay to ensure UI updates
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-            do {
-                if let url = dataManager.exportUserData(context: modelContext, format: format) {
-                    print("✅ Export successful from SettingsView: \(url)")
-                    
-                    // Verify file exists before showing options
-                    if FileManager.default.fileExists(atPath: url.path) {
-                        exportURL = url
-                        showingExportSheet = true
-                        feedbackManager.successHaptic()
-                        print("📤 Showing export options for file: \(url.lastPathComponent)")
-                    } else {
-                        print("❌ Export file does not exist at path: \(url.path)")
-                        feedbackManager.errorHaptic()
-                        self.showingExportFailedAlert = true
-                    }
+        // Run export in background to avoid UI blocking
+        Task.detached(priority: .userInitiated) { @MainActor in
+            let context = modelContext
+            let result = await Task {
+                dataManager.exportUserData(context: context, format: format)
+            }.value
+            
+            if let url = result {
+                // Verify file exists
+                if FileManager.default.fileExists(atPath: url.path) {
+                    showShareSheet(url: url)
+                    feedbackManager.successHaptic()
                 } else {
-                    print("❌ Export failed from SettingsView - nil URL returned")
+                    showingExportError = true
                     feedbackManager.errorHaptic()
-                    self.showingExportFailedAlert = true
                 }
-            } catch {
-                print("❌ Export error from SettingsView: \(error)")
+            } else {
+                showingExportError = true
                 feedbackManager.errorHaptic()
-                self.showingExportFailedAlert = true
             }
         }
     }
     
     private func showShareSheet(url: URL) {
+        print("🔄 Attempting to show share sheet for: \(url.path)")
+        
         let activityVC = UIActivityViewController(activityItems: [url], applicationActivities: nil)
         activityVC.excludedActivityTypes = [
             .assignToContact,
@@ -787,16 +768,32 @@ struct SettingsView: View {
             .postToVimeo
         ]
         
-        if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-           let window = windowScene.windows.first,
-           let rootVC = window.rootViewController {
-            
-            var presentingVC = rootVC
-            while let presentedVC = presentingVC.presentedViewController {
-                presentingVC = presentedVC
-            }
-            
-            presentingVC.present(activityVC, animated: true)
+        // iPad support
+        if let popover = activityVC.popoverPresentationController,
+           let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+           let window = windowScene.windows.first {
+            popover.sourceView = window.rootViewController?.view
+            popover.sourceRect = CGRect(x: UIScreen.main.bounds.width / 2, y: UIScreen.main.bounds.height / 2, width: 0, height: 0)
+            popover.permittedArrowDirections = []
+        }
+        
+        // Find the topmost presented view controller
+        guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+              let window = windowScene.windows.first,
+              let rootVC = window.rootViewController else {
+            print("❌ Could not find root view controller")
+            showingExportError = true
+            return
+        }
+        
+        var presentingVC = rootVC
+        while let presentedVC = presentingVC.presentedViewController {
+            presentingVC = presentedVC
+        }
+        
+        print("✅ Presenting share sheet from: \(presentingVC)")
+        presentingVC.present(activityVC, animated: true) {
+            print("📱 Share sheet presented successfully")
         }
     }
     
@@ -807,7 +804,6 @@ struct SettingsView: View {
             // Optionally dismiss settings or show success message
         } catch {
             feedbackManager.errorHaptic()
-            print("❌ Delete error: \(error)")
         }
     }
     
@@ -815,6 +811,11 @@ struct SettingsView: View {
         if let url = URL(string: UIApplication.openSettingsURLString) {
             UIApplication.shared.open(url)
         }
+    }
+    
+    private func cancelAllNotifications() {
+        UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
+        feedbackManager.successHaptic()
     }
 }
 
@@ -847,124 +848,21 @@ struct SettingsCard<Content: View>: View {
 }
 
 // MARK: - Document Picker for Saving Files  
-struct DocumentPicker: UIViewControllerRepresentable {
-    let sourceURL: URL
-    let exportFormat: ExportFormat
-    let onSuccess: (URL) -> Void
-    let onError: (Error) -> Void
-    
-    func makeUIViewController(context: Context) -> UIDocumentPickerViewController {
-        print("📁 Creating DocumentPicker for format: \(exportFormat.rawValue)")
-        print("📄 Source file: \(sourceURL.lastPathComponent)")
-        
-        // Copy file to a more accessible location first
-        let fileManager = FileManager.default
-        let documentsPath = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first!
-        let fileName = "LifeCompanion_Export_\(dateFormatter.string(from: Date())).\(exportFormat.fileExtension)"
-        let destinationURL = documentsPath.appendingPathComponent(fileName)
-        
-        do {
-            // Remove existing file if it exists
-            if fileManager.fileExists(atPath: destinationURL.path) {
-                try fileManager.removeItem(at: destinationURL)
-            }
-            
-            // Copy the exported file to documents directory
-            try fileManager.copyItem(at: sourceURL, to: destinationURL)
-            print("✅ File copied to documents: \(destinationURL.path)")
-            
-            // Create picker for the copied file
-            let picker = UIDocumentPickerViewController(forExporting: [destinationURL])
-            picker.delegate = context.coordinator
-            picker.allowsMultipleSelection = false
-            picker.shouldShowFileExtensions = true
-            
-            return picker
-            
-        } catch {
-            print("❌ Failed to copy file: \(error)")
-            // Fallback to original file
-            let picker = UIDocumentPickerViewController(forExporting: [sourceURL])
-            picker.delegate = context.coordinator
-            picker.allowsMultipleSelection = false
-            picker.shouldShowFileExtensions = true
-            
-            return picker
-        }
-    }
-    
-    func updateUIViewController(_ uiViewController: UIDocumentPickerViewController, context: Context) {}
-    
-    func makeCoordinator() -> Coordinator {
-        Coordinator(self)
-    }
-    
-    private var dateFormatter: DateFormatter {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd_HH-mm-ss"
-        return formatter
-    }
-    
-    class Coordinator: NSObject, UIDocumentPickerDelegate {
-        let parent: DocumentPicker
-        
-        init(_ parent: DocumentPicker) {
-            self.parent = parent
-        }
-        
-        func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
-            print("✅ Document picker completed successfully")
-            guard let url = urls.first else {
-                print("❌ No URL selected in document picker")
-                parent.onError(DocumentPickerError.noURLSelected)
-                return
-            }
-            
-            print("📂 File saved to: \(url.path)")
-            print("📂 File name: \(url.lastPathComponent)")
-            parent.onSuccess(url)
-        }
-        
-        func documentPickerWasCancelled(_ controller: UIDocumentPickerViewController) {
-            print("⏹️ Document picker was cancelled")
-            parent.onError(DocumentPickerError.cancelled)
-        }
-    }
-}
 
-enum DocumentPickerError: LocalizedError {
-    case noURLSelected
-    case cancelled
-    
-    var errorDescription: String? {
-        switch self {
-        case .noURLSelected:
-            return "No file location was selected"
-        case .cancelled:
-            return "File saving was cancelled"
-        }
-    }
-}
 
 // MARK: - Share Sheet for Data Export
 struct ShareSheet: UIViewControllerRepresentable {
     let activityItems: [Any]
     
     func makeUIViewController(context: Context) -> UIActivityViewController {
-        print("📤 Creating UIActivityViewController with \(activityItems.count) items")
         
         for (index, item) in activityItems.enumerated() {
             if let url = item as? URL {
-                print("   📄 Item \(index): URL - \(url.lastPathComponent)")
-                print("       Path: \(url.path)")
-                print("       Exists: \(FileManager.default.fileExists(atPath: url.path))")
                 
                 if let attributes = try? FileManager.default.attributesOfItem(atPath: url.path),
                    let size = attributes[.size] as? Int {
-                    print("       Size: \(size) bytes")
                 }
             } else {
-                print("   📄 Item \(index): \(type(of: item))")
             }
         }
         
@@ -987,12 +885,10 @@ struct ShareSheet: UIViewControllerRepresentable {
 // MARK: - SettingsView Helper Methods Extension
 extension SettingsView {
     private func openSupportEmail() {
-        print("🔄 Opening support email...")
         feedbackManager.buttonTap()
         
         // Check if we're in simulator first
         #if targetEnvironment(simulator)
-        print("⚠️ Running in simulator - showing contact information")
         DispatchQueue.main.async {
             self.showingEmailAlert = true
         }
@@ -1021,7 +917,6 @@ extension SettingsView {
         guard let encodedEmail = email.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
               let encodedSubject = subject.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
               let encodedBody = body.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) else {
-            print("❌ Failed to encode email parameters")
             DispatchQueue.main.async {
                 self.showingEmailAlert = true
             }
@@ -1037,18 +932,14 @@ extension SettingsView {
         
         // Try each Gmail scheme
         for (index, urlString) in gmailSchemes.enumerated() {
-            print("📧 Trying Gmail scheme \(index + 1): \(urlString)")
             
             if let url = URL(string: urlString), UIApplication.shared.canOpenURL(url) {
-                print("✅ Opening Gmail app with scheme \(index + 1)...")
                 UIApplication.shared.open(url) { success in
                     DispatchQueue.main.async {
                         if success {
-                            print("✅ Gmail opened successfully")
                             let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
                             impactFeedback.impactOccurred()
                         } else {
-                            print("❌ Gmail failed to open despite being available")
                             self.showingEmailAlert = true
                         }
                     }
@@ -1057,7 +948,6 @@ extension SettingsView {
             }
         }
         
-        print("❌ Gmail app not available, trying other email clients...")
         
         // Try other email clients
         let emailClients = [
@@ -1068,15 +958,12 @@ extension SettingsView {
         
         for (clientName, urlString) in emailClients {
             if let url = URL(string: urlString), UIApplication.shared.canOpenURL(url) {
-                print("✅ Opening \(clientName)...")
                 UIApplication.shared.open(url) { success in
                     DispatchQueue.main.async {
                         if success {
-                            print("✅ \(clientName) opened successfully")
                             let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
                             impactFeedback.impactOccurred()
                         } else {
-                            print("❌ \(clientName) failed to open")
                             self.showingEmailAlert = true
                         }
                     }
@@ -1087,33 +974,22 @@ extension SettingsView {
         
         // Final fallback to default Mail app
         let mailURLString = "mailto:\(encodedEmail)?subject=\(encodedSubject)&body=\(encodedBody)"
-        print("📧 Final fallback to Mail app: \(mailURLString)")
         
         if let mailURL = URL(string: mailURLString) {
-            print("✅ Opening default Mail app...")
             UIApplication.shared.open(mailURL) { success in
                 DispatchQueue.main.async {
                     if success {
-                        print("✅ Mail app opened successfully")
                         let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
                         impactFeedback.impactOccurred()
                     } else {
-                        print("❌ Failed to open Mail app")
                         self.showingEmailAlert = true
                     }
                 }
             }
         } else {
-            print("❌ Could not create mailto URL")
             DispatchQueue.main.async {
                 self.showingEmailAlert = true
             }
         }
     }
-    
-
-}
-
-#Preview {
-    SettingsView()
 }

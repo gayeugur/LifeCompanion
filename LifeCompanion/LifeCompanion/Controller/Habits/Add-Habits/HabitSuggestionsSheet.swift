@@ -169,7 +169,7 @@ struct HabitSuggestionsSheet: View {
                 
                 // Frequency
                 HStack {
-                    Text(template.frequency.displayName.localized)
+                    Text(template.frequency.displayName)
                         .font(.system(size: 10, weight: .medium))
                         .foregroundColor(.secondary)
                         .textCase(.uppercase)

@@ -1,0 +1,36 @@
+"/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/LifeCompanion/Controller/ContentView.swift":
+  diagnostics: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/DerivedData/Build/Intermediates.noindex/LifeCompanion.build/Debug-iphonesimulator/LifeCompanion.build/Objects-normal/arm64/ContentView.dia"
+  swift-dependencies: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/DerivedData/Build/Intermediates.noindex/LifeCompanion.build/Debug-iphonesimulator/LifeCompanion.build/Objects-normal/arm64/ContentView.swiftdeps"
+  dependencies: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/DerivedData/Build/Intermediates.noindex/LifeCompanion.build/Debug-iphonesimulator/LifeCompanion.build/Objects-normal/arm64/ContentView.d"
+  object: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/DerivedData/Build/Intermediates.noindex/LifeCompanion.build/Debug-iphonesimulator/LifeCompanion.build/Objects-normal/arm64/ContentView.o"
+  const-values: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/DerivedData/Build/Intermediates.noindex/LifeCompanion.build/Debug-iphonesimulator/LifeCompanion.build/Objects-normal/arm64/ContentView.swiftconstvalues"
+"/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/LifeCompanion/Extension/String.swift":
+  dependencies: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/DerivedData/Build/Intermediates.noindex/LifeCompanion.build/Debug-iphonesimulator/LifeCompanion.build/Objects-normal/arm64/String.d"
+  diagnostics: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/DerivedData/Build/Intermediates.noindex/LifeCompanion.build/Debug-iphonesimulator/LifeCompanion.build/Objects-normal/arm64/String.dia"
+  object: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/DerivedData/Build/Intermediates.noindex/LifeCompanion.build/Debug-iphonesimulator/LifeCompanion.build/Objects-normal/arm64/String.o"
+  swift-dependencies: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/DerivedData/Build/Intermediates.noindex/LifeCompanion.build/Debug-iphonesimulator/LifeCompanion.build/Objects-normal/arm64/String.swiftdeps"
+  const-values: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/DerivedData/Build/Intermediates.noindex/LifeCompanion.build/Debug-iphonesimulator/LifeCompanion.build/Objects-normal/arm64/String.swiftconstvalues"
+"/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/LifeCompanion/Controller/ToDo/TodoListView.swift":
+  const-values: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/DerivedData/Build/Intermediates.noindex/LifeCompanion.build/Debug-iphonesimulator/LifeCompanion.build/Objects-normal/arm64/TodoListView.swiftconstvalues"
+  swift-dependencies: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/DerivedData/Build/Intermediates.noindex/LifeCompanion.build/Debug-iphonesimulator/LifeCompanion.build/Objects-normal/arm64/TodoListView.swiftdeps"
+  dependencies: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/DerivedData/Build/Intermediates.noindex/LifeCompanion.build/Debug-iphonesimulator/LifeCompanion.build/Objects-normal/arm64/TodoListView.d"
+  object: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/DerivedData/Build/Intermediates.noindex/LifeCompanion.build/Debug-iphonesimulator/LifeCompanion.build/Objects-normal/arm64/TodoListView.o"
+  diagnostics: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/DerivedData/Build/Intermediates.noindex/LifeCompanion.build/Debug-iphonesimulator/LifeCompanion.build/Objects-normal/arm64/TodoListView.dia"
+"/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/LifeCompanion/Controller/ToDo/TodoRowView.swift":
+  diagnostics: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/DerivedData/Build/Intermediates.noindex/LifeCompanion.build/Debug-iphonesimulator/LifeCompanion.build/Objects-normal/arm64/TodoRowView.dia"
+  object: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/DerivedData/Build/Intermediates.noindex/LifeCompanion.build/Debug-iphonesimulator/LifeCompanion.build/Objects-normal/arm64/TodoRowView.o"
+  swift-dependencies: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/DerivedData/Build/Intermediates.noindex/LifeCompanion.build/Debug-iphonesimulator/LifeCompanion.build/Objects-normal/arm64/TodoRowView.swiftdeps"
+  const-values: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/DerivedData/Build/Intermediates.noindex/LifeCompanion.build/Debug-iphonesimulator/LifeCompanion.build/Objects-normal/arm64/TodoRowView.swiftconstvalues"
+  dependencies: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/DerivedData/Build/Intermediates.noindex/LifeCompanion.build/Debug-iphonesimulator/LifeCompanion.build/Objects-normal/arm64/TodoRowView.d"
+"/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/LifeCompanion/Extension/Color.swift":
+  swift-dependencies: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/DerivedData/Build/Intermediates.noindex/LifeCompanion.build/Debug-iphonesimulator/LifeCompanion.build/Objects-normal/arm64/Color.swiftdeps"
+  diagnostics: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/DerivedData/Build/Intermediates.noindex/LifeCompanion.build/Debug-iphonesimulator/LifeCompanion.build/Objects-normal/arm64/Color.dia"
+  const-values: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/DerivedData/Build/Intermediates.noindex/LifeCompanion.build/Debug-iphonesimulator/LifeCompanion.build/Objects-normal/arm64/Color.swiftconstvalues"
+  dependencies: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/DerivedData/Build/Intermediates.noindex/LifeCompanion.build/Debug-iphonesimulator/LifeCompanion.build/Objects-normal/arm64/Color.d"
+  object: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/DerivedData/Build/Intermediates.noindex/LifeCompanion.build/Debug-iphonesimulator/LifeCompanion.build/Objects-normal/arm64/Color.o"
+"/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/LifeCompanion/Extension/ConfirmationDialog.swift":
+  swift-dependencies: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/DerivedData/Build/Intermediates.noindex/LifeCompanion.build/Debug-iphonesimulator/LifeCompanion.build/Objects-normal/arm64/ConfirmationDialog.swiftdeps"
+  diagnostics: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/DerivedData/Build/Intermediates.noindex/LifeCompanion.build/Debug-iphonesimulator/LifeCompanion.build/Objects-normal/arm64/ConfirmationDialog.dia"
+  object: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/DerivedData/Build/Intermediates.noindex/LifeCompanion.build/Debug-iphonesimulator/LifeCompanion.build/Objects-normal/arm64/ConfirmationDialog.o"
+  const-values: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/DerivedData/Build/Intermediates.noindex/LifeCompanion.build/Debug-iphonesimulator/LifeCompanion.build/Objects-normal/arm64/ConfirmationDialog.swiftconstvalues"
+  dependencies: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/DerivedData/Build/Intermediates.noindex/LifeCompanion.build/Debug-iphonesimulator/LifeCompanion.build/Objects-normal/arm64/ConfirmationDialog.d"

@@ -23,8 +23,6 @@ class LanguageManager: ObservableObject {
         let storedLanguage = UserDefaults.standard.string(forKey: "selectedLanguage") ?? "system"
         currentLanguage = storedLanguage
         
-        print("🌍 LanguageManager initialized with language: \(storedLanguage)")
-        
         // FOR TESTING: Force Turkish to test localization
         // Uncomment next line to test Turkish
         // currentLanguage = "tr"
@@ -39,8 +37,6 @@ class LanguageManager: ObservableObject {
         UserDefaults.standard.set(language, forKey: "AppLanguage")
         UserDefaults.standard.synchronize()
         
-        print("🌍 Language changed to: \(language)")
-        
         // Force UI refresh with objectWillChange
         DispatchQueue.main.async {
             self.objectWillChange.send()
@@ -50,7 +46,6 @@ class LanguageManager: ObservableObject {
     
     private func getSystemLanguage() -> String {
         let systemLang = Locale.preferredLanguages.first?.components(separatedBy: "-").first ?? "en"
-        print("🌍 System language: \(systemLang)")
         return systemLang
     }
     
@@ -63,13 +58,10 @@ class LanguageManager: ObservableObject {
     func getLocalizedString(for key: String, comment: String = "") -> String {
         let language = currentLanguage == "system" ? getSystemLanguage() : currentLanguage
         
-        print("🌍 Looking for key '\(key)' in language '\(language)'")
-        
         // First try to get the selected language bundle
         if let path = Bundle.main.path(forResource: language, ofType: "lproj"),
            let bundle = Bundle(path: path) {
             let localizedString = bundle.localizedString(forKey: key, value: nil, table: nil)
-            print("🌍 Found in \(language): '\(localizedString)'")
             if localizedString != key {
                 return localizedString
             }
@@ -79,14 +71,12 @@ class LanguageManager: ObservableObject {
         if let path = Bundle.main.path(forResource: "en", ofType: "lproj"),
            let bundle = Bundle(path: path) {
             let localizedString = bundle.localizedString(forKey: key, value: nil, table: nil)
-            print("🌍 Fallback to English: '\(localizedString)'")
             if localizedString != key {
                 return localizedString
             }
         }
         
         // Return the key itself if no localization found
-        print("🌍 No localization found for '\(key)', returning key")
         return key
     }
 }

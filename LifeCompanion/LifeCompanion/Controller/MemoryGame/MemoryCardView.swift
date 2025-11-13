@@ -51,8 +51,7 @@ struct MemoryCardView: View {
         .animation(.easeInOut(duration: 0.3), value: card.isFlipped)
         .animation(.easeInOut(duration: 0.3), value: card.isMatched)
         .onTapGesture {
-            print("🔥 TAP DETECTED! Card: \(card.symbol)")
-            onTap()
+            viewModel.flipCard(card)
         }
         .onChange(of: card.isMatched) { matched in
             if matched {
@@ -195,7 +194,7 @@ struct MemoryCardGrid: View {
 
 // MARK: - Preview
 #Preview {
-    @StateObject var viewModel = MemoryGameViewModel()
+    @Previewable @StateObject var viewModel = MemoryGameViewModel()
     
     return VStack {
         MemoryCardView(

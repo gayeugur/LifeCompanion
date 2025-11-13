@@ -14,8 +14,20 @@ struct HabitsView: View {
     @EnvironmentObject var feedbackManager: FeedbackManager
     @StateObject private var viewModel = HabitListViewModel()
     @State private var showingHistory = false
-    @State private var showingStreakCelebration = false
-    @State private var celebratingHabit: HabitItem?
+
+    
+    // Only show today's habits on main screen
+    private var todaysHabits: [HabitItem] {
+        let calendar = Calendar.current
+        let today = calendar.startOfDay(for: Date())
+        
+        return viewModel.habits.filter { habit in
+            // Check if habit has an entry for today
+            return habit.entries.contains { entry in
+                calendar.isDate(entry.date, inSameDayAs: today)
+            }
+        }
+    }
     
     var body: some View {
         ZStack {
@@ -32,16 +44,16 @@ struct HabitsView: View {
             )
             .ignoresSafeArea()
 
-            if viewModel.habits.isEmpty {
+            if todaysHabits.isEmpty {
                 VStack(spacing: 16) {
                     Spacer()
                     Image(systemName: "tray.fill")
                         .font(.system(size: 60))
                         .foregroundColor(.gray.opacity(0.5))
-                    Text(NSLocalizedString("habits.empty.title", comment: "No habits yet"))
+                    Text("habits.empty.title".localized)
                         .font(.system(size: 18, weight: .medium))
                         .foregroundColor(.gray)
-                    Text(NSLocalizedString("habits.empty.subtitle", comment: "Tap + to add a habit"))
+                    Text("habits.empty.subtitle".localized)
                         .font(.system(size: 14))
                         .foregroundColor(.gray.opacity(0.7))
                     Spacer()
@@ -50,20 +62,29 @@ struct HabitsView: View {
                 .padding()
             } else {
                 List {
-                    ForEach(viewModel.habits) { habit in
+                    ForEach(todaysHabits) { habit in
                         HabitRowView(
                             habit: habit,
                             onIncrement: { 
-                                let oldStreak = habit.currentStreak
-                                viewModel.incrementCount(for: habit, in: modelContext) 
+                                // Immediate haptic feedback
+                                feedbackManager.buttonTap()
                                 
-                                // Check for streak milestones
+                                let oldStreak = habit.currentStreak
+                                viewModel.incrementCount(for: habit, in: modelContext, settingsManager: settingsManager) 
+                                
+                                // Check for streak milestones (for UI celebration)
                                 if habit.isCompleted && habit.currentStreak > oldStreak {
                                     checkStreakMilestone(habit: habit)
                                 }
                             },
-                            onDeleteRequest: { viewModel.showDeleteConfirmation(for: habit) },
-                            onEdit: { viewModel.startEditing(habit) }
+                            onDeleteRequest: { 
+                                feedbackManager.warningHaptic()
+                                viewModel.showDeleteConfirmation(for: habit) 
+                            },
+                            onEdit: { 
+                                feedbackManager.lightHaptic()
+                                viewModel.startEditing(habit) 
+                            }
                         )
                         .listRowInsets(.init(top: 8, leading: 16, bottom: 8, trailing: 16))
                         .listRowBackground(Color.clear)
@@ -106,7 +127,7 @@ struct HabitsView: View {
                 }
             }
         }
-        .navigationTitle(NSLocalizedString("habits.title", comment: "Habits"))
+        .navigationTitle("habits.title".localized)
         .navigationBarTitleDisplayMode(.large)
         .toolbar {
             // ...existing code...
@@ -116,34 +137,42 @@ struct HabitsView: View {
                 } label: {
                     Image(systemName: "clock.arrow.circlepath")
                         .imageScale(.large)
-                        .accessibilityLabel(Text(NSLocalizedString("history.title", comment: "History")))
+                        .accessibilityLabel(Text("history.title".localized))
                 }
             }
         }
         .onAppear {
+            viewModel.configure(settingsManager: settingsManager)
             viewModel.fetchHabits(from: modelContext)
             viewModel.checkAutoReset(in: modelContext, settingsManager: settingsManager)
+            viewModel.ensureTodayEntries(in: modelContext)
         }
-        .sheet(isPresented: $viewModel.showingAddHabit, content: {
-            AddHabitView { title, freq, count, reminder in
+        .sheet(isPresented: $viewModel.showingAddHabit, onDismiss: {
+            // Force refresh habits when sheet is dismissed
+            viewModel.fetchHabits(from: modelContext)
+            viewModel.ensureTodayEntries(in: modelContext)
+        }, content: {
+            AddHabitView { title, freq, count, reminder, reminderDates in
                 viewModel.addHabit(
                     title: title,
                     frequency: freq,
                     targetCount: count,
                     reminderTime: reminder,
+                    reminderDates: reminderDates,
                     in: modelContext
                 )
             }
         })
         .sheet(isPresented: $viewModel.showingEditHabit, content: {
             if let habit = viewModel.editingHabit {
-                EditHabitView(habit: habit) { title, freq, count, reminder in
+                EditHabitView(habit: habit) { title, freq, count, reminder, reminderDates in
                     viewModel.updateHabit(
                         habit,
                         title: title,
                         frequency: freq,
                         targetCount: count,
                         reminderTime: reminder,
+                        reminderDates: reminderDates,
                         in: modelContext
                     )
                 }
@@ -163,31 +192,12 @@ struct HabitsView: View {
                 viewModel.confirmDelete(in: modelContext)
             }
         )
-        .alert("streak.celebration.title".localized, isPresented: $showingStreakCelebration) {
-            Button("streak.celebration.button".localized) { }
-        } message: {
-            if let habit = celebratingHabit {
-                Text(String(format: "streak.celebration.message".localized, habit.currentStreak, habit.title, habit.streakEmoji))
-            }
-        }
+        
     }
     
     private func checkStreakMilestone(habit: HabitItem) {
-        // Only celebrate if enabled in settings
-        guard settingsManager.shouldShowStreakCelebration(for: habit.currentStreak) else { return }
-        
-        celebratingHabit = habit
-        withAnimation(.spring()) {
-            showingStreakCelebration = true
-        }
-        
-        // Use feedback manager for haptic and sound
-        feedbackManager.streakCelebration()
-        
-        // Schedule celebration notification if notifications are enabled
-        if settingsManager.notificationsEnabled {
-            habit.scheduleStreakCelebrationNotification()
-        }
+        // Streak celebration disabled - just give subtle feedback
+        feedbackManager.buttonTap()
     }
 }
 

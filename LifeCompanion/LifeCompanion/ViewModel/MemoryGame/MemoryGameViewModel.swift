@@ -8,7 +8,8 @@
 import Foundation
 import SwiftUI
 
-class MemoryGameViewModel: ObservableObject {
+@MainActor
+final class MemoryGameViewModel: ObservableObject {
     @Published var game: MemoryGame?
     @Published var showingSettings = false
     @Published var showingGameComplete = false
@@ -42,8 +43,6 @@ class MemoryGameViewModel: ObservableObject {
     }
     
     func flipCard(_ card: MemoryCard) {
-        print("🎮 ViewModel: flipCard called for \(card.symbol)")
-        print("🎮 Game state: \(game?.gameState ?? .notStarted)")
         game?.flipCard(card)
         
         // Check if game is completed

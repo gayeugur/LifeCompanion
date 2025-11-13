@@ -8,6 +8,8 @@
 import Foundation
 import SwiftUI
 import AVFoundation
+import UIKit
+import UserNotifications
 
 @MainActor
 final class MeditationViewModel: ObservableObject {
@@ -36,6 +38,13 @@ final class MeditationViewModel: ObservableObject {
     
     // MARK: - Ambient Sound Properties
     @Published var selectedAmbientSound: AmbientSound = .none
+    
+    // MARK: - Settings
+    private var settingsManager: SettingsManager?
+    
+    func configure(settingsManager: SettingsManager) {
+        self.settingsManager = settingsManager
+    }
     @Published var isAmbientSoundPlaying = false
     @Published var ambientVolume: Double = 0.5
     
@@ -43,6 +52,8 @@ final class MeditationViewModel: ObservableObject {
     private var timer: Timer?
     private var breathingTimer: Timer?
     private var audioPlayer: AVAudioPlayer?
+    private var timerStartTime: Date?
+    private var pausedTimeRemaining: Int?
     
     let timerOptions = [5, 10, 15, 20, 30, 45, 60]
     
@@ -55,14 +66,22 @@ final class MeditationViewModel: ObservableObject {
     // MARK: - Timer Functions
     func startTimer() {
         isTimerRunning = true
+        timerStartTime = Date()
+        pausedTimeRemaining = nil
+        
+        // Configure audio session for background playback
+        configureAudioSessionForBackground()
+        
+        // Start RunLoop timer for better background performance
         timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
             Task { @MainActor in
-                if self.timeRemaining > 0 {
-                    self.timeRemaining -= 1
-                } else {
-                    self.completeTimer()
-                }
+                self.updateTimerFromBackground()
             }
+        }
+        
+        // Add timer to common run loop modes for better background performance
+        if let timer = timer {
+            RunLoop.current.add(timer, forMode: .common)
         }
         
         // Haptic feedback
@@ -74,6 +93,7 @@ final class MeditationViewModel: ObservableObject {
         isTimerRunning = false
         timer?.invalidate()
         timer = nil
+        pausedTimeRemaining = timeRemaining
     }
     
     func stopTimer() {
@@ -81,10 +101,26 @@ final class MeditationViewModel: ObservableObject {
         timer?.invalidate()
         timer = nil
         timeRemaining = selectedTimer * 60
+        timerStartTime = nil
+        pausedTimeRemaining = nil
         
         // Light haptic feedback
         let impactFeedback = UIImpactFeedbackGenerator(style: .light)
         impactFeedback.impactOccurred()
+    }
+    
+    private func updateTimerFromBackground() {
+        guard let startTime = timerStartTime, isTimerRunning else { return }
+        
+        let elapsed = Int(Date().timeIntervalSince(startTime))
+        let totalTime = selectedTimer * 60
+        let remaining = totalTime - elapsed
+        
+        if remaining > 0 {
+            timeRemaining = remaining
+        } else {
+            completeTimer()
+        }
     }
     
     private func completeTimer() {
@@ -97,10 +133,46 @@ final class MeditationViewModel: ObservableObject {
         
         // Reset timer
         timeRemaining = selectedTimer * 60
+        timerStartTime = nil
+        pausedTimeRemaining = nil
         
         // Strong haptic feedback for completion
         let impactFeedback = UIImpactFeedbackGenerator(style: .heavy)
         impactFeedback.impactOccurred()
+        
+        // Send completion notification
+        sendTimerCompletionNotification()
+    }
+    
+    private func configureAudioSessionForBackground() {
+        do {
+            let audioSession = AVAudioSession.sharedInstance()
+            try audioSession.setCategory(.playback, mode: .default, options: [.mixWithOthers])
+            try audioSession.setActive(true)
+        } catch {
+            // Handle error silently for now
+        }
+    }
+    
+    private func sendTimerCompletionNotification() {
+        // Don't send notification if notifications are disabled
+        guard settingsManager?.notificationsEnabled ?? true else { return }
+        
+        // Schedule local notification for timer completion
+        let content = UNMutableNotificationContent()
+        content.title = "meditation.timer.completed.title".localized
+        content.body = String(format: "meditation.timer.completed.body".localized, selectedTimer)
+        content.sound = .default
+        content.categoryIdentifier = "MEDITATION_TIMER"
+        
+        // Schedule immediate notification
+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 0.1, repeats: false)
+        let identifier = "meditation_timer_completed_\(Date().timeIntervalSince1970)"
+        let request = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
+        
+        UNUserNotificationCenter.current().add(request) { _ in
+            // Handle silently
+        }
     }
     
     func selectTimer(_ duration: Int) {
@@ -190,7 +262,6 @@ final class MeditationViewModel: ObservableObject {
                 impactFeedback.impactOccurred()
             }
         } catch {
-            print("Audio player error: \(error.localizedDescription)")
             // Fallback to system sound
             playSystemSoundForAmbient(sound)
         }
@@ -206,7 +277,6 @@ final class MeditationViewModel: ObservableObject {
         impactFeedback.impactOccurred()
         
         // Show message that sound files are needed
-        print("Playing \(sound.name) - Add \(sound.fileName ?? "").mp3 to project for actual audio")
     }
     
     func stopAmbientSound() {
@@ -327,6 +397,42 @@ final class MeditationViewModel: ObservableObject {
         // Haptic feedback
         let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
         impactFeedback.impactOccurred()
+    }
+    
+    // MARK: - App State Handling
+    func handleAppWillResignActive() {
+        // Save current state when app goes to background
+        if isTimerRunning {
+            UserDefaults.standard.set(Date().timeIntervalSince1970, forKey: "meditation_background_time")
+            UserDefaults.standard.set(timeRemaining, forKey: "meditation_time_remaining")
+            UserDefaults.standard.set(selectedTimer, forKey: "meditation_selected_timer")
+        }
+    }
+    
+    func handleAppDidBecomeActive() {
+        // Restore and update timer when app becomes active
+        guard isTimerRunning else { return }
+        
+        let backgroundTime = UserDefaults.standard.double(forKey: "meditation_background_time")
+        let savedTimeRemaining = UserDefaults.standard.integer(forKey: "meditation_time_remaining")
+        let savedSelectedTimer = UserDefaults.standard.integer(forKey: "meditation_selected_timer")
+        
+        if backgroundTime > 0 && savedTimeRemaining > 0 {
+            let timeInBackground = Date().timeIntervalSince1970 - backgroundTime
+            let newTimeRemaining = savedTimeRemaining - Int(timeInBackground)
+            
+            if newTimeRemaining > 0 {
+                timeRemaining = newTimeRemaining
+            } else {
+                // Timer completed while in background
+                completeTimer()
+            }
+            
+            // Clear saved values
+            UserDefaults.standard.removeObject(forKey: "meditation_background_time")
+            UserDefaults.standard.removeObject(forKey: "meditation_time_remaining")
+            UserDefaults.standard.removeObject(forKey: "meditation_selected_timer")
+        }
     }
 }
 

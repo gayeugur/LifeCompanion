@@ -1,0 +1,64 @@
+{
+  "source": "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/LifeCompanion/Controller/Habits/Edit-Habits/EditHabitView.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "",
+        "location": {
+          "startingColumn": 40,
+          "startingLine": 78
+        }
+      },
+      {
+        "comment": "",
+        "key": "%@ %lld %@",
+        "location": {
+          "startingColumn": 41,
+          "startingLine": 93
+        }
+      },
+      {
+        "comment": "",
+        "key": "",
+        "location": {
+          "startingColumn": 45,
+          "startingLine": 118
+        }
+      },
+      {
+        "comment": "",
+        "key": "",
+        "location": {
+          "startingColumn": 45,
+          "startingLine": 168
+        }
+      },
+      {
+        "comment": "",
+        "key": "%lld %@",
+        "location": {
+          "startingColumn": 54,
+          "startingLine": 140
+        }
+      },
+      {
+        "comment": "",
+        "key": "",
+        "location": {
+          "startingColumn": 53,
+          "startingLine": 154
+        }
+      },
+      {
+        "comment": "",
+        "key": "Done",
+        "location": {
+          "startingColumn": 28,
+          "startingLine": 265
+        }
+      }
+    ]
+  },
+  "version": 1
+}

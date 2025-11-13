@@ -1,0 +1,104 @@
+{
+  "source": "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/LifeCompanion/Controller/Settings/SettingsView.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "Export Error",
+        "location": {
+          "startingColumn": 16,
+          "startingLine": 60
+        }
+      },
+      {
+        "comment": "",
+        "key": "OK",
+        "location": {
+          "startingColumn": 20,
+          "startingLine": 61
+        }
+      },
+      {
+        "comment": "",
+        "key": "Unable to export your data. Please try again.",
+        "location": {
+          "startingColumn": 18,
+          "startingLine": 63
+        }
+      },
+      {
+        "comment": "",
+        "key": "",
+        "location": {
+          "startingColumn": 28,
+          "startingLine": 177
+        }
+      },
+      {
+        "comment": "",
+        "key": "",
+        "location": {
+          "startingColumn": 28,
+          "startingLine": 238
+        }
+      },
+      {
+        "comment": "",
+        "key": "",
+        "location": {
+          "startingColumn": 28,
+          "startingLine": 266
+        }
+      },
+      {
+        "comment": "",
+        "key": "%lld",
+        "location": {
+          "startingColumn": 42,
+          "startingLine": 306
+        }
+      },
+      {
+        "comment": "",
+        "key": "ml",
+        "location": {
+          "startingColumn": 42,
+          "startingLine": 309
+        }
+      },
+      {
+        "comment": "",
+        "key": "",
+        "location": {
+          "startingColumn": 28,
+          "startingLine": 338
+        }
+      },
+      {
+        "comment": "",
+        "key": "%lld×%lld",
+        "location": {
+          "startingColumn": 34,
+          "startingLine": 340
+        }
+      },
+      {
+        "comment": "",
+        "key": "1.0.0",
+        "location": {
+          "startingColumn": 30,
+          "startingLine": 401
+        }
+      },
+      {
+        "comment": "",
+        "key": "LifeCompanion",
+        "location": {
+          "startingColumn": 30,
+          "startingLine": 627
+        }
+      }
+    ]
+  },
+  "version": 1
+}

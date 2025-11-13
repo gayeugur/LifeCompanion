@@ -1,0 +1,152 @@
+{
+  "source": "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/LifeCompanion/Controller/Settings/SettingsView.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "Export Failed",
+        "location": {
+          "startingColumn": 16,
+          "startingLine": 72
+        }
+      },
+      {
+        "comment": "",
+        "key": "Unable to export your data. Please try again or contact support if the issue persists.",
+        "location": {
+          "startingColumn": 18,
+          "startingLine": 75
+        }
+      },
+      {
+        "comment": "",
+        "key": "OK",
+        "location": {
+          "startingColumn": 20,
+          "startingLine": 78
+        }
+      },
+      {
+        "comment": "",
+        "key": "In simulator: Contact gayeugur00@gmail.com for support",
+        "location": {
+          "startingColumn": 18,
+          "startingLine": 90
+        }
+      },
+      {
+        "comment": "",
+        "key": "Cancel",
+        "location": {
+          "startingColumn": 20,
+          "startingLine": 242
+        }
+      },
+      {
+        "comment": "",
+        "key": "Select how you want to save your data export",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 177
+        }
+      },
+      {
+        "comment": "",
+        "key": "Save directly to Files app",
+        "location": {
+          "startingColumn": 38,
+          "startingLine": 198
+        }
+      },
+      {
+        "comment": "",
+        "key": "Share via AirDrop, Email, etc.",
+        "location": {
+          "startingColumn": 38,
+          "startingLine": 227
+        }
+      },
+      {
+        "comment": "",
+        "key": "",
+        "location": {
+          "startingColumn": 28,
+          "startingLine": 300
+        }
+      },
+      {
+        "comment": "",
+        "key": "",
+        "location": {
+          "startingColumn": 28,
+          "startingLine": 332
+        }
+      },
+      {
+        "comment": "",
+        "key": "",
+        "location": {
+          "startingColumn": 28,
+          "startingLine": 360
+        }
+      },
+      {
+        "comment": "",
+        "key": "",
+        "location": {
+          "startingColumn": 32,
+          "startingLine": 370
+        }
+      },
+      {
+        "comment": "",
+        "key": "%lld",
+        "location": {
+          "startingColumn": 42,
+          "startingLine": 400
+        }
+      },
+      {
+        "comment": "",
+        "key": "ml",
+        "location": {
+          "startingColumn": 42,
+          "startingLine": 403
+        }
+      },
+      {
+        "comment": "",
+        "key": "",
+        "location": {
+          "startingColumn": 28,
+          "startingLine": 432
+        }
+      },
+      {
+        "comment": "",
+        "key": "%lld×%lld",
+        "location": {
+          "startingColumn": 34,
+          "startingLine": 434
+        }
+      },
+      {
+        "comment": "",
+        "key": "1.0.0",
+        "location": {
+          "startingColumn": 30,
+          "startingLine": 494
+        }
+      },
+      {
+        "comment": "",
+        "key": "LifeCompanion",
+        "location": {
+          "startingColumn": 30,
+          "startingLine": 591
+        }
+      }
+    ]
+  },
+  "version": 1
+}

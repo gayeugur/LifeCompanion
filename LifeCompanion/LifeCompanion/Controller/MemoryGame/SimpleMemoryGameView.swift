@@ -13,7 +13,7 @@ struct SimpleMemoryGameView: View {
             Text("🧠")
                 .font(.system(size: 60))
             
-            Text("Memory Game")
+            Text("memory.game.title".localized)
                 .font(.title)
                 .fontWeight(.bold)
             

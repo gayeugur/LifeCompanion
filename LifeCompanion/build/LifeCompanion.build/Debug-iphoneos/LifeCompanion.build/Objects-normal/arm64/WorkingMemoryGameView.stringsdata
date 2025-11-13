@@ -1,0 +1,216 @@
+{
+  "source": "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/LifeCompanion/Controller/MemoryGame/WorkingMemoryGameView.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "Memory Game",
+        "location": {
+          "startingColumn": 26,
+          "startingLine": 143
+        }
+      },
+      {
+        "comment": "",
+        "key": "🎉 Game Complete!",
+        "location": {
+          "startingColumn": 16,
+          "startingLine": 162
+        }
+      },
+      {
+        "comment": "",
+        "key": "🧠 Memory Game",
+        "location": {
+          "startingColumn": 26,
+          "startingLine": 53
+        }
+      },
+      {
+        "comment": "",
+        "key": "⏱️",
+        "location": {
+          "startingColumn": 30,
+          "startingLine": 65
+        }
+      },
+      {
+        "comment": "",
+        "key": "Time",
+        "location": {
+          "startingColumn": 30,
+          "startingLine": 67
+        }
+      },
+      {
+        "comment": "",
+        "key": "👆",
+        "location": {
+          "startingColumn": 30,
+          "startingLine": 76
+        }
+      },
+      {
+        "comment": "",
+        "key": "Moves",
+        "location": {
+          "startingColumn": 30,
+          "startingLine": 78
+        }
+      },
+      {
+        "comment": "",
+        "key": "%lld",
+        "location": {
+          "startingColumn": 30,
+          "startingLine": 81
+        }
+      },
+      {
+        "comment": "",
+        "key": "✅",
+        "location": {
+          "startingColumn": 30,
+          "startingLine": 87
+        }
+      },
+      {
+        "comment": "",
+        "key": "Matches",
+        "location": {
+          "startingColumn": 30,
+          "startingLine": 89
+        }
+      },
+      {
+        "comment": "",
+        "key": "%lld",
+        "location": {
+          "startingColumn": 30,
+          "startingLine": 92
+        }
+      },
+      {
+        "comment": "",
+        "key": "New Game",
+        "location": {
+          "startingColumn": 28,
+          "startingLine": 123
+        }
+      },
+      {
+        "comment": "",
+        "key": "Settings",
+        "location": {
+          "startingColumn": 28,
+          "startingLine": 128
+        }
+      },
+      {
+        "comment": "",
+        "key": "🏆 Scores",
+        "location": {
+          "startingColumn": 28,
+          "startingLine": 133
+        }
+      },
+      {
+        "comment": "",
+        "key": "New Game",
+        "location": {
+          "startingColumn": 20,
+          "startingLine": 163
+        }
+      },
+      {
+        "comment": "",
+        "key": "View Scores",
+        "location": {
+          "startingColumn": 20,
+          "startingLine": 166
+        }
+      },
+      {
+        "comment": "",
+        "key": "OK",
+        "location": {
+          "startingColumn": 20,
+          "startingLine": 169
+        }
+      },
+      {
+        "comment": "",
+        "key": "Congratulations! You completed the game in %lld moves and %@.\n\nYour Score: %lld points",
+        "location": {
+          "startingColumn": 18,
+          "startingLine": 172
+        }
+      },
+      {
+        "comment": "",
+        "key": "?",
+        "location": {
+          "startingColumn": 30,
+          "startingLine": 316
+        }
+      },
+      {
+        "comment": "",
+        "key": "Settings",
+        "location": {
+          "startingColumn": 30,
+          "startingLine": 416
+        }
+      },
+      {
+        "comment": "",
+        "key": "🧠",
+        "location": {
+          "startingColumn": 26,
+          "startingLine": 371
+        }
+      },
+      {
+        "comment": "",
+        "key": "Game Settings",
+        "location": {
+          "startingColumn": 26,
+          "startingLine": 373
+        }
+      },
+      {
+        "comment": "",
+        "key": "Grid Size",
+        "location": {
+          "startingColumn": 26,
+          "startingLine": 379
+        }
+      },
+      {
+        "comment": "",
+        "key": "%lld×%lld",
+        "location": {
+          "startingColumn": 42,
+          "startingLine": 390
+        }
+      },
+      {
+        "comment": "",
+        "key": "%lld cards",
+        "location": {
+          "startingColumn": 42,
+          "startingLine": 397
+        }
+      },
+      {
+        "comment": "",
+        "key": "Done",
+        "location": {
+          "startingColumn": 28,
+          "startingLine": 420
+        }
+      }
+    ]
+  },
+  "version": 1
+}

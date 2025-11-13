@@ -23,12 +23,27 @@
 "add.datetime" = "Date & Time";
 "add.validation.title" = "Title required";
 "add.validation.message" = "Please enter a title for the task.";
+"add.habit.swipe" = "Add Task";
+
+"edit.title" = "Edit Task";
+"edit.save" = "Update";
+"edit.ok" = "OK";
+"edit.title.placeholder" = "Title (required)";
+"edit.subtitle.placeholder" = "Subtitle (optional)";
+"edit.priority" = "Priority";
+"edit.reminder" = "Edit reminder";
+"edit.section.details" = "Task Details";
+"edit.datetime" = "Date & Time";
+"edit.datetime" = "Date & Time";
+"edit.validation.title" = "Title required";
+"edit.validation.message" = "Please enter a title for the task.";
+
 "priority.low" = "Low";
 "priority.medium" = "Medium";
 "priority.high" = "High";
 "filter.time.all" = "All Tasks";
 "filter.time.today" = "Today";
-"filter.time.thisWeek" = "This Week";
+"filter.time.thisWeek" = "Upcoming";
 "filter.time.overdue" = "Overdue";
 "filter.status.all" = "All";
 "filter.status.completed" = "Completed";
@@ -65,7 +80,18 @@
 "habits.empty.title" = "No habits yet";
 "habits.empty.subtitle" = "Tap + to add a habit";
 "history.title" = "History";
-"history.empty" = "No history";
+"history.empty" = "No history available";
+
+"history.add.title" = "Add History Entry";
+"history.add.date" = "Date";
+"history.add.habit" = "Habit";
+"history.add.select.habit" = "Select a habit";
+"history.add.status" = "Status";
+"history.add.completed" = "Completed";
+"history.add.not.completed" = "Not Completed";
+"history.add.save" = "Save";
+
+"todo.title" = "To‑Do";
 "habit.status.done" = "Completed";
 "habit.status.active" = "Do";
 "habit.frequency.daily" = "Daily";
@@ -128,6 +154,43 @@
 "habit.template.clean.room" = "Clean Room";
 "habit.template.call.family" = "Call Family";
 "habit.template.meet.friends" = "Meet Friends";
+
+//History Section
+"history.title" = "History";
+"history.empty" = "No history entries yet";
+"history.add.title" = "Add History Entry";
+"history.add.date" = "Date";
+"history.add.habit" = "Habit";
+"history.add.select.habit" = "Select Habit";
+"history.add.status" = "Status";
+"history.add.completed" = "Completed";
+"history.add.not.completed" = "Not Completed";
+"history.add.save" = "Save Entry";
+
+//Habit Frequency
+"habit.frequency.daily" = "Daily";
+"habit.frequency.weekly" = "Weekly";
+"habit.frequency.monthly" = "Monthly";
+
+//Add Habit Section
+"addHabit.title" = "New Habit";
+"addHabit.nameLabel" = "Habit Name";
+"addHabit.namePlaceholder" = "Enter habit name";
+"addHabit.frequencyLabel" = "Frequency";
+"addHabit.targetLabel" = "Daily Target";
+"addHabit.times" = "times";
+"addHabit.reminderLabel" = "Reminders";
+"addHabit.saveButton" = "Create Habit";
+
+//Edit Habit Section
+"editHabit.title" = "Edit Habit";
+"editHabit.nameLabel" = "Habit Name";
+"editHabit.namePlaceholder" = "Enter habit name";
+"editHabit.frequencyLabel" = "Frequency";
+"editHabit.targetLabel" = "Daily Target";
+"editHabit.times" = "times";
+"editHabit.reminderLabel" = "Reminders";
+"editHabit.updateButton" = "Update Habit";
 
 //Todo Suggestions
 "todo.suggestions.title" = "Task Ideas";
@@ -326,6 +389,11 @@
 "habit.notification.reminder.body" = "Time to complete your %@ habit!";
 "habit.notification.celebration.title" = "🎉 Streak Achievement!";
 "habit.notification.celebration.body" = "Amazing! You've reached a %d-day streak for %@! %@";
+"habit.notification.completed.title" = "✅ Habit Completed!";
+"habit.notification.completed.body" = "Great job! You've completed '%@' today!";
+
+"meditation.timer.completed.title" = "🧘 Meditation Complete!";
+"meditation.timer.completed.body" = "Well done! You've completed your %d-minute meditation session.";
 
 //Medication Notifications
 "medication.notification.title" = "Medication Reminder";
@@ -457,13 +525,9 @@
 "settings.general.darkmode" = "Dark Mode";
 "settings.general.language" = "Language";
 "settings.general.notifications" = "Notifications";
-"settings.general.sounds" = "Sound Effects";
-"settings.general.haptics" = "Haptic Feedback";
-"settings.general.haptics.description" = "Feel vibrations when completing habits and reaching milestones";
 "settings.habits.title" = "Habits";
 "settings.habits.reminder.time" = "Default Reminder Time";
-"settings.habits.celebrations" = "Streak Celebrations";
-"settings.habits.reset.time" = "Daily Reset Time";
+"settings.habits.show_streak_info" = "Show Streak Info";
 "settings.health.title" = "Health";
 "settings.health.water.goal" = "Daily Water Goal";
 "settings.memory.title" = "Memory Game";
@@ -472,8 +536,8 @@
 "settings.privacy.data.export" = "Export My Data";
 "settings.privacy.data.delete" = "Delete All Data";
 "settings.export.format.title" = "Export Format Selection";
-"settings.export.format.message" = "Choose export format. PDF provides a readable report, JSON contains raw data for backup and restore.\n\n⚠️ Files will be saved to your device and can be shared via the system share sheet.";
-"settings.export.format.pdf" = "PDF Format";
+"settings.export.format.message" = "Choose export format. Text Report provides a readable summary, JSON contains raw data for backup and restore.\n\n⚠️ Files will be saved to your device and can be shared via the system share sheet.";
+"settings.export.format.pdf" = "Text Report";
 "settings.export.format.json" = "JSON Format";
 
 // Export Options
@@ -487,7 +551,7 @@
 "settings.about.version" = "Version";
 "settings.about.privacy" = "Privacy Policy";
 "settings.about.support" = "Help & Support";
-"settings.about.description" = "LifeCompanion is your personal assistant for building better habits, tracking health, and maintaining mental wellness.";
+"settings.about.description" = "🌟 LifeCompanion is your personal assistant for building better habits, tracking health, and maintaining mental wellness. ✨";
 "settings.about.features" = "Features";
 "settings.about.feature.habits" = "Habit Tracking with Streaks";
 "settings.about.feature.health" = "Health & Medication Management";
@@ -495,6 +559,8 @@
 "settings.about.feature.todos" = "Smart Task Management";
 "settings.about.feature.meditation" = "Mindfulness & Meditation";
 "settings.language.title" = "Select Language";
+"settings.language.description" = "Choose your preferred language";
+"settings.language.system.subtitle" = "Use device language settings";
 "settings.notification.permission.title" = "Notification Permission";
 "settings.notification.permission.message" = "Please enable notifications in Settings to receive reminders.";
 "settings.notification.permission.settings" = "Open Settings";
@@ -503,6 +569,26 @@
 "settings.privacy.delete.confirm" = "Delete All";
 "settings.support.email.failed.title" = "Email Not Available";
 "settings.support.email.failed.message" = "No email app is configured on this device. Please set up Mail or install Gmail to contact support.";
+
+//Todo Notifications
+"todo.notification.body" = "Don't forget to complete this task!";
+
+//Reminder Types
+"reminder.none" = "No Reminder";
+"reminder.daily" = "Daily";
+"reminder.specificDates" = "Specific Dates";
+"reminder.type" = "Reminder Type";
+"reminder.daily.time" = "Daily reminder time:";
+"reminder.specificDates.select" = "Select dates:";
+"reminder.dates.selected" = "dates selected";
+"reminder.time" = "Reminder time:";
+"reminder.selectedDates" = "Selected dates:";
+
+//Todo Filters
+"todo.filter.time" = "Time Filter";
+"todo.filter.status" = "Status Filter";
+"todo.filter.tasks" = "tasks";
+"todo.action.delete" = "Delete";
 
 //Common
 "common.back" = "Back";

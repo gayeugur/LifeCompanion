@@ -49,13 +49,13 @@ enum HabitCategory: String, CaseIterable {
     var localizedName: String {
         switch self {
         case .health:
-            return NSLocalizedString("habit.category.health", comment: "Health")
+            return "habit.category.health".localized
         case .personal:
-            return NSLocalizedString("habit.category.personal", comment: "Personal Development")
+            return "habit.category.personal".localized
         case .productivity:
-            return NSLocalizedString("habit.category.productivity", comment: "Productivity")
+            return "habit.category.productivity".localized
         case .social:
-            return NSLocalizedString("habit.category.social", comment: "Social")
+            return "habit.category.social".localized
         }
     }
     

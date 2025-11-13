@@ -1,0 +1,36 @@
+"/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/LifeCompanion/Model/MemoryGame/MemoryCard.swift":
+  dependencies: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/build/LifeCompanion.build/Debug-iphoneos/LifeCompanion.build/Objects-normal/arm64/MemoryCard.d"
+  object: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/build/LifeCompanion.build/Debug-iphoneos/LifeCompanion.build/Objects-normal/arm64/MemoryCard.o"
+  swift-dependencies: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/build/LifeCompanion.build/Debug-iphoneos/LifeCompanion.build/Objects-normal/arm64/MemoryCard.swiftdeps"
+  diagnostics: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/build/LifeCompanion.build/Debug-iphoneos/LifeCompanion.build/Objects-normal/arm64/MemoryCard.dia"
+  const-values: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/build/LifeCompanion.build/Debug-iphoneos/LifeCompanion.build/Objects-normal/arm64/MemoryCard.swiftconstvalues"
+"/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/LifeCompanion/Model/Todo/TodoTemplate.swift":
+  object: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/build/LifeCompanion.build/Debug-iphoneos/LifeCompanion.build/Objects-normal/arm64/TodoTemplate.o"
+  swift-dependencies: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/build/LifeCompanion.build/Debug-iphoneos/LifeCompanion.build/Objects-normal/arm64/TodoTemplate.swiftdeps"
+  const-values: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/build/LifeCompanion.build/Debug-iphoneos/LifeCompanion.build/Objects-normal/arm64/TodoTemplate.swiftconstvalues"
+  diagnostics: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/build/LifeCompanion.build/Debug-iphoneos/LifeCompanion.build/Objects-normal/arm64/TodoTemplate.dia"
+  dependencies: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/build/LifeCompanion.build/Debug-iphoneos/LifeCompanion.build/Objects-normal/arm64/TodoTemplate.d"
+"/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/LifeCompanion/Model/MemoryGame/GameScore.swift":
+  swift-dependencies: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/build/LifeCompanion.build/Debug-iphoneos/LifeCompanion.build/Objects-normal/arm64/GameScore.swiftdeps"
+  object: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/build/LifeCompanion.build/Debug-iphoneos/LifeCompanion.build/Objects-normal/arm64/GameScore.o"
+  const-values: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/build/LifeCompanion.build/Debug-iphoneos/LifeCompanion.build/Objects-normal/arm64/GameScore.swiftconstvalues"
+  dependencies: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/build/LifeCompanion.build/Debug-iphoneos/LifeCompanion.build/Objects-normal/arm64/GameScore.d"
+  diagnostics: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/build/LifeCompanion.build/Debug-iphoneos/LifeCompanion.build/Objects-normal/arm64/GameScore.dia"
+"/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/LifeCompanion/Model/MemoryGame/MemoryGame.swift":
+  const-values: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/build/LifeCompanion.build/Debug-iphoneos/LifeCompanion.build/Objects-normal/arm64/MemoryGame.swiftconstvalues"
+  object: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/build/LifeCompanion.build/Debug-iphoneos/LifeCompanion.build/Objects-normal/arm64/MemoryGame.o"
+  swift-dependencies: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/build/LifeCompanion.build/Debug-iphoneos/LifeCompanion.build/Objects-normal/arm64/MemoryGame.swiftdeps"
+  diagnostics: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/build/LifeCompanion.build/Debug-iphoneos/LifeCompanion.build/Objects-normal/arm64/MemoryGame.dia"
+  dependencies: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/build/LifeCompanion.build/Debug-iphoneos/LifeCompanion.build/Objects-normal/arm64/MemoryGame.d"
+"/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/LifeCompanion/Model/Todo/TodoItem.swift":
+  dependencies: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/build/LifeCompanion.build/Debug-iphoneos/LifeCompanion.build/Objects-normal/arm64/TodoItem.d"
+  swift-dependencies: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/build/LifeCompanion.build/Debug-iphoneos/LifeCompanion.build/Objects-normal/arm64/TodoItem.swiftdeps"
+  const-values: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/build/LifeCompanion.build/Debug-iphoneos/LifeCompanion.build/Objects-normal/arm64/TodoItem.swiftconstvalues"
+  diagnostics: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/build/LifeCompanion.build/Debug-iphoneos/LifeCompanion.build/Objects-normal/arm64/TodoItem.dia"
+  object: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/build/LifeCompanion.build/Debug-iphoneos/LifeCompanion.build/Objects-normal/arm64/TodoItem.o"
+"/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/LifeCompanion/Model/MenuItem.swift":
+  dependencies: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/build/LifeCompanion.build/Debug-iphoneos/LifeCompanion.build/Objects-normal/arm64/MenuItem.d"
+  const-values: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/build/LifeCompanion.build/Debug-iphoneos/LifeCompanion.build/Objects-normal/arm64/MenuItem.swiftconstvalues"
+  object: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/build/LifeCompanion.build/Debug-iphoneos/LifeCompanion.build/Objects-normal/arm64/MenuItem.o"
+  swift-dependencies: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/build/LifeCompanion.build/Debug-iphoneos/LifeCompanion.build/Objects-normal/arm64/MenuItem.swiftdeps"
+  diagnostics: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/build/LifeCompanion.build/Debug-iphoneos/LifeCompanion.build/Objects-normal/arm64/MenuItem.dia"

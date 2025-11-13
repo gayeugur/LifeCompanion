@@ -10,8 +10,13 @@ import SwiftData
 
 struct HistoryView: View {
     @Environment(\.modelContext) private var modelContext
+    @StateObject private var viewModel = HabitListViewModel()
 
     @State private var sections: [HistorySection] = []
+    @State private var showingAddHistorySheet = false
+    @State private var selectedDate = Date()
+    @State private var selectedHabit: HabitItem?
+    @State private var allHabits: [HabitItem] = []
 
     var body: some View {
         ZStack {
@@ -30,9 +35,32 @@ struct HistoryView: View {
             
             contentView
         }
-        .navigationTitle(NSLocalizedString("history.title", comment: "History"))
+        .navigationTitle("history.title".localized)
         .navigationBarTitleDisplayMode(.large)
-        .onAppear { loadHistory() }
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button {
+                    showingAddHistorySheet = true
+                } label: {
+                    Image(systemName: "plus")
+                        .imageScale(.large)
+                }
+            }
+        }
+        .onAppear { 
+            loadHistory() 
+            loadHabits()
+        }
+        .sheet(isPresented: $showingAddHistorySheet) {
+            AddHistoryEntrySheet(
+                habits: allHabits,
+                selectedDate: $selectedDate,
+                selectedHabit: $selectedHabit
+            ) { habit, date, isCompleted in
+                viewModel.addHistoryEntry(for: habit, on: date, isCompleted: isCompleted, in: modelContext)
+                loadHistory() // Refresh after adding
+            }
+        }
     }
 
     @ViewBuilder
@@ -77,7 +105,7 @@ struct HistoryView: View {
             Image(systemName: "tray")
                 .font(.system(size: 56))
                 .foregroundColor(.gray.opacity(0.5))
-            Text(NSLocalizedString("history.empty", comment: "No history"))
+            Text("history.empty".localized)
                 .foregroundColor(.secondary)
             Spacer()
         }
@@ -133,6 +161,11 @@ struct HistoryView: View {
             let monthEnd = cal.date(byAdding: .month, value: 1, to: entryDay)!
             return monthEnd <= now
         }
+    }
+    
+    private func loadHabits() {
+        viewModel.fetchHabits(from: modelContext)
+        allHabits = viewModel.habits
     }
 
     private static let headerFormatter: DateFormatter = {
@@ -201,9 +234,160 @@ private struct HistoryRowCard: View {
 
     private func frequencyTitle(_ freq: HabitFrequency) -> String {
         switch freq {
-        case .daily: return NSLocalizedString("habit.frequency.daily", comment: "Daily")
-        case .weekly: return NSLocalizedString("habit.frequency.weekly", comment: "Weekly")
-        case .monthly: return NSLocalizedString("habit.frequency.monthly", comment: "Monthly")
+        case .daily: return "habit.frequency.daily".localized
+        case .weekly: return "habit.frequency.weekly".localized
+        case .monthly: return "habit.frequency.monthly".localized
+        }
+    }
+}
+
+// MARK: - Add History Entry Sheet
+
+struct AddHistoryEntrySheet: View {
+    @Environment(\.dismiss) private var dismiss
+    
+    let habits: [HabitItem]
+    @Binding var selectedDate: Date
+    @Binding var selectedHabit: HabitItem?
+    let onSave: (HabitItem, Date, Bool) -> Void
+    
+    @State private var isCompleted = true
+    
+    var body: some View {
+        NavigationStack {
+            ZStack {
+                // Green gradient background
+                LinearGradient(
+                    colors: [
+                        Color.green.opacity(0.08),
+                        Color.green.opacity(0.04),
+                        Color.mint.opacity(0.02),
+                        Color.clear
+                    ],
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                )
+                .ignoresSafeArea()
+                
+                VStack(spacing: 20) {
+                    // Date picker card
+                    VStack(alignment: .leading, spacing: 12) {
+                        Text("history.add.date".localized)
+                            .font(.callout)
+                            .foregroundStyle(.secondary)
+                        
+                        DatePicker("", selection: $selectedDate, in: ...Date(), displayedComponents: .date)
+                            .datePickerStyle(.compact)
+                    }
+                    .padding(20)
+                    .background(
+                        RoundedRectangle(cornerRadius: 16)
+                            .fill(Color(.systemBackground))
+                            .shadow(color: .black.opacity(0.05), radius: 8, y: 2)
+                    )
+                    
+                    // Habit picker card  
+                    VStack(alignment: .leading, spacing: 12) {
+                        Text("history.add.habit".localized)
+                            .font(.callout)
+                            .foregroundStyle(.secondary)
+                        
+                        Menu {
+                            ForEach(habits) { habit in
+                                Button(habit.title) {
+                                    selectedHabit = habit
+                                }
+                            }
+                        } label: {
+                            HStack {
+                                Text(selectedHabit?.title ?? "history.add.select.habit".localized)
+                                    .foregroundColor(selectedHabit == nil ? .secondary : .primary)
+                                Spacer()
+                                Image(systemName: "chevron.down")
+                                    .foregroundColor(.secondary)
+                            }
+                            .padding(14)
+                            .background(Color(.tertiarySystemBackground), in: RoundedRectangle(cornerRadius: 12))
+                        }
+                    }
+                    .padding(20)
+                    .background(
+                        RoundedRectangle(cornerRadius: 16)
+                            .fill(Color(.systemBackground))
+                            .shadow(color: .black.opacity(0.05), radius: 8, y: 2)
+                    )
+                    
+                    // Status card
+                    VStack(alignment: .leading, spacing: 12) {
+                        Text("history.add.status".localized)
+                            .font(.callout)
+                            .foregroundStyle(.secondary)
+                        
+                        HStack(spacing: 16) {
+                            Button {
+                                isCompleted = true
+                            } label: {
+                                HStack {
+                                    Image(systemName: isCompleted ? "checkmark.circle.fill" : "circle")
+                                        .foregroundColor(isCompleted ? .green : .gray)
+                                    Text("history.add.completed".localized)
+                                        .foregroundColor(.primary)
+                                }
+                            }
+                            
+                            Button {
+                                isCompleted = false  
+                            } label: {
+                                HStack {
+                                    Image(systemName: !isCompleted ? "xmark.circle.fill" : "circle")
+                                        .foregroundColor(!isCompleted ? .red : .gray)
+                                    Text("history.add.not.completed".localized)
+                                        .foregroundColor(.primary)
+                                }
+                            }
+                        }
+                    }
+                    .padding(20)
+                    .background(
+                        RoundedRectangle(cornerRadius: 16)
+                            .fill(Color(.systemBackground))
+                            .shadow(color: .black.opacity(0.05), radius: 8, y: 2)
+                    )
+                    
+                    Spacer()
+                    
+                    // Save button
+                    Button {
+                        guard let habit = selectedHabit else { return }
+                        onSave(habit, selectedDate, isCompleted)
+                        dismiss()
+                    } label: {
+                        Text("history.add.save".localized)
+                            .font(.headline)
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, 16)
+                            .background(
+                                LinearGradient(colors: [Color.green.opacity(0.9), Color.green],
+                                               startPoint: .top,
+                                               endPoint: .bottom)
+                            )
+                            .foregroundStyle(.white)
+                            .clipShape(RoundedRectangle(cornerRadius: 16))
+                            .shadow(color: selectedHabit == nil ? .clear : Color.green.opacity(0.3), radius: 8, y: 4)
+                    }
+                    .disabled(selectedHabit == nil)
+                    .opacity(selectedHabit == nil ? 0.5 : 1)
+                    .padding(.horizontal, 20)
+                }
+                .padding(20)
+            }
+        }
+        .navigationTitle("history.add.title".localized)
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .topBarLeading) {
+                Button("Cancel") { dismiss() }
+            }
         }
     }
 }

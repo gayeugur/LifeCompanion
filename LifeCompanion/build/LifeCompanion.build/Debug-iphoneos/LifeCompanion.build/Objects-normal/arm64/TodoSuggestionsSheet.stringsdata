@@ -1,0 +1,16 @@
+{
+  "source": "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/LifeCompanion/Controller/ToDo/AddToDo/TodoSuggestionsSheet.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "%lld",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 99
+        }
+      }
+    ]
+  },
+  "version": 1
+}

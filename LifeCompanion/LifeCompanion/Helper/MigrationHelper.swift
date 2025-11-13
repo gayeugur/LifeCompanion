@@ -18,7 +18,6 @@ class MigrationHelper {
             try? FileManager.default.removeItem(at: url)
             
             UserDefaults.standard.set(true, forKey: "hasRunStreakMigration")
-            print("🔄 Migration: Cleared old data for streak feature")
         }
     }
 }

@@ -8,10 +8,11 @@
 import Foundation
 import SwiftData
 import SwiftUI
+import UserNotifications
 
 @MainActor
 final class HabitListViewModel: ObservableObject {
-    @Published var habits: [HabitItem] = []
+    @Published private(set) var habits: [HabitItem] = []
     @Published var showingAddHabit: Bool = false
     @Published var showingEditHabit: Bool = false
     @Published var editingHabit: HabitItem? = nil
@@ -19,42 +20,50 @@ final class HabitListViewModel: ObservableObject {
     @Published var habitToDelete: HabitItem? = nil
     
     private var settingsManager: SettingsManager?
-
+    private var lastFetchTime: Date?
+    private let fetchCacheTimeout: TimeInterval = 1.0 // Cache for 1 second
+    
+    func configure(settingsManager: SettingsManager) {
+        self.settingsManager = settingsManager
+    }
+    
     func fetchHabits(from context: ModelContext) {
+        print("🔄 Fetching habits from context...")
         do {
             let fetchDescriptor = FetchDescriptor<HabitItem>(sortBy: [SortDescriptor(\.createdAt, order: .reverse)])
             let fetched = try context.fetch(fetchDescriptor)
             habits = fetched
-            print("📋 Fetched \(habits.count) habits from database")
+            print("✅ Fetched \(habits.count) habits")
         } catch {
             print("❌ Error fetching habits: \(error)")
             habits = []
         }
     }
-
+    
     func addHabit(title: String,
                   frequency: HabitFrequency,
                   targetCount: Int,
                   reminderTime: Date?,
+                  reminderDates: [Date]?,
                   in context: ModelContext) {
-        print("🔄 Adding habit: '\(title)' with frequency: \(frequency)")
         let newHabit = HabitItem(title: title,
                                  frequency: frequency,
                                  targetCount: targetCount,
-                                 reminderTime: reminderTime)
+                                 reminderTime: reminderTime,
+                                 reminderDates: reminderDates)
         context.insert(newHabit)
         save(context)
         
-        // Schedule reminder notification if time is set
-        if reminderTime != nil {
-            newHabit.scheduleReminderNotification()
+        // Schedule reminder notification if time or dates are set
+        if reminderTime != nil || reminderDates != nil {
+            let notificationsEnabled = settingsManager?.notificationsEnabled ?? true
+            newHabit.scheduleReminderNotification(notificationsEnabled: notificationsEnabled)
         }
         
         fetchHabits(from: context)
-        print("✅ Habit added successfully. Total habits: \(habits.count)")
         showingAddHabit = false
     }
-
+    
     func delete(_ habit: HabitItem, in context: ModelContext) {
         // Cancel all notifications for this habit before deleting
         habit.cancelAllNotifications()
@@ -68,15 +77,18 @@ final class HabitListViewModel: ObservableObject {
                      frequency: HabitFrequency,
                      targetCount: Int,
                      reminderTime: Date?,
+                     reminderDates: [Date]?,
                      in context: ModelContext) {
         habit.title = title
         habit.frequency = frequency
         habit.targetCount = targetCount
         habit.reminderTime = reminderTime
+        habit.reminderDates = reminderDates
         
         // Update notifications
-        if let _ = reminderTime {
-            habit.scheduleReminderNotification()
+        if reminderTime != nil || reminderDates != nil {
+            let notificationsEnabled = settingsManager?.notificationsEnabled ?? true
+            habit.scheduleReminderNotification(notificationsEnabled: notificationsEnabled)
         } else {
             habit.cancelReminderNotifications()
         }
@@ -100,38 +112,59 @@ final class HabitListViewModel: ObservableObject {
         delete(habit, in: context)
         habitToDelete = nil
     }
-
-    func incrementCount(for habit: HabitItem, in context: ModelContext) {
+    
+    func incrementCount(for habit: HabitItem, in context: ModelContext, settingsManager: SettingsManager? = nil) {
+        // Don't increment if already completed
+        guard !habit.isCompleted else { 
+            print("🚫 Habit already completed, not incrementing")
+            return 
+        }
+        
+        let wasCompleted = habit.isCompleted
+        print("📊 Incrementing habit: \(habit.title), current: \(habit.currentCount), target: \(habit.targetCount), wasCompleted: \(wasCompleted)")
         habit.currentCount += 1
-
-        if habit.currentCount >= habit.targetCount {
+        
+        let cal = Calendar.current
+        let today = cal.startOfDay(for: Date())
+        
+        // Always ensure there's an entry for today
+        let todayEntry = habit.entries.first(where: { cal.isDate($0.date, inSameDayAs: today) }) ?? {
+            let newEntry = HabitEntry(habit: habit, date: today, isCompleted: false, completedAt: nil)
+            context.insert(newEntry)
+            return newEntry
+        }()
+        
+        if habit.currentCount >= habit.targetCount && !wasCompleted {
+            print("🎯 Habit just completed! Marking as complete and sending notification")
             habit.isCompleted = true
             
             // Update streak when habit is completed
+            let oldStreak = habit.currentStreak
             habit.updateStreak()
-
-            let cal = Calendar.current
-            let today = cal.startOfDay(for: Date())
-
-            if let entry = habit.entries.first(where: { cal.isDate($0.date, inSameDayAs: today) }) {
-                entry.isCompleted = true
-                entry.completedAt = Date()
-            }
+            
+            // Mark today's entry as completed
+            todayEntry.isCompleted = true
+            todayEntry.completedAt = Date()
+            
+            // Cancel reminder notifications since habit is now completed
+            print("🔕 Cancelling reminder notifications for completed habit: \(habit.title)")
+            habit.cancelReminderNotifications()
+            
+            // Send completion notification only for newly completed habits (wasCompleted = false)
+            sendCompletionNotification(for: habit, settingsManager: settingsManager, streakIncreased: habit.currentStreak > oldStreak)
+        } else if habit.currentCount >= habit.targetCount && wasCompleted {
+            print("🔕 Habit already completed, not sending notification")
         }
-
+        
         save(context)
         fetchHabits(from: context)
     }
-
+    
     private func save(_ context: ModelContext) {
         do {
             try context.save()
-            print("✅ Context saved successfully")
         } catch {
-            print("❌ Save error: \(error.localizedDescription)")
-            if let nsError = error as NSError? {
-                print("❌ Error details: \(nsError.userInfo)")
-            }
+            // Handle error silently
         }
     }
     
@@ -151,50 +184,163 @@ final class HabitListViewModel: ObservableObject {
         guard let todayResetTime = calendar.date(bySettingHour: resetComponents.hour ?? 0,
                                                  minute: resetComponents.minute ?? 0,
                                                  second: 0,
-                                                 of: now) else { return }
+                                                 of: now) else { 
+            print("❌ Could not create reset time for today")
+            return 
+        }
         
         let lastResetKey = "lastHabitResetDate"
-        let lastResetString = UserDefaults.standard.string(forKey: lastResetKey) ?? ""
+        let lastResetTimestamp = UserDefaults.standard.double(forKey: lastResetKey)
+        let lastResetDate = lastResetTimestamp > 0 ? Date(timeIntervalSince1970: lastResetTimestamp) : Date.distantPast
         
-        // Create today's date string for comparison
+        // Debug logging
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd"
-        let todayString = dateFormatter.string(from: now)
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        print("🕐 Reset check - Now: \(dateFormatter.string(from: now))")
+        print("🕐 Reset check - Today's reset time: \(dateFormatter.string(from: todayResetTime))")
+        print("🕐 Reset check - Last reset: \(dateFormatter.string(from: lastResetDate))")
         
-        // Check if we need to reset (new day and past reset time)
-        let needsReset = lastResetString != todayString && now >= todayResetTime
+        // Check if we need to reset
+        // Case 1: If it's a new day and we're past the reset time, reset
+        // Case 2: If it's the same day but we're past reset time and haven't reset since reset time
+        let needsReset: Bool
         
-        guard needsReset else { return }
+        let isNewDay = !calendar.isDate(lastResetDate, inSameDayAs: now)
+        let isPastResetTime = now >= todayResetTime
         
-        print("🔄 Habit auto-reset triggered at \(dateFormatter.string(from: now)) - Reset time: \(resetComponents.hour ?? 0):\(String(format: "%02d", resetComponents.minute ?? 0))")
-
+        if isNewDay {
+            // New day: reset if we're past today's reset time
+            needsReset = isPastResetTime
+            print("📅 New day detected - needs reset: \(needsReset)")
+        } else {
+            // Same day: reset if we're past reset time and last reset was before today's reset time
+            let lastResetBeforeToday = lastResetDate < todayResetTime
+            needsReset = isPastResetTime && lastResetBeforeToday
+            print("🕐 Same day - past reset time: \(isPastResetTime), last reset before today: \(lastResetBeforeToday)")
+        }
+        
+        print("🔄 Reset needed: \(needsReset)")
+        
+        guard needsReset else { 
+            print("⏸️ No reset needed")
+            return 
+        }
+        
         let todayStart = calendar.startOfDay(for: now)
+        
+        print("🔄 Starting reset process for \(habits.count) habits...")
         
         for habit in habits {
             let hasTodayEntry = habit.entries.contains { calendar.isDate($0.date, inSameDayAs: todayStart) }
-
+            
             if hasTodayEntry == false {
                 let entry = HabitEntry(habit: habit, date: todayStart, isCompleted: false, completedAt: nil)
                 context.insert(entry)
             }
-
+            
             // Reset streak if needed (when days are missed)
             habit.resetStreakIfNeeded()
             
             habit.currentCount = 0
             habit.isCompleted = false
+            
+            // Reschedule reminder notifications for the new day
+            if let settingsManager = settingsManager {
+                print("🔄 Rescheduling notifications for habit: \(habit.title) after reset")
+                habit.scheduleReminderNotification(notificationsEnabled: settingsManager.notificationsEnabled)
+            }
         }
-
+        
         save(context)
-        UserDefaults.standard.set(todayString, forKey: lastResetKey)
-        print("✅ Habit reset completed for \(habits.count) habits")
+        
+        // Save the timestamp when reset was performed
+        UserDefaults.standard.set(now.timeIntervalSince1970, forKey: lastResetKey)
+        print("✅ Habits reset completed at: \(dateFormatter.string(from: now))")
     }
     
     func checkAutoReset(in context: ModelContext, settingsManager: SettingsManager) {
         self.settingsManager = settingsManager
         resetIfNeeded(in: context, settingsManager: settingsManager)
     }
-
-
     
+    func ensureTodayEntries(in context: ModelContext) {
+        let calendar = Calendar.current
+        let today = calendar.startOfDay(for: Date())
+        
+        for habit in habits {
+            let hasTodayEntry = habit.entries.contains { calendar.isDate($0.date, inSameDayAs: today) }
+            
+            if !hasTodayEntry {
+                let entry = HabitEntry(habit: habit, date: today, isCompleted: false, completedAt: nil)
+                context.insert(entry)
+            }
+        }
+        
+        save(context)
+    }
+    
+    func addHistoryEntry(for habit: HabitItem, on date: Date, isCompleted: Bool, in context: ModelContext) {
+        let calendar = Calendar.current
+        let targetDate = calendar.startOfDay(for: date)
+        
+        // Check if entry already exists for this date
+        let existingEntry = habit.entries.first { calendar.isDate($0.date, inSameDayAs: targetDate) }
+        
+        if let existing = existingEntry {
+            // Update existing entry
+            existing.isCompleted = isCompleted
+            existing.completedAt = isCompleted ? date : nil
+        } else {
+            // Create new entry for past date
+            let newEntry = HabitEntry(habit: habit, date: targetDate, isCompleted: isCompleted, completedAt: isCompleted ? date : nil)
+            context.insert(newEntry)
+        }
+        
+        save(context)
+        fetchHabits(from: context)
+    }
+    
+    private func sendCompletionNotification(for habit: HabitItem, settingsManager: SettingsManager?, streakIncreased: Bool) {
+        // Don't send notification if settings manager is not available or notifications disabled
+        guard let settings = settingsManager, settings.notificationsEnabled else { 
+            print("🔕 Completion notification skipped - notifications disabled")
+            return 
+        }
+        
+        // Extra safety: Don't send notification if habit was already completed before this session
+        guard habit.isCompleted else {
+            print("🔕 Completion notification skipped - habit not marked as completed")
+            return
+        }
+        
+        print("🎉 Sending completion notification for habit: \(habit.title)")
+        
+        // If streak increased and it's a milestone, send celebration notification
+        if streakIncreased && settings.shouldShowStreakCelebration(for: habit.currentStreak) {
+            print("🏆 Milestone celebration notification for streak: \(habit.currentStreak)")
+            habit.scheduleStreakCelebrationNotification(notificationsEnabled: settings.notificationsEnabled)
+        } 
+        // Otherwise, send a simple completion notification
+        else {
+            print("✅ Simple completion notification")
+            scheduleSimpleCompletionNotification(for: habit)
+        }
+    }
+    
+    private func scheduleSimpleCompletionNotification(for habit: HabitItem) {
+        let content = UNMutableNotificationContent()
+        content.title = "habit.notification.completed.title".localized
+        content.body = String(format: "habit.notification.completed.body".localized, habit.title)
+        content.sound = .default
+        content.categoryIdentifier = "HABIT_COMPLETION"
+        
+        // Schedule immediate notification
+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
+        let identifier = "\(habit.id.uuidString)_completed_\(Date().timeIntervalSince1970)"
+        let request = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
+        
+        UNUserNotificationCenter.current().add(request) { error in
+            // Handle silently
+        }
+    }
 }

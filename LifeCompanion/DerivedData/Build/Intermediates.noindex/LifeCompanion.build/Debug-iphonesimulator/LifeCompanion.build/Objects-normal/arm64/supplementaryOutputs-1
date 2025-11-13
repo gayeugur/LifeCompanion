@@ -1,0 +1,42 @@
+"/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/LifeCompanion/Controller/Habits/History/HistoryView.swift":
+  swift-dependencies: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/DerivedData/Build/Intermediates.noindex/LifeCompanion.build/Debug-iphonesimulator/LifeCompanion.build/Objects-normal/arm64/HistoryView.swiftdeps"
+  diagnostics: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/DerivedData/Build/Intermediates.noindex/LifeCompanion.build/Debug-iphonesimulator/LifeCompanion.build/Objects-normal/arm64/HistoryView.dia"
+  object: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/DerivedData/Build/Intermediates.noindex/LifeCompanion.build/Debug-iphonesimulator/LifeCompanion.build/Objects-normal/arm64/HistoryView.o"
+  const-values: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/DerivedData/Build/Intermediates.noindex/LifeCompanion.build/Debug-iphonesimulator/LifeCompanion.build/Objects-normal/arm64/HistoryView.swiftconstvalues"
+  dependencies: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/DerivedData/Build/Intermediates.noindex/LifeCompanion.build/Debug-iphonesimulator/LifeCompanion.build/Objects-normal/arm64/HistoryView.d"
+"/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/LifeCompanion/App/LifeCompanionApp.swift":
+  diagnostics: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/DerivedData/Build/Intermediates.noindex/LifeCompanion.build/Debug-iphonesimulator/LifeCompanion.build/Objects-normal/arm64/LifeCompanionApp.dia"
+  object: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/DerivedData/Build/Intermediates.noindex/LifeCompanion.build/Debug-iphonesimulator/LifeCompanion.build/Objects-normal/arm64/LifeCompanionApp.o"
+  swift-dependencies: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/DerivedData/Build/Intermediates.noindex/LifeCompanion.build/Debug-iphonesimulator/LifeCompanion.build/Objects-normal/arm64/LifeCompanionApp.swiftdeps"
+  const-values: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/DerivedData/Build/Intermediates.noindex/LifeCompanion.build/Debug-iphonesimulator/LifeCompanion.build/Objects-normal/arm64/LifeCompanionApp.swiftconstvalues"
+  dependencies: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/DerivedData/Build/Intermediates.noindex/LifeCompanion.build/Debug-iphonesimulator/LifeCompanion.build/Objects-normal/arm64/LifeCompanionApp.d"
+"/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/LifeCompanion/Controller/Habits/Add-Habits/HabitSuggestionsSheet.swift":
+  const-values: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/DerivedData/Build/Intermediates.noindex/LifeCompanion.build/Debug-iphonesimulator/LifeCompanion.build/Objects-normal/arm64/HabitSuggestionsSheet.swiftconstvalues"
+  dependencies: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/DerivedData/Build/Intermediates.noindex/LifeCompanion.build/Debug-iphonesimulator/LifeCompanion.build/Objects-normal/arm64/HabitSuggestionsSheet.d"
+  diagnostics: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/DerivedData/Build/Intermediates.noindex/LifeCompanion.build/Debug-iphonesimulator/LifeCompanion.build/Objects-normal/arm64/HabitSuggestionsSheet.dia"
+  object: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/DerivedData/Build/Intermediates.noindex/LifeCompanion.build/Debug-iphonesimulator/LifeCompanion.build/Objects-normal/arm64/HabitSuggestionsSheet.o"
+  swift-dependencies: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/DerivedData/Build/Intermediates.noindex/LifeCompanion.build/Debug-iphonesimulator/LifeCompanion.build/Objects-normal/arm64/HabitSuggestionsSheet.swiftdeps"
+"/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/LifeCompanion/Controller/Habits/HabitsRowView.swift":
+  dependencies: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/DerivedData/Build/Intermediates.noindex/LifeCompanion.build/Debug-iphonesimulator/LifeCompanion.build/Objects-normal/arm64/HabitsRowView.d"
+  const-values: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/DerivedData/Build/Intermediates.noindex/LifeCompanion.build/Debug-iphonesimulator/LifeCompanion.build/Objects-normal/arm64/HabitsRowView.swiftconstvalues"
+  diagnostics: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/DerivedData/Build/Intermediates.noindex/LifeCompanion.build/Debug-iphonesimulator/LifeCompanion.build/Objects-normal/arm64/HabitsRowView.dia"
+  swift-dependencies: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/DerivedData/Build/Intermediates.noindex/LifeCompanion.build/Debug-iphonesimulator/LifeCompanion.build/Objects-normal/arm64/HabitsRowView.swiftdeps"
+  object: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/DerivedData/Build/Intermediates.noindex/LifeCompanion.build/Debug-iphonesimulator/LifeCompanion.build/Objects-normal/arm64/HabitsRowView.o"
+"/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/LifeCompanion/Controller/Habits/HabitsView.swift":
+  object: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/DerivedData/Build/Intermediates.noindex/LifeCompanion.build/Debug-iphonesimulator/LifeCompanion.build/Objects-normal/arm64/HabitsView.o"
+  const-values: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/DerivedData/Build/Intermediates.noindex/LifeCompanion.build/Debug-iphonesimulator/LifeCompanion.build/Objects-normal/arm64/HabitsView.swiftconstvalues"
+  swift-dependencies: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/DerivedData/Build/Intermediates.noindex/LifeCompanion.build/Debug-iphonesimulator/LifeCompanion.build/Objects-normal/arm64/HabitsView.swiftdeps"
+  dependencies: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/DerivedData/Build/Intermediates.noindex/LifeCompanion.build/Debug-iphonesimulator/LifeCompanion.build/Objects-normal/arm64/HabitsView.d"
+  diagnostics: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/DerivedData/Build/Intermediates.noindex/LifeCompanion.build/Debug-iphonesimulator/LifeCompanion.build/Objects-normal/arm64/HabitsView.dia"
+"/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/LifeCompanion/Controller/Habits/Edit-Habits/EditHabitView.swift":
+  dependencies: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/DerivedData/Build/Intermediates.noindex/LifeCompanion.build/Debug-iphonesimulator/LifeCompanion.build/Objects-normal/arm64/EditHabitView.d"
+  const-values: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/DerivedData/Build/Intermediates.noindex/LifeCompanion.build/Debug-iphonesimulator/LifeCompanion.build/Objects-normal/arm64/EditHabitView.swiftconstvalues"
+  diagnostics: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/DerivedData/Build/Intermediates.noindex/LifeCompanion.build/Debug-iphonesimulator/LifeCompanion.build/Objects-normal/arm64/EditHabitView.dia"
+  object: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/DerivedData/Build/Intermediates.noindex/LifeCompanion.build/Debug-iphonesimulator/LifeCompanion.build/Objects-normal/arm64/EditHabitView.o"
+  swift-dependencies: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/DerivedData/Build/Intermediates.noindex/LifeCompanion.build/Debug-iphonesimulator/LifeCompanion.build/Objects-normal/arm64/EditHabitView.swiftdeps"
+"/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/LifeCompanion/Controller/Habits/Add-Habits/AddHabitView.swift":
+  const-values: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/DerivedData/Build/Intermediates.noindex/LifeCompanion.build/Debug-iphonesimulator/LifeCompanion.build/Objects-normal/arm64/AddHabitView.swiftconstvalues"
+  swift-dependencies: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/DerivedData/Build/Intermediates.noindex/LifeCompanion.build/Debug-iphonesimulator/LifeCompanion.build/Objects-normal/arm64/AddHabitView.swiftdeps"
+  object: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/DerivedData/Build/Intermediates.noindex/LifeCompanion.build/Debug-iphonesimulator/LifeCompanion.build/Objects-normal/arm64/AddHabitView.o"
+  dependencies: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/DerivedData/Build/Intermediates.noindex/LifeCompanion.build/Debug-iphonesimulator/LifeCompanion.build/Objects-normal/arm64/AddHabitView.d"
+  diagnostics: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/DerivedData/Build/Intermediates.noindex/LifeCompanion.build/Debug-iphonesimulator/LifeCompanion.build/Objects-normal/arm64/AddHabitView.dia"

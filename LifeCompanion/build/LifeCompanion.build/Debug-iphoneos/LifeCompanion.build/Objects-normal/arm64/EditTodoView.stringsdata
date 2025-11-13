@@ -1,0 +1,48 @@
+{
+  "source": "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/LifeCompanion/Controller/ToDo/EditTodoView.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "edit.validation.title",
+        "location": {
+          "startingColumn": 39,
+          "startingLine": 150
+        }
+      },
+      {
+        "comment": "",
+        "key": "",
+        "location": {
+          "startingColumn": 40,
+          "startingLine": 81
+        }
+      },
+      {
+        "comment": "",
+        "key": "Done",
+        "location": {
+          "startingColumn": 28,
+          "startingLine": 140
+        }
+      },
+      {
+        "comment": "",
+        "key": "edit.ok",
+        "location": {
+          "startingColumn": 24,
+          "startingLine": 151
+        }
+      },
+      {
+        "comment": "",
+        "key": "edit.validation.message",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 153
+        }
+      }
+    ]
+  },
+  "version": 1
+}

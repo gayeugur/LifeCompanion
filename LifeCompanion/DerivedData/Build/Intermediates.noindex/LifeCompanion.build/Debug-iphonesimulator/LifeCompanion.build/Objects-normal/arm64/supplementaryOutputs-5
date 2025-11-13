@@ -1,0 +1,36 @@
+"/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/LifeCompanion/Helper/DataManager.swift":
+  swift-dependencies: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/DerivedData/Build/Intermediates.noindex/LifeCompanion.build/Debug-iphonesimulator/LifeCompanion.build/Objects-normal/arm64/DataManager.swiftdeps"
+  dependencies: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/DerivedData/Build/Intermediates.noindex/LifeCompanion.build/Debug-iphonesimulator/LifeCompanion.build/Objects-normal/arm64/DataManager.d"
+  diagnostics: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/DerivedData/Build/Intermediates.noindex/LifeCompanion.build/Debug-iphonesimulator/LifeCompanion.build/Objects-normal/arm64/DataManager.dia"
+  const-values: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/DerivedData/Build/Intermediates.noindex/LifeCompanion.build/Debug-iphonesimulator/LifeCompanion.build/Objects-normal/arm64/DataManager.swiftconstvalues"
+  object: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/DerivedData/Build/Intermediates.noindex/LifeCompanion.build/Debug-iphonesimulator/LifeCompanion.build/Objects-normal/arm64/DataManager.o"
+"/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/LifeCompanion/Helper/FeedbackManager.swift":
+  swift-dependencies: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/DerivedData/Build/Intermediates.noindex/LifeCompanion.build/Debug-iphonesimulator/LifeCompanion.build/Objects-normal/arm64/FeedbackManager.swiftdeps"
+  dependencies: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/DerivedData/Build/Intermediates.noindex/LifeCompanion.build/Debug-iphonesimulator/LifeCompanion.build/Objects-normal/arm64/FeedbackManager.d"
+  const-values: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/DerivedData/Build/Intermediates.noindex/LifeCompanion.build/Debug-iphonesimulator/LifeCompanion.build/Objects-normal/arm64/FeedbackManager.swiftconstvalues"
+  object: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/DerivedData/Build/Intermediates.noindex/LifeCompanion.build/Debug-iphonesimulator/LifeCompanion.build/Objects-normal/arm64/FeedbackManager.o"
+  diagnostics: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/DerivedData/Build/Intermediates.noindex/LifeCompanion.build/Debug-iphonesimulator/LifeCompanion.build/Objects-normal/arm64/FeedbackManager.dia"
+"/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/LifeCompanion/Helper/MigrationHelper.swift":
+  dependencies: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/DerivedData/Build/Intermediates.noindex/LifeCompanion.build/Debug-iphonesimulator/LifeCompanion.build/Objects-normal/arm64/MigrationHelper.d"
+  const-values: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/DerivedData/Build/Intermediates.noindex/LifeCompanion.build/Debug-iphonesimulator/LifeCompanion.build/Objects-normal/arm64/MigrationHelper.swiftconstvalues"
+  swift-dependencies: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/DerivedData/Build/Intermediates.noindex/LifeCompanion.build/Debug-iphonesimulator/LifeCompanion.build/Objects-normal/arm64/MigrationHelper.swiftdeps"
+  object: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/DerivedData/Build/Intermediates.noindex/LifeCompanion.build/Debug-iphonesimulator/LifeCompanion.build/Objects-normal/arm64/MigrationHelper.o"
+  diagnostics: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/DerivedData/Build/Intermediates.noindex/LifeCompanion.build/Debug-iphonesimulator/LifeCompanion.build/Objects-normal/arm64/MigrationHelper.dia"
+"/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/LifeCompanion/Helper/ThemeManager.swift":
+  object: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/DerivedData/Build/Intermediates.noindex/LifeCompanion.build/Debug-iphonesimulator/LifeCompanion.build/Objects-normal/arm64/ThemeManager.o"
+  diagnostics: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/DerivedData/Build/Intermediates.noindex/LifeCompanion.build/Debug-iphonesimulator/LifeCompanion.build/Objects-normal/arm64/ThemeManager.dia"
+  dependencies: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/DerivedData/Build/Intermediates.noindex/LifeCompanion.build/Debug-iphonesimulator/LifeCompanion.build/Objects-normal/arm64/ThemeManager.d"
+  const-values: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/DerivedData/Build/Intermediates.noindex/LifeCompanion.build/Debug-iphonesimulator/LifeCompanion.build/Objects-normal/arm64/ThemeManager.swiftconstvalues"
+  swift-dependencies: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/DerivedData/Build/Intermediates.noindex/LifeCompanion.build/Debug-iphonesimulator/LifeCompanion.build/Objects-normal/arm64/ThemeManager.swiftdeps"
+"/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/LifeCompanion/Helper/LanguageManager.swift":
+  dependencies: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/DerivedData/Build/Intermediates.noindex/LifeCompanion.build/Debug-iphonesimulator/LifeCompanion.build/Objects-normal/arm64/LanguageManager.d"
+  object: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/DerivedData/Build/Intermediates.noindex/LifeCompanion.build/Debug-iphonesimulator/LifeCompanion.build/Objects-normal/arm64/LanguageManager.o"
+  swift-dependencies: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/DerivedData/Build/Intermediates.noindex/LifeCompanion.build/Debug-iphonesimulator/LifeCompanion.build/Objects-normal/arm64/LanguageManager.swiftdeps"
+  const-values: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/DerivedData/Build/Intermediates.noindex/LifeCompanion.build/Debug-iphonesimulator/LifeCompanion.build/Objects-normal/arm64/LanguageManager.swiftconstvalues"
+  diagnostics: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/DerivedData/Build/Intermediates.noindex/LifeCompanion.build/Debug-iphonesimulator/LifeCompanion.build/Objects-normal/arm64/LanguageManager.dia"
+"/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/LifeCompanion/Helper/SettingsManager.swift":
+  object: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/DerivedData/Build/Intermediates.noindex/LifeCompanion.build/Debug-iphonesimulator/LifeCompanion.build/Objects-normal/arm64/SettingsManager.o"
+  const-values: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/DerivedData/Build/Intermediates.noindex/LifeCompanion.build/Debug-iphonesimulator/LifeCompanion.build/Objects-normal/arm64/SettingsManager.swiftconstvalues"
+  dependencies: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/DerivedData/Build/Intermediates.noindex/LifeCompanion.build/Debug-iphonesimulator/LifeCompanion.build/Objects-normal/arm64/SettingsManager.d"
+  diagnostics: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/DerivedData/Build/Intermediates.noindex/LifeCompanion.build/Debug-iphonesimulator/LifeCompanion.build/Objects-normal/arm64/SettingsManager.dia"
+  swift-dependencies: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/DerivedData/Build/Intermediates.noindex/LifeCompanion.build/Debug-iphonesimulator/LifeCompanion.build/Objects-normal/arm64/SettingsManager.swiftdeps"

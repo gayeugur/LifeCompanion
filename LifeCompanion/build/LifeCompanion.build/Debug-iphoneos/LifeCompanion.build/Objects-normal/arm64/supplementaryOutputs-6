@@ -1,0 +1,36 @@
+"/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/LifeCompanion/Model/Habits/HabitFrequency.swift":
+  const-values: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/build/LifeCompanion.build/Debug-iphoneos/LifeCompanion.build/Objects-normal/arm64/HabitFrequency.swiftconstvalues"
+  object: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/build/LifeCompanion.build/Debug-iphoneos/LifeCompanion.build/Objects-normal/arm64/HabitFrequency.o"
+  dependencies: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/build/LifeCompanion.build/Debug-iphoneos/LifeCompanion.build/Objects-normal/arm64/HabitFrequency.d"
+  swift-dependencies: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/build/LifeCompanion.build/Debug-iphoneos/LifeCompanion.build/Objects-normal/arm64/HabitFrequency.swiftdeps"
+  diagnostics: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/build/LifeCompanion.build/Debug-iphoneos/LifeCompanion.build/Objects-normal/arm64/HabitFrequency.dia"
+"/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/LifeCompanion/Model/Habits/HabitEntry.swift":
+  const-values: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/build/LifeCompanion.build/Debug-iphoneos/LifeCompanion.build/Objects-normal/arm64/HabitEntry.swiftconstvalues"
+  diagnostics: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/build/LifeCompanion.build/Debug-iphoneos/LifeCompanion.build/Objects-normal/arm64/HabitEntry.dia"
+  dependencies: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/build/LifeCompanion.build/Debug-iphoneos/LifeCompanion.build/Objects-normal/arm64/HabitEntry.d"
+  object: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/build/LifeCompanion.build/Debug-iphoneos/LifeCompanion.build/Objects-normal/arm64/HabitEntry.o"
+  swift-dependencies: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/build/LifeCompanion.build/Debug-iphoneos/LifeCompanion.build/Objects-normal/arm64/HabitEntry.swiftdeps"
+"/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/LifeCompanion/Model/Health/MedicationEntry.swift":
+  object: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/build/LifeCompanion.build/Debug-iphoneos/LifeCompanion.build/Objects-normal/arm64/MedicationEntry.o"
+  dependencies: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/build/LifeCompanion.build/Debug-iphoneos/LifeCompanion.build/Objects-normal/arm64/MedicationEntry.d"
+  const-values: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/build/LifeCompanion.build/Debug-iphoneos/LifeCompanion.build/Objects-normal/arm64/MedicationEntry.swiftconstvalues"
+  diagnostics: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/build/LifeCompanion.build/Debug-iphoneos/LifeCompanion.build/Objects-normal/arm64/MedicationEntry.dia"
+  swift-dependencies: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/build/LifeCompanion.build/Debug-iphoneos/LifeCompanion.build/Objects-normal/arm64/MedicationEntry.swiftdeps"
+"/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/LifeCompanion/Model/Habits/HabitTemplate.swift":
+  dependencies: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/build/LifeCompanion.build/Debug-iphoneos/LifeCompanion.build/Objects-normal/arm64/HabitTemplate.d"
+  swift-dependencies: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/build/LifeCompanion.build/Debug-iphoneos/LifeCompanion.build/Objects-normal/arm64/HabitTemplate.swiftdeps"
+  diagnostics: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/build/LifeCompanion.build/Debug-iphoneos/LifeCompanion.build/Objects-normal/arm64/HabitTemplate.dia"
+  object: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/build/LifeCompanion.build/Debug-iphoneos/LifeCompanion.build/Objects-normal/arm64/HabitTemplate.o"
+  const-values: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/build/LifeCompanion.build/Debug-iphoneos/LifeCompanion.build/Objects-normal/arm64/HabitTemplate.swiftconstvalues"
+"/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/LifeCompanion/Model/Health/WaterIntake.swift":
+  const-values: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/build/LifeCompanion.build/Debug-iphoneos/LifeCompanion.build/Objects-normal/arm64/WaterIntake.swiftconstvalues"
+  swift-dependencies: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/build/LifeCompanion.build/Debug-iphoneos/LifeCompanion.build/Objects-normal/arm64/WaterIntake.swiftdeps"
+  object: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/build/LifeCompanion.build/Debug-iphoneos/LifeCompanion.build/Objects-normal/arm64/WaterIntake.o"
+  dependencies: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/build/LifeCompanion.build/Debug-iphoneos/LifeCompanion.build/Objects-normal/arm64/WaterIntake.d"
+  diagnostics: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/build/LifeCompanion.build/Debug-iphoneos/LifeCompanion.build/Objects-normal/arm64/WaterIntake.dia"
+"/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/LifeCompanion/Model/Habits/HabitItem.swift":
+  dependencies: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/build/LifeCompanion.build/Debug-iphoneos/LifeCompanion.build/Objects-normal/arm64/HabitItem.d"
+  diagnostics: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/build/LifeCompanion.build/Debug-iphoneos/LifeCompanion.build/Objects-normal/arm64/HabitItem.dia"
+  object: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/build/LifeCompanion.build/Debug-iphoneos/LifeCompanion.build/Objects-normal/arm64/HabitItem.o"
+  swift-dependencies: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/build/LifeCompanion.build/Debug-iphoneos/LifeCompanion.build/Objects-normal/arm64/HabitItem.swiftdeps"
+  const-values: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/build/LifeCompanion.build/Debug-iphoneos/LifeCompanion.build/Objects-normal/arm64/HabitItem.swiftconstvalues"

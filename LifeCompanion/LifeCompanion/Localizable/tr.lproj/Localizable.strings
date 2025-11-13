@@ -17,18 +17,33 @@
 "add.title.placeholder" = "Title (required)";
 "add.subtitle.placeholder" = "Subtitle (optional)";
 "add.priority" = "Priority";
-"add.reminder" = "Add reminder";
-"add.section.details" = "Task Details";
-"add.section.reminder" = "Reminder";
-"add.datetime" = "Date & Time";
-"add.validation.title" = "Title required";
-"add.validation.message" = "Please enter a title for the task.";
+"add.reminder" = "Hatırlatıcı ekle";
+"add.section.details" = "Görev Detayları";
+"add.section.reminder" = "Hatırlatıcı";
+"add.datetime" = "Tarih ve Saat";
+"add.validation.title" = "Başlık gerekli";
+"add.validation.message" = "Lütfen görev için bir başlık girin.";
+"add.habit.swipe" = "Görev Ekle";
+
+"edit.title" = "Görevi Düzenle";
+"edit.save" = "Güncelle";
+"edit.ok" = "Tamam";
+"edit.title.placeholder" = "Başlık (zorunlu)";
+"edit.subtitle.placeholder" = "Alt başlık (isteğe bağlı)";
+"edit.priority" = "Öncelik";
+"edit.reminder" = "Hatırlatıcıyı düzenle";
+"edit.section.details" = "Görev Detayları";
+"edit.datetime" = "Tarih ve Saat";
+"edit.datetime" = "Tarih ve Saat";
+"edit.validation.title" = "Başlık gerekli";
+"edit.validation.message" = "Lütfen görev için bir başlık girin.";
+
 "priority.low" = "Low";
 "priority.medium" = "Medium";
 "priority.high" = "High";
 "filter.time.all" = "Tüm Görevler";
 "filter.time.today" = "Bugün";
-"filter.time.thisWeek" = "Bu Hafta";
+"filter.time.thisWeek" = "Gelecek";
 "filter.time.overdue" = "Gecikenler";
 "filter.status.all" = "Tümü";
 "filter.status.completed" = "Tamamlanan";
@@ -64,7 +79,19 @@
 "habits.empty.title" = "Henüz alışkanlık eklemediniz";
 "habits.empty.subtitle" = "Başlamak için + butonuna dokunun";
 "history.title" = "Geçmiş";
-"history.empty" = "Geçmiş bulunamadı";
+"history.empty" = "Geçmiş kaydı mevcut değil";
+
+"history.add.title" = "Geçmiş Kayıt Ekle";
+"history.add.date" = "Tarih";
+"history.add.habit" = "Alışkanlık";
+"history.add.select.habit" = "Bir alışkanlık seçin";
+"history.add.status" = "Durum";
+"history.add.completed" = "Tamamlandı";
+"history.add.not.completed" = "Tamamlanmadı";
+"history.add.save" = "Kaydet";
+
+"todo.title" = "Yapılacaklar";
+"menu.todos" = "Yapılacaklar";
 "habit.status.done" = "Tamamlandı";
 "habit.status.active" = "Yap";
 "habit.frequency.daily" = "Günlük";
@@ -127,6 +154,43 @@
 "habit.template.clean.room" = "Oda Temizle";
 "habit.template.call.family" = "Ailey Ara";
 "habit.template.meet.friends" = "Arkadaşlarla Buluş";
+
+//History Section
+"history.title" = "Geçmiş";
+"history.empty" = "Henüz geçmiş kaydı yok";
+"history.add.title" = "Geçmiş Kaydı Ekle";
+"history.add.date" = "Tarih";
+"history.add.habit" = "Alışkanlık";
+"history.add.select.habit" = "Alışkanlık Seç";
+"history.add.status" = "Durum";
+"history.add.completed" = "Tamamlandı";
+"history.add.not.completed" = "Tamamlanmadı";
+"history.add.save" = "Kaydı Kaydet";
+
+//Habit Frequency
+"habit.frequency.daily" = "Günlük";
+"habit.frequency.weekly" = "Haftalık";
+"habit.frequency.monthly" = "Aylık";
+
+//Add Habit Section
+"addHabit.title" = "Yeni Alışkanlık";
+"addHabit.nameLabel" = "Alışkanlık Adı";
+"addHabit.namePlaceholder" = "Alışkanlık adını girin";
+"addHabit.frequencyLabel" = "Sıklık";
+"addHabit.targetLabel" = "Günlük Hedef";
+"addHabit.times" = "kez";
+"addHabit.reminderLabel" = "Hatırlatıcılar";
+"addHabit.saveButton" = "Alışkanlık Oluştur";
+
+//Edit Habit Section
+"editHabit.title" = "Alışkanlığı Düzenle";
+"editHabit.nameLabel" = "Alışkanlık Adı";
+"editHabit.namePlaceholder" = "Alışkanlık adını girin";
+"editHabit.frequencyLabel" = "Sıklık";
+"editHabit.targetLabel" = "Günlük Hedef";
+"editHabit.times" = "kez";
+"editHabit.reminderLabel" = "Hatırlatıcılar";
+"editHabit.updateButton" = "Alışkanlığı Güncelle";
 
 //Todo Suggestions
 "todo.suggestions.title" = "Görev Fikirleri";
@@ -324,7 +388,12 @@
 "habit.notification.reminder.title" = "Alışkanlık Hatırlatıcısı";
 "habit.notification.reminder.body" = "%@ alışkanlığınızı tamamlama zamanı!";
 "habit.notification.celebration.title" = "🎉 Seri Başarısı!";
-"habit.notification.celebration.body" = "Harika! %@ için %d günlük seriye ulaştın! %@";
+"habit.notification.celebration.body" = "Harika! %@ için %d günlük seri yakaladın! %@";
+"habit.notification.completed.title" = "✅ Alışkanlık Tamamlandı!";
+"habit.notification.completed.body" = "Aferin! Bugün '%@' alışkanlığını tamamladın!";
+
+"meditation.timer.completed.title" = "🧘 Meditasyon Tamamlandı!";
+"meditation.timer.completed.body" = "Tebrikler! %d dakikalık meditasyon seansını tamamladın.";
 
 //Medication Notifications
 "medication.notification.title" = "İlaç Hatırlatıcısı";
@@ -456,13 +525,9 @@
 "settings.general.darkmode" = "Karanlık Mod";
 "settings.general.language" = "Dil";
 "settings.general.notifications" = "Bildirimler";
-"settings.general.sounds" = "Ses Efektleri";
-"settings.general.haptics" = "Titreşim Geri Bildirimi";
-"settings.general.haptics.description" = "Alışkanlıkları tamamladığınızda ve kilometre taşlarına ulaştığınızda titreşim hissedin";
 "settings.habits.title" = "Alışkanlıklar";
 "settings.habits.reminder.time" = "Varsayılan Hatırlatma Saati";
-"settings.habits.celebrations" = "Seri Kutlamaları";
-"settings.habits.reset.time" = "Günlük Sıfırlama Saati";
+"settings.habits.show_streak_info" = "Seri Bilgilerini Göster";
 "settings.health.title" = "Sağlık";
 "settings.health.water.goal" = "Günlük Su Hedefi";
 "settings.memory.title" = "Hafıza Oyunu";
@@ -472,7 +537,7 @@
 "settings.privacy.data.delete" = "Tüm Verileri Sil";
 "settings.export.format.title" = "Dışa Aktarma Format Seçimi";
 "settings.export.format.message" = "Dışa aktarma formatını seçin. PDF okunabilir bir rapor sağlar, JSON yedekleme ve geri yükleme için ham veri içerir.\n\n⚠️ Dosyalar cihazınıza kaydedilecek ve sistem paylaşım sayfası aracılığıyla paylaşılabilecek.";
-"settings.export.format.pdf" = "PDF Formatı";
+"settings.export.format.pdf" = "Metin Raporu";
 "settings.export.format.json" = "JSON Formatı";
 
 // Export Options
@@ -486,7 +551,7 @@
 "settings.about.version" = "Sürüm";
 "settings.about.privacy" = "Gizlilik Politikası";
 "settings.about.support" = "Yardım ve Destek";
-"settings.about.description" = "LifeCompanion, daha iyi alışkanlıklar edinmek, sağlığı takip etmek ve zihinsel sağlığı korumak için kişisel asistanınızdır.";
+"settings.about.description" = "🌟 LifeCompanion, daha iyi alışkanlıklar edinmek, sağlığı takip etmek ve zihinsel sağlığı korumak için kişisel asistanınızdır. ✨";
 "settings.about.features" = "Özellikler";
 "settings.about.feature.habits" = "Seri Takipli Alışkanlık Yönetimi";
 "settings.about.feature.health" = "Sağlık ve İlaç Yönetimi";
@@ -494,6 +559,8 @@
 "settings.about.feature.todos" = "Akıllı Görev Yönetimi";
 "settings.about.feature.meditation" = "Farkındalık ve Meditasyon";
 "settings.language.title" = "Dil Seçin";
+"settings.language.description" = "Uygulamanın dilini seçin";
+"settings.language.system.subtitle" = "Cihazınızın dil ayarlarını kullan";
 "settings.notification.permission.title" = "Bildirim İzni";
 "settings.notification.permission.message" = "Hatırlatıcıları almak için lütfen Ayarlar'dan bildirimleri etkinleştirin.";
 "settings.notification.permission.settings" = "Ayarları Aç";
@@ -502,6 +569,26 @@
 "settings.privacy.delete.confirm" = "Hepsini Sil";
 "settings.support.email.failed.title" = "E-posta Kullanılamıyor";
 "settings.support.email.failed.message" = "Bu cihazda e-posta uygulaması yapılandırılmamış. Desteğe ulaşmak için Mail uygulamasını ayarlayın veya Gmail yükleyin.";
+
+//Todo Notifications
+"todo.notification.body" = "Bu görevi tamamlamayı unutma!";
+
+//Reminder Types
+"reminder.none" = "Hatırlatma Yok";
+"reminder.daily" = "Günlük";
+"reminder.specificDates" = "Belirli Tarihler";
+"reminder.type" = "Hatırlatma Türü";
+"reminder.daily.time" = "Günlük hatırlatma saati:";
+"reminder.specificDates.select" = "Tarih seç:";
+"reminder.dates.selected" = "tarih seçildi";
+"reminder.time" = "Hatırlatma saati:";
+"reminder.selectedDates" = "Seçilen tarihler:";
+
+//Todo Filters
+"todo.filter.time" = "Zaman Filtresi";
+"todo.filter.status" = "Durum Filtresi";
+"todo.filter.tasks" = "görev";
+"todo.action.delete" = "Sil";
 
 //Common
 "common.back" = "Geri";

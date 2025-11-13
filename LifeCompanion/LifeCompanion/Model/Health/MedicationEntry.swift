@@ -44,11 +44,16 @@ final class MedicationEntry: Identifiable {
         let today = calendar.startOfDay(for: Date())
         var scheduledTimes: [Date] = []
         
+        print("🏗️ GENERATING SCHEDULED TIMES")
+        print("   Frequency: \(frequency)")
+        
         guard frequency != .asNeeded, let baseTime = reminderTime else {
+            print("   Result: No scheduled times (asNeeded or no reminder time)")
             return scheduledTimes
         }
         
         let components = calendar.dateComponents([.hour, .minute], from: baseTime)
+        print("   Base time: \(components.hour ?? 0):\(components.minute ?? 0)")
         
         // Generate scheduled times for next 7 days
         for dayOffset in 0..<7 {
@@ -72,10 +77,12 @@ final class MedicationEntry: Identifiable {
             case .thrice:
                 // Three times a day: morning, noon, evening
                 let baseHour = components.hour ?? 8
-                let intervals = [0, 8, 16] // 8-hour intervals from base time
+                let intervals = [0, 6, 12] // 6-hour intervals to ensure all 3 doses fit in 24 hours
                 for interval in intervals {
                     var timeComponents = components
-                    timeComponents.hour = baseHour + interval
+                    let targetHour = baseHour + interval
+                    // Ensure we don't exceed 23 hours (valid hour range: 0-23)
+                    timeComponents.hour = min(targetHour, 23)
                     if let time = calendar.date(byAdding: timeComponents, to: dayStart) {
                         scheduledTimes.append(time)
                     }
@@ -101,14 +108,29 @@ final class MedicationEntry: Identifiable {
             }
         }
         
-        return scheduledTimes.sorted()
+        let sortedTimes = scheduledTimes.sorted()
+        print("   Generated \(sortedTimes.count) scheduled times for 7 days")
+        
+        let todayTimes = sortedTimes.filter { calendar.isDateInToday($0) }
+        print("   Today's times: \(todayTimes.count)")
+        
+        return sortedTimes
     }
     
     var completionPercentage: Double {
-        guard !scheduledTimes.isEmpty else { return 0 }
+        guard !scheduledTimes.isEmpty else { 
+            return 0 
+        }
         let todayScheduled = scheduledTimes.filter { Calendar.current.isDateInToday($0) }
         let todayTaken = takenTimes.filter { Calendar.current.isDateInToday($0) }
-        return Double(todayTaken.count) / Double(todayScheduled.count)
+        
+        guard todayScheduled.count > 0 else { return 0 }
+        
+        let percentage = Double(todayTaken.count) / Double(todayScheduled.count)
+        
+        print("📊 \(medicationName): \(todayTaken.count)/\(todayScheduled.count) = \(Int(percentage * 100))%")
+        
+        return percentage
     }
     
     var nextDoseTime: Date? {
@@ -118,7 +140,7 @@ final class MedicationEntry: Identifiable {
         let now = Date()
         
         // First check if there are scheduled times for today that haven't passed
-        let todayScheduled = scheduledTimes.filter { Calendar.current.isDateInToday($0) }
+        let todayScheduled = scheduledTimes.filter { calendar.isDateInToday($0) }
         if let nextToday = todayScheduled.first(where: { $0 > now }) {
             return nextToday
         }
@@ -139,11 +161,14 @@ final class MedicationEntry: Identifiable {
     }
     
     // MARK: - Notification Management
-    func scheduleNotifications() {
+    func scheduleNotifications(notificationsEnabled: Bool = true) {
         // Remove existing notifications for this medication
         UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [self.id.uuidString])
         
         guard self.frequency != .asNeeded else { return }
+        
+        // Don't schedule if notifications are disabled
+        guard notificationsEnabled else { return }
         
         // Schedule notifications for each scheduled time
         for scheduledTime in self.scheduledTimes {
@@ -164,10 +189,10 @@ final class MedicationEntry: Identifiable {
             )
             
             UNUserNotificationCenter.current().add(request) { error in
-                if let error = error {
-                    print("❌ Failed to schedule notification: \(error)")
+                if error != nil {
+                    // Notification scheduling failed - could log this if needed
                 } else {
-                    print("✅ Notification scheduled for \(self.medicationName) at \(scheduledTime)")
+                    // Notification scheduled successfully
                 }
             }
         }

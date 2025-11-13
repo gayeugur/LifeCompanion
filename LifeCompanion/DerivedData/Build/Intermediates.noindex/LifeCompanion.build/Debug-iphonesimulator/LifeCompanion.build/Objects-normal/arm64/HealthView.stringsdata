@@ -1,0 +1,168 @@
+{
+  "source": "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/LifeCompanion/Controller/Health/HealthView.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "Loading health data...",
+        "location": {
+          "startingColumn": 34,
+          "startingLine": 77
+        }
+      },
+      {
+        "comment": "",
+        "key": "%lldml",
+        "location": {
+          "startingColumn": 18,
+          "startingLine": 197
+        }
+      },
+      {
+        "comment": "",
+        "key": "%lldml/%lldml",
+        "location": {
+          "startingColumn": 26,
+          "startingLine": 272
+        }
+      },
+      {
+        "comment": "",
+        "key": "%lld%%",
+        "location": {
+          "startingColumn": 30,
+          "startingLine": 325
+        }
+      },
+      {
+        "comment": "",
+        "key": "%lldml %@",
+        "location": {
+          "startingColumn": 34,
+          "startingLine": 332
+        }
+      },
+      {
+        "comment": "",
+        "key": "(250ml)",
+        "location": {
+          "startingColumn": 38,
+          "startingLine": 374
+        }
+      },
+      {
+        "comment": "",
+        "key": "%lld cm",
+        "location": {
+          "startingColumn": 26,
+          "startingLine": 637
+        }
+      },
+      {
+        "comment": "",
+        "key": "%lld kg",
+        "location": {
+          "startingColumn": 26,
+          "startingLine": 646
+        }
+      },
+      {
+        "comment": "",
+        "key": "%@: %lldml",
+        "location": {
+          "startingColumn": 26,
+          "startingLine": 692
+        }
+      },
+      {
+        "comment": "",
+        "key": "Delete",
+        "location": {
+          "startingColumn": 40,
+          "startingLine": 760
+        }
+      },
+      {
+        "comment": "",
+        "key": "%@: %@",
+        "location": {
+          "startingColumn": 26,
+          "startingLine": 791
+        }
+      },
+      {
+        "comment": "",
+        "key": "%lld%%",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 813
+        }
+      },
+      {
+        "comment": "",
+        "key": "Delete",
+        "location": {
+          "startingColumn": 20,
+          "startingLine": 836
+        }
+      },
+      {
+        "comment": "",
+        "key": "%@: %@",
+        "location": {
+          "startingColumn": 26,
+          "startingLine": 854
+        }
+      },
+      {
+        "comment": "",
+        "key": "%lld%%",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 876
+        }
+      },
+      {
+        "comment": "",
+        "key": "cm",
+        "location": {
+          "startingColumn": 34,
+          "startingLine": 987
+        }
+      },
+      {
+        "comment": "",
+        "key": "170",
+        "location": {
+          "startingColumn": 39,
+          "startingLine": 983
+        }
+      },
+      {
+        "comment": "",
+        "key": "kg",
+        "location": {
+          "startingColumn": 34,
+          "startingLine": 1002
+        }
+      },
+      {
+        "comment": "",
+        "key": "70",
+        "location": {
+          "startingColumn": 39,
+          "startingLine": 998
+        }
+      },
+      {
+        "comment": "",
+        "key": "%lldml",
+        "location": {
+          "startingColumn": 38,
+          "startingLine": 1032
+        }
+      }
+    ]
+  },
+  "version": 1
+}

@@ -44,8 +44,6 @@ struct LifeCompanionApp: App {
                 configurations: [modelConfiguration]
             )
         } catch {
-            print("❌ ModelContainer error: \(error)")
-            
             // Fallback: Try to delete and recreate the container
             do {
                 let url = URL.applicationSupportDirectory.appending(path: "default.store")
@@ -61,7 +59,6 @@ struct LifeCompanionApp: App {
                 ])
                 
                 container = try ModelContainer(for: schema)
-                print("✅ ModelContainer recreated successfully")
             } catch {
                 fatalError("Could not initialize ModelContainer even after cleanup: \(error)")
             }
@@ -83,11 +80,8 @@ struct LifeCompanionApp: App {
     }
     
     private func requestNotificationPermission() {
-        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { success, error in
-            if let error = error {
-                print("Notification permission error: \(error)")
-            }
-        }
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { _, _ in }
+        
         
         // Setup notification categories
         setupNotificationCategories()
@@ -110,9 +104,36 @@ struct LifeCompanionApp: App {
             options: []
         )
         
+        // Habit completion category
+        let habitCompletionCategory = UNNotificationCategory(
+            identifier: "HABIT_COMPLETION",
+            actions: [],
+            intentIdentifiers: [],
+            options: []
+        )
+        
+        // Todo reminder category
+        let todoReminderCategory = UNNotificationCategory(
+            identifier: "TODO_REMINDER",
+            actions: [],
+            intentIdentifiers: [],
+            options: []
+        )
+        
+        // Meditation timer category
+        let meditationTimerCategory = UNNotificationCategory(
+            identifier: "MEDITATION_TIMER",
+            actions: [],
+            intentIdentifiers: [],
+            options: []
+        )
+        
         UNUserNotificationCenter.current().setNotificationCategories([
             habitReminderCategory,
-            habitCelebrationCategory
+            habitCelebrationCategory,
+            habitCompletionCategory,
+            todoReminderCategory,
+            meditationTimerCategory
         ])
     }
 }

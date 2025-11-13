@@ -15,10 +15,26 @@ struct EditHabitView: View {
     @State private var frequency: HabitFrequency = .daily
     @State private var targetCount: Int = 1
     @State private var reminderTime: Date? = nil
+    @State private var reminderDates: Set<Date> = []
+    @State private var reminderType: ReminderType = .none
     
     @FocusState private var isFieldFocused: Bool
 
-    var onSave: (String, HabitFrequency, Int, Date?) -> Void
+    var onSave: (String, HabitFrequency, Int, Date?, [Date]?) -> Void
+    
+    enum ReminderType: String, CaseIterable {
+        case none = "none"
+        case daily = "daily"
+        case specificDates = "specificDates"
+        
+        var displayName: String {
+            switch self {
+            case .none: return NSLocalizedString("reminder.none", comment: "No Reminder")
+            case .daily: return NSLocalizedString("reminder.daily", comment: "Daily")
+            case .specificDates: return NSLocalizedString("reminder.specificDates", comment: "Specific Dates")
+            }
+        }
+    }
 
     var body: some View {
         NavigationStack {
@@ -43,10 +59,10 @@ struct EditHabitView: View {
                         // Başlık
                         card {
                             VStack(alignment: .leading, spacing: 10) {
-                                Text("editHabit.nameLabel".localized)
+                                Text(NSLocalizedString("editHabit.nameLabel", comment: "Habit Name"))
                                     .font(.callout)
                                     .foregroundStyle(.secondary)
-                                TextField("editHabit.namePlaceholder".localized, text: $title)
+                                TextField(NSLocalizedString("editHabit.namePlaceholder", comment: "Enter habit name"), text: $title)
                                     .focused($isFieldFocused)
                                     .padding(14)
                                     .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 16))
@@ -56,12 +72,12 @@ struct EditHabitView: View {
                         // Sıklık
                         card {
                             VStack(alignment: .leading, spacing: 10) {
-                                Text("editHabit.frequencyLabel".localized)
+                                Text(NSLocalizedString("editHabit.frequencyLabel", comment: "Frequency"))
                                     .font(.callout)
                                     .foregroundStyle(.secondary)
                                 Picker("", selection: $frequency) {
                                     ForEach(HabitFrequency.allCases, id: \.self) { freq in
-                                        Text(freq.displayName.localized).tag(freq)
+                                        Text(freq.displayName).tag(freq)
                                     }
                                 }
                                 .pickerStyle(.segmented)
@@ -71,31 +87,131 @@ struct EditHabitView: View {
                         // Hedef
                         card {
                             VStack(alignment: .leading, spacing: 10) {
-                                Text("editHabit.targetLabel".localized)
+                                Text(NSLocalizedString("editHabit.targetLabel", comment: "Daily Target"))
                                     .font(.callout)
                                     .foregroundStyle(.secondary)
-                                Stepper("\(frequency.displayName.localized) \(targetCount) \(String(format: "editHabit.times".localized, targetCount))", value: $targetCount, in: 1...50)
+                                Stepper("\(frequency.displayName) \(targetCount) \(NSLocalizedString("editHabit.times", comment: "times"))", value: $targetCount, in: 1...50)
                             }
                         }
                         
                         // Hatırlatma
                         card {
-                            VStack(alignment: .leading, spacing: 10) {
-                                Toggle("editHabit.reminderLabel".localized, isOn: Binding(
-                                    get: { reminderTime != nil },
-                                    set: { reminderTime = $0 ? Date() : nil }
-                                ))
+                            VStack(alignment: .leading, spacing: 15) {
+                                Text(NSLocalizedString("editHabit.reminderLabel", comment: "Reminders"))
+                                    .font(.callout)
+                                    .foregroundStyle(.secondary)
                                 
-                                if let _ = reminderTime {
-                                    DatePicker(
-                                        "",
-                                        selection: Binding(
-                                            get: { reminderTime ?? Date() },
-                                            set: { reminderTime = $0 }
-                                        ),
-                                        displayedComponents: [.hourAndMinute]
-                                    )
-                                    .labelsHidden()
+                                Picker(NSLocalizedString("reminder.type", comment: "Reminder Type"), selection: $reminderType) {
+                                    ForEach(ReminderType.allCases, id: \.self) { type in
+                                        Text(type.displayName).tag(type)
+                                    }
+                                }
+                                .pickerStyle(.segmented)
+                                
+                                if reminderType == .daily {
+                                    VStack(alignment: .leading, spacing: 8) {
+                                        Text(NSLocalizedString("reminder.daily.time", comment: "Daily reminder time:"))
+                                            .font(.subheadline)
+                                            .foregroundStyle(.secondary)
+                                        
+                                        DatePicker(
+                                            "",
+                                            selection: Binding(
+                                                get: { reminderTime ?? Date() },
+                                                set: { reminderTime = $0 }
+                                            ),
+                                            displayedComponents: [.hourAndMinute]
+                                        )
+                                        .labelsHidden()
+                                        .datePickerStyle(.compact)
+                                    }
+                                }
+                                
+                                if reminderType == .specificDates {
+                                    VStack(alignment: .leading, spacing: 8) {
+                                        HStack {
+                                            Text(NSLocalizedString("reminder.specificDates.select", comment: "Select dates:"))
+                                                .font(.subheadline)
+                                                .foregroundStyle(.secondary)
+                                            
+                                            Spacer()
+                                            
+                                            if !reminderDates.isEmpty {
+                                                Text("\(reminderDates.count) \(NSLocalizedString("reminder.dates.selected", comment: "dates selected"))")
+                                                    .font(.caption)
+                                                    .foregroundStyle(.green)
+                                            }
+                                        }
+                                        
+                                        // Time selector for specific dates
+                                        if !reminderDates.isEmpty {
+                                            VStack(alignment: .leading, spacing: 4) {
+                                                Text(NSLocalizedString("reminder.time", comment: "Reminder time:"))
+                                                    .font(.caption)
+                                                    .foregroundStyle(.secondary)
+                                                
+                                                DatePicker(
+                                                    "",
+                                                    selection: Binding(
+                                                        get: { reminderTime ?? Date() },
+                                                        set: { reminderTime = $0 }
+                                                    ),
+                                                    displayedComponents: [.hourAndMinute]
+                                                )
+                                                .labelsHidden()
+                                                .datePickerStyle(.compact)
+                                            }
+                                        }
+                                        
+                                        // Date picker
+                                        DatePicker(
+                                            "",
+                                            selection: Binding(
+                                                get: { Date() },
+                                                set: { newDate in
+                                                    let calendar = Calendar.current
+                                                    let startOfDay = calendar.startOfDay(for: newDate)
+                                                    if reminderDates.contains(startOfDay) {
+                                                        reminderDates.remove(startOfDay)
+                                                    } else {
+                                                        reminderDates.insert(startOfDay)
+                                                    }
+                                                }
+                                            ),
+                                            in: Date()...,
+                                            displayedComponents: [.date]
+                                        )
+                                        .datePickerStyle(.graphical)
+                                        
+                                        // Selected dates list
+                                        if !reminderDates.isEmpty {
+                                            VStack(alignment: .leading, spacing: 4) {
+                                                Text(NSLocalizedString("reminder.selectedDates", comment: "Selected dates:"))
+                                                    .font(.caption)
+                                                    .foregroundStyle(.secondary)
+                                                
+                                                ForEach(Array(reminderDates.sorted()), id: \.self) { date in
+                                                    HStack {
+                                                        Text(date, style: .date)
+                                                            .font(.caption)
+                                                        
+                                                        Spacer()
+                                                        
+                                                        Button {
+                                                            reminderDates.remove(date)
+                                                        } label: {
+                                                            Image(systemName: "xmark.circle.fill")
+                                                                .font(.caption)
+                                                                .foregroundStyle(.red)
+                                                        }
+                                                    }
+                                                    .padding(.horizontal, 8)
+                                                    .padding(.vertical, 4)
+                                                    .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 8))
+                                                }
+                                            }
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -108,13 +224,17 @@ struct EditHabitView: View {
                 
                 // Güncelle butonu
                 Button {
+                    let finalReminderTime = (reminderType != .none) ? reminderTime : nil
+                    let finalReminderDates = (reminderType == .specificDates && !reminderDates.isEmpty) ? Array(reminderDates) : nil
+                    
                     onSave(title.trimmingCharacters(in: .whitespacesAndNewlines),
                            frequency,
                            targetCount,
-                           reminderTime)
+                           finalReminderTime,
+                           finalReminderDates)
                     dismiss()
                 } label: {
-                    Text("editHabit.updateButton".localized)
+                    Text(NSLocalizedString("editHabit.updateButton", comment: "Update Habit"))
                         .font(.headline)
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 18)
@@ -135,7 +255,7 @@ struct EditHabitView: View {
                 .ignoresSafeArea(.keyboard, edges: .bottom)
             }
         }
-            .navigationTitle("editHabit.title".localized)
+            .navigationTitle(NSLocalizedString("editHabit.title", comment: "Edit Habit"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 
@@ -158,6 +278,25 @@ struct EditHabitView: View {
                 frequency = habit.frequency
                 targetCount = habit.targetCount
                 reminderTime = habit.reminderTime
+                
+                // Set reminder type and dates
+                if let dates = habit.reminderDates, !dates.isEmpty {
+                    reminderType = .specificDates
+                    reminderDates = Set(dates)
+                } else if habit.reminderTime != nil {
+                    reminderType = .daily
+                } else {
+                    reminderType = .none
+                }
+            }
+            .onChange(of: reminderType) { oldValue, newValue in
+                // Reset reminder data when type changes
+                if newValue == .none {
+                    reminderTime = nil
+                    reminderDates.removeAll()
+                } else if newValue != .none && reminderTime == nil {
+                    reminderTime = Date()
+                }
             }
         }
     }

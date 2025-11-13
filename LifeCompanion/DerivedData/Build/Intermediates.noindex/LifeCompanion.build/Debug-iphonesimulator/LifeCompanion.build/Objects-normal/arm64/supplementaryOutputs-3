@@ -1,0 +1,42 @@
+"/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/LifeCompanion/Controller/ToDo/AddToDo/AddTodoView.swift":
+  const-values: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/DerivedData/Build/Intermediates.noindex/LifeCompanion.build/Debug-iphonesimulator/LifeCompanion.build/Objects-normal/arm64/AddTodoView.swiftconstvalues"
+  dependencies: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/DerivedData/Build/Intermediates.noindex/LifeCompanion.build/Debug-iphonesimulator/LifeCompanion.build/Objects-normal/arm64/AddTodoView.d"
+  diagnostics: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/DerivedData/Build/Intermediates.noindex/LifeCompanion.build/Debug-iphonesimulator/LifeCompanion.build/Objects-normal/arm64/AddTodoView.dia"
+  swift-dependencies: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/DerivedData/Build/Intermediates.noindex/LifeCompanion.build/Debug-iphonesimulator/LifeCompanion.build/Objects-normal/arm64/AddTodoView.swiftdeps"
+  object: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/DerivedData/Build/Intermediates.noindex/LifeCompanion.build/Debug-iphonesimulator/LifeCompanion.build/Objects-normal/arm64/AddTodoView.o"
+"/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/LifeCompanion/Controller/MemoryGame/SimpleMemoryGameView.swift":
+  diagnostics: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/DerivedData/Build/Intermediates.noindex/LifeCompanion.build/Debug-iphonesimulator/LifeCompanion.build/Objects-normal/arm64/SimpleMemoryGameView.dia"
+  object: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/DerivedData/Build/Intermediates.noindex/LifeCompanion.build/Debug-iphonesimulator/LifeCompanion.build/Objects-normal/arm64/SimpleMemoryGameView.o"
+  swift-dependencies: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/DerivedData/Build/Intermediates.noindex/LifeCompanion.build/Debug-iphonesimulator/LifeCompanion.build/Objects-normal/arm64/SimpleMemoryGameView.swiftdeps"
+  const-values: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/DerivedData/Build/Intermediates.noindex/LifeCompanion.build/Debug-iphonesimulator/LifeCompanion.build/Objects-normal/arm64/SimpleMemoryGameView.swiftconstvalues"
+  dependencies: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/DerivedData/Build/Intermediates.noindex/LifeCompanion.build/Debug-iphonesimulator/LifeCompanion.build/Objects-normal/arm64/SimpleMemoryGameView.d"
+"/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/LifeCompanion/Controller/ToDo/EditTodoView.swift":
+  dependencies: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/DerivedData/Build/Intermediates.noindex/LifeCompanion.build/Debug-iphonesimulator/LifeCompanion.build/Objects-normal/arm64/EditTodoView.d"
+  swift-dependencies: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/DerivedData/Build/Intermediates.noindex/LifeCompanion.build/Debug-iphonesimulator/LifeCompanion.build/Objects-normal/arm64/EditTodoView.swiftdeps"
+  object: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/DerivedData/Build/Intermediates.noindex/LifeCompanion.build/Debug-iphonesimulator/LifeCompanion.build/Objects-normal/arm64/EditTodoView.o"
+  diagnostics: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/DerivedData/Build/Intermediates.noindex/LifeCompanion.build/Debug-iphonesimulator/LifeCompanion.build/Objects-normal/arm64/EditTodoView.dia"
+  const-values: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/DerivedData/Build/Intermediates.noindex/LifeCompanion.build/Debug-iphonesimulator/LifeCompanion.build/Objects-normal/arm64/EditTodoView.swiftconstvalues"
+"/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/LifeCompanion/Controller/Settings/SettingsView.swift":
+  object: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/DerivedData/Build/Intermediates.noindex/LifeCompanion.build/Debug-iphonesimulator/LifeCompanion.build/Objects-normal/arm64/SettingsView.o"
+  diagnostics: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/DerivedData/Build/Intermediates.noindex/LifeCompanion.build/Debug-iphonesimulator/LifeCompanion.build/Objects-normal/arm64/SettingsView.dia"
+  const-values: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/DerivedData/Build/Intermediates.noindex/LifeCompanion.build/Debug-iphonesimulator/LifeCompanion.build/Objects-normal/arm64/SettingsView.swiftconstvalues"
+  swift-dependencies: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/DerivedData/Build/Intermediates.noindex/LifeCompanion.build/Debug-iphonesimulator/LifeCompanion.build/Objects-normal/arm64/SettingsView.swiftdeps"
+  dependencies: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/DerivedData/Build/Intermediates.noindex/LifeCompanion.build/Debug-iphonesimulator/LifeCompanion.build/Objects-normal/arm64/SettingsView.d"
+"/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/LifeCompanion/Controller/MemoryGame/WorkingMemoryGameView.swift":
+  const-values: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/DerivedData/Build/Intermediates.noindex/LifeCompanion.build/Debug-iphonesimulator/LifeCompanion.build/Objects-normal/arm64/WorkingMemoryGameView.swiftconstvalues"
+  diagnostics: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/DerivedData/Build/Intermediates.noindex/LifeCompanion.build/Debug-iphonesimulator/LifeCompanion.build/Objects-normal/arm64/WorkingMemoryGameView.dia"
+  swift-dependencies: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/DerivedData/Build/Intermediates.noindex/LifeCompanion.build/Debug-iphonesimulator/LifeCompanion.build/Objects-normal/arm64/WorkingMemoryGameView.swiftdeps"
+  dependencies: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/DerivedData/Build/Intermediates.noindex/LifeCompanion.build/Debug-iphonesimulator/LifeCompanion.build/Objects-normal/arm64/WorkingMemoryGameView.d"
+  object: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/DerivedData/Build/Intermediates.noindex/LifeCompanion.build/Debug-iphonesimulator/LifeCompanion.build/Objects-normal/arm64/WorkingMemoryGameView.o"
+"/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/LifeCompanion/Controller/ToDo/PriorityBadge.swift":
+  const-values: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/DerivedData/Build/Intermediates.noindex/LifeCompanion.build/Debug-iphonesimulator/LifeCompanion.build/Objects-normal/arm64/PriorityBadge.swiftconstvalues"
+  dependencies: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/DerivedData/Build/Intermediates.noindex/LifeCompanion.build/Debug-iphonesimulator/LifeCompanion.build/Objects-normal/arm64/PriorityBadge.d"
+  swift-dependencies: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/DerivedData/Build/Intermediates.noindex/LifeCompanion.build/Debug-iphonesimulator/LifeCompanion.build/Objects-normal/arm64/PriorityBadge.swiftdeps"
+  object: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/DerivedData/Build/Intermediates.noindex/LifeCompanion.build/Debug-iphonesimulator/LifeCompanion.build/Objects-normal/arm64/PriorityBadge.o"
+  diagnostics: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/DerivedData/Build/Intermediates.noindex/LifeCompanion.build/Debug-iphonesimulator/LifeCompanion.build/Objects-normal/arm64/PriorityBadge.dia"
+"/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/LifeCompanion/Controller/ToDo/AddToDo/TodoSuggestionsSheet.swift":
+  const-values: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/DerivedData/Build/Intermediates.noindex/LifeCompanion.build/Debug-iphonesimulator/LifeCompanion.build/Objects-normal/arm64/TodoSuggestionsSheet.swiftconstvalues"
+  swift-dependencies: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/DerivedData/Build/Intermediates.noindex/LifeCompanion.build/Debug-iphonesimulator/LifeCompanion.build/Objects-normal/arm64/TodoSuggestionsSheet.swiftdeps"
+  diagnostics: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/DerivedData/Build/Intermediates.noindex/LifeCompanion.build/Debug-iphonesimulator/LifeCompanion.build/Objects-normal/arm64/TodoSuggestionsSheet.dia"
+  object: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/DerivedData/Build/Intermediates.noindex/LifeCompanion.build/Debug-iphonesimulator/LifeCompanion.build/Objects-normal/arm64/TodoSuggestionsSheet.o"
+  dependencies: "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/DerivedData/Build/Intermediates.noindex/LifeCompanion.build/Debug-iphonesimulator/LifeCompanion.build/Objects-normal/arm64/TodoSuggestionsSheet.d"

@@ -13,6 +13,8 @@ struct HealthView: View {
     @Environment(\.modelContext) private var modelContext
     @StateObject private var viewModel = HealthViewModel()
     @EnvironmentObject private var settingsManager: SettingsManager
+    @EnvironmentObject private var feedbackManager: FeedbackManager
+
     
     // SwiftData Query for medications - simplified
     @Query(sort: \MedicationEntry.createdAt, order: .reverse) 
@@ -114,7 +116,6 @@ struct HealthView: View {
                     // Check for auto reset
                     viewModel.checkAutoReset(context: modelContext)
                 } catch {
-                    print("❌ Error in HealthView onAppear: \(error)")
                 }
             }
         }
@@ -169,25 +170,21 @@ struct HealthView: View {
         .sheet(isPresented: $showingAddMedication) {
             AddMedicationView { medication in
                 // Add medication to context
-                print("💊 Adding medication to context: \(medication.medicationName)")
                 modelContext.insert(medication)
                 
                 // Save - @Query will automatically update
                 do {
                     try modelContext.save()
-                    print("✅ Medication saved successfully")
                     
                     // Request notification permission and schedule
                     requestNotificationPermission { granted in
-                        if granted {
-                            medication.scheduleNotifications()
-                            print("📢 Notifications scheduled for \(medication.medicationName)")
+                        if granted && settingsManager.notificationsEnabled {
+                            medication.scheduleNotifications(notificationsEnabled: true)
                         } else {
-                            print("⚠️ Cannot schedule notifications - permission denied")
+                            // Don't schedule if notifications are disabled or permission denied
                         }
                     }
                 } catch {
-                    print("❌ Failed to save medication: \(error)")
                 }
             }
         }
@@ -363,6 +360,7 @@ struct HealthView: View {
                     Spacer()
                     
                     Button(action: {
+                        feedbackManager.buttonTap()
                         viewModel.addWaterAmount(250, in: modelContext)
                     }) {
                         VStack(spacing: 4) {
@@ -694,7 +692,7 @@ struct HealthView: View {
                 }
                 
                 HStack {
-                    Text("\("health.daily.goal".localized): \(settingsManager.dailyWaterGoal)ml")
+                    Text("\("health.daily.goal".localized): \(viewModel.dailyWaterGoal)ml")
                         .font(.caption)
                         .foregroundColor(.secondary)
                     
@@ -757,19 +755,21 @@ struct HealthView: View {
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 20)
             } else {
-                // Use List for swipe actions
-                List {
+                // Use VStack with manual swipe gestures for better control
+                VStack(spacing: 8) {
                     ForEach(medications) { medication in
-                        medicationRowForList(medication)
-                            .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+                        medicationRowView(medication)
+                            .background(
+                                RoundedRectangle(cornerRadius: 12)
+                                    .fill(Color.tertiaryBackground)
+                            )
+                            .contextMenu {
                                 Button("Delete", role: .destructive) {
                                     showDeleteAlert(for: medication)
                                 }
                             }
                     }
                 }
-                .listStyle(PlainListStyle())
-                .frame(height: CGFloat(medications.count * 80))
             }
         }
         .padding(20)
@@ -844,7 +844,7 @@ struct HealthView: View {
         }
     }
     
-    private func medicationRowForList(_ medication: MedicationEntry) -> some View {
+    private func medicationRowView(_ medication: MedicationEntry) -> some View {
         HStack(spacing: 12) {
             VStack(alignment: .leading, spacing: 4) {
                 Text(medication.medicationName)
@@ -884,11 +884,13 @@ struct HealthView: View {
             }
             
             Button(action: {
-                // Check for potential overdose
+                // Immediate haptic feedback
                 if medication.completionPercentage >= 1.0 {
+                    feedbackManager.warningHaptic()
                     selectedMedication = medication
                     showingOverdoseAlert = true
                 } else {
+                    feedbackManager.buttonTap()
                     takeMedication(medication)
                 }
             }) {
@@ -896,9 +898,9 @@ struct HealthView: View {
                     .font(.title2)
                     .foregroundColor(.green)
             }
+            .buttonStyle(.borderless) // Use borderless style for better tap handling
         }
-        .listRowBackground(Color.clear)
-        .listRowSeparator(.hidden)
+        .padding(12)
     }
     
     // MARK: - Health Tips Card
@@ -1081,14 +1083,55 @@ struct HealthView: View {
     
     // MARK: - Medication Actions
     private func takeMedication(_ medication: MedicationEntry) {
-        // Mark medication as taken
-        medication.takenTimes.append(Date())
+        print("\n💊 TAKING MEDICATION: \(medication.medicationName)")
+        print("📋 Frequency: \(medication.frequency)")
         
-        // Save to context
+        // Debug scheduled times
+        let todayScheduled = medication.scheduledTimes.filter { Calendar.current.isDateInToday($0) }
+        print("📅 Total scheduled times: \(medication.scheduledTimes.count)")
+        print("📅 Today scheduled times: \(todayScheduled.count)")
+        
+        if todayScheduled.isEmpty {
+            print("⚠️ ERROR: No scheduled times for today!")
+            print("� All scheduled times:")
+            let formatter = DateFormatter()
+            formatter.dateStyle = .medium
+            formatter.timeStyle = .short
+            for time in medication.scheduledTimes {
+                print("   - \(formatter.string(from: time))")
+            }
+        }
+        
+        let todayTaken = medication.takenTimes.filter { Calendar.current.isDateInToday($0) }
+        print("✅ Before: \(todayTaken.count)/\(todayScheduled.count)")
+        print("✅ Current completion: \(Int(medication.completionPercentage * 100))%")
+        
+        // Mark medication as taken
+        let currentTime = Date()
+        medication.takenTimes.append(currentTime)
+        print("✅ Added taken time: \(currentTime)")
+        
+        let newTodayTaken = medication.takenTimes.filter { Calendar.current.isDateInToday($0) }
+        let newPercentage = todayScheduled.count > 0 ? Double(newTodayTaken.count) / Double(todayScheduled.count) : 0
+        print("✅ After: \(newTodayTaken.count)/\(todayScheduled.count) = \(Int(newPercentage * 100))%")
+        print("✅ New completion should be: \(Int(medication.completionPercentage * 100))%")
+        
+        // Save to context with error handling
         do {
             try modelContext.save()
+            print("✅ Context saved successfully")
+            
+            // Additional debugging - check if data persisted
+            let allMeds = try modelContext.fetch(FetchDescriptor<MedicationEntry>())
+            if let savedMed = allMeds.first(where: { $0.id == medication.id }) {
+                let savedTodayTaken = savedMed.takenTimes.filter { Calendar.current.isDateInToday($0) }
+                print("✅ Verified - saved medication has \(savedTodayTaken.count) taken times today")
+                print("✅ Verified - completion percentage: \(Int(savedMed.completionPercentage * 100))%")
+            }
+            
+            // SwiftData @Query will automatically refresh the UI
         } catch {
-            print("❌ Failed to save medication taken time: \(error)")
+            print("❌ Error saving medication: \(error)")
         }
         
         // Haptic feedback
@@ -1113,7 +1156,6 @@ struct HealthView: View {
         do {
             try modelContext.save()
         } catch {
-            print("❌ Failed to delete medication: \(error)")
         }
         
         // Haptic feedback
@@ -1126,7 +1168,6 @@ struct HealthView: View {
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { granted, error in
             DispatchQueue.main.async {
                 if let error = error {
-                    print("❌ Notification permission error: \(error)")
                     completion(false)
                 } else {
                     print(granted ? "✅ Notification permission granted" : "❌ Notification permission denied")

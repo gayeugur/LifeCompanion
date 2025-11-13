@@ -52,13 +52,13 @@ enum TodoCategory: String, CaseIterable {
     var localizedName: String {
         switch self {
         case .daily:
-            return NSLocalizedString("todo.category.daily", comment: "Daily Tasks")
+            return "todo.category.daily".localized
         case .work:
-            return NSLocalizedString("todo.category.work", comment: "Work")
+            return "todo.category.work".localized
         case .personal:
-            return NSLocalizedString("todo.category.personal", comment: "Personal")
+            return "todo.category.personal".localized
         case .entertainment:
-            return NSLocalizedString("todo.category.entertainment", comment: "Entertainment & Hobbies")
+            return "todo.category.entertainment".localized
         }
     }
     
@@ -88,9 +88,9 @@ enum TodoPriority: String, CaseIterable {
     
     var localizedName: String {
         switch self {
-        case .low: return NSLocalizedString("priority.low", comment: "Low")
-        case .medium: return NSLocalizedString("priority.medium", comment: "Medium")
-        case .high: return NSLocalizedString("priority.high", comment: "High")
+        case .low: return "priority.low".localized
+        case .medium: return "priority.medium".localized
+        case .high: return "priority.high".localized
         }
     }
     

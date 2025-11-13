@@ -8,6 +8,7 @@
 import Foundation
 import SwiftUI
 import SwiftData
+import UserNotifications
 
 @MainActor
 final class TodoListViewModel: ObservableObject {
@@ -66,7 +67,17 @@ final class TodoListViewModel: ObservableObject {
 
     func toggleCompletion(_ todo: TodoItem, in context: ModelContext) {
         todo.isCompleted.toggle()
+        
+        // Cancel notification when todo is completed
+        if todo.isCompleted {
+            cancelNotification(for: todo)
+        }
+        
         try? context.save()
+    }
+    
+    private func cancelNotification(for todo: TodoItem) {
+        UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [todo.id.uuidString])
     }
 
     /// Returns counts for UI badges WITHOUT mutating any @Published state.
@@ -107,18 +118,12 @@ final class TodoListViewModel: ObservableObject {
             case .today:
                 return todos.filter { cal.isDate(($0.dueDate ?? $0.createdAt), inSameDayAs: now) }
             case .thisWeek:
-                if let range = cal.dateInterval(of: .weekOfYear, for: now) {
-                    return todos.filter {
-                        let r = $0.dueDate ?? $0.createdAt
-                        return r >= range.start && r < range.end
-                    }
-                } else {
-                    let start = cal.startOfDay(for: now)
-                    guard let end = cal.date(byAdding: .day, value: 7, to: start) else { return [] }
-                    return todos.filter {
-                        let r = $0.dueDate ?? $0.createdAt
-                        return r >= start && r < end
-                    }
+                // Show upcoming tasks (future tasks, not completed)
+                let today = cal.startOfDay(for: now)
+                return todos.filter { todo in
+                    guard !todo.isCompleted else { return false }
+                    let taskDate = todo.dueDate ?? todo.createdAt
+                    return taskDate > today
                 }
             case .overdue:
                 return todos.filter {
@@ -172,17 +177,17 @@ enum TimeFilter: String, CaseIterable, Identifiable {
     var id: String { rawValue }
     var localizedName: String {
         switch self {
-        case .all: return NSLocalizedString("filter.time.all", comment: "All time filters")
-        case .today: return NSLocalizedString("filter.time.today", comment: "Today")
-        case .thisWeek: return NSLocalizedString("filter.time.thisWeek", comment: "This week")
-        case .overdue: return NSLocalizedString("filter.time.overdue", comment: "Overdue")
+        case .all: return "filter.time.all".localized
+        case .today: return "filter.time.today".localized
+        case .thisWeek: return "filter.time.thisWeek".localized
+        case .overdue: return "filter.time.overdue".localized
         }
     }
     var iconName: String {
         switch self {
         case .all: return "tray.full.fill"
         case .today: return "calendar.badge.clock"
-        case .thisWeek: return "calendar"
+        case .thisWeek: return "arrow.up.forward"
         case .overdue: return "exclamationmark.triangle.fill"
         }
     }

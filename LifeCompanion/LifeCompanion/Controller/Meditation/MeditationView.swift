@@ -9,6 +9,7 @@ import SwiftUI
 
 struct MeditationView: View {
     @StateObject private var viewModel = MeditationViewModel()
+    @EnvironmentObject var settingsManager: SettingsManager
     @State private var showingGoalAlert = false
     @State private var newGoalText = ""
     
@@ -101,6 +102,12 @@ struct MeditationView: View {
             .onDisappear {
                 viewModel.cleanup()
             }
+            .onReceive(NotificationCenter.default.publisher(for: UIApplication.willResignActiveNotification)) { _ in
+                viewModel.handleAppWillResignActive()
+            }
+            .onReceive(NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)) { _ in
+                viewModel.handleAppDidBecomeActive()
+            }
             .alert("meditation.goal.alert.title".localized, isPresented: $showingGoalAlert) {
                 TextField("meditation.goal.alert.placeholder".localized, text: $newGoalText)
                     .keyboardType(.numberPad)
@@ -126,6 +133,9 @@ struct MeditationView: View {
             } message: {
                 Text("meditation.add.session.message".localized)
             }
+        }
+        .onAppear {
+            viewModel.configure(settingsManager: settingsManager)
         }
     }
     

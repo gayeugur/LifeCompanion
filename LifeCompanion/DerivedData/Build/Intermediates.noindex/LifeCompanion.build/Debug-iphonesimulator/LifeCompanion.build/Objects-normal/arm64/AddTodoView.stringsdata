@@ -1,0 +1,48 @@
+{
+  "source": "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/LifeCompanion/Controller/ToDo/AddToDo/AddTodoView.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "add.validation.title",
+        "location": {
+          "startingColumn": 39,
+          "startingLine": 173
+        }
+      },
+      {
+        "comment": "",
+        "key": "",
+        "location": {
+          "startingColumn": 40,
+          "startingLine": 104
+        }
+      },
+      {
+        "comment": "",
+        "key": "Done",
+        "location": {
+          "startingColumn": 28,
+          "startingLine": 163
+        }
+      },
+      {
+        "comment": "",
+        "key": "add.ok",
+        "location": {
+          "startingColumn": 24,
+          "startingLine": 174
+        }
+      },
+      {
+        "comment": "",
+        "key": "add.validation.message",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 176
+        }
+      }
+    ]
+  },
+  "version": 1
+}

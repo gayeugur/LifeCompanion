@@ -18,9 +18,9 @@ enum HabitFrequency: String, Codable, CaseIterable, Hashable, Identifiable {
 
     var displayName: String {
         switch self {
-        case .daily: return "addHabit.daily".localized
-        case .weekly: return "addHabit.weekly".localized
-        case .monthly: return "addHabit.montly".localized
+        case .daily: return "habit.frequency.daily".localized
+        case .weekly: return "habit.frequency.weekly".localized
+        case .monthly: return "habit.frequency.monthly".localized
         }
     }
 }
@@ -28,9 +28,9 @@ enum HabitFrequency: String, Codable, CaseIterable, Hashable, Identifiable {
 extension HabitFrequency {
     var targetText: String {
         switch self {
-        case .daily: return "addHabit.daily".localized
-        case .weekly: return "addHabit.weekly".localized
-        case .monthly: return "addHabit.montly".localized
+        case .daily: return "habit.frequency.daily".localized
+        case .weekly: return "habit.frequency.weekly".localized
+        case .monthly: return "habit.frequency.monthly".localized
         }
     }
 }

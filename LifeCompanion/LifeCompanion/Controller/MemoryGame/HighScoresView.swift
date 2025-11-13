@@ -10,6 +10,7 @@ import SwiftData
 
 struct HighScoresView: View {
     @Environment(\.dismiss) private var dismiss
+    @EnvironmentObject private var languageManager: LanguageManager
     @Query(sort: \GameScore.score, order: .reverse) private var allScores: [GameScore]
     
     // Filter scores by grid size

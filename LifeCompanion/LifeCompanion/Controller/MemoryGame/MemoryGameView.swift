@@ -10,6 +10,8 @@ import SwiftUI
 struct MemoryGameView: View {
     @StateObject private var viewModel = MemoryGameViewModel()
     @Environment(\.dismiss) private var dismiss
+    @EnvironmentObject private var languageManager: LanguageManager
+    @State private var refreshKey = UUID()
     
     var body: some View {
         ZStack {
@@ -83,6 +85,10 @@ struct MemoryGameView: View {
         }
         .sheet(isPresented: $viewModel.showingSettings) {
             GameSettingsView(viewModel: viewModel)
+        }
+        .id(refreshKey)
+        .onReceive(NotificationCenter.default.publisher(for: .languageDidChange)) { _ in
+            refreshKey = UUID()
         }
         .alert("memory.game.complete.title".localized, isPresented: $viewModel.showingGameComplete) {
             Button("memory.game.new".localized) {

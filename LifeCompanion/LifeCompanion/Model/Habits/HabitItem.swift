@@ -20,13 +20,14 @@ final class HabitItem: Identifiable {
     var currentCount: Int
     var isCompleted: Bool
     var reminderTime: Date?
+    var reminderDates: [Date]? // Selected specific dates for reminders
     var createdAt: Date
     var currentStreak: Int = 0
     var longestStreak: Int = 0  
     var lastCompletedDate: Date?
     @Relationship(deleteRule: .cascade) var entries: [HabitEntry]
 
-    init(title: String, notes: String? = nil, frequency: HabitFrequency, targetCount: Int = 1, reminderTime: Date? = nil) {
+    init(title: String, notes: String? = nil, frequency: HabitFrequency, targetCount: Int = 1, reminderTime: Date? = nil, reminderDates: [Date]? = nil) {
         self.id = UUID()
         self.title = title
         self.notes = notes
@@ -35,6 +36,7 @@ final class HabitItem: Identifiable {
         self.currentCount = 0
         self.isCompleted = false
         self.reminderTime = reminderTime
+        self.reminderDates = reminderDates
         self.createdAt = Date()
         self.currentStreak = 0
         self.longestStreak = 0
@@ -109,9 +111,14 @@ final class HabitItem: Identifiable {
     
     // MARK: - Notification Management
     
-    /// Schedule daily reminder notification for this habit
-    func scheduleReminderNotification() {
-        guard let reminderTime = reminderTime else { return }
+    /// Schedule reminder notifications for this habit
+    func scheduleReminderNotification(notificationsEnabled: Bool = true) {
+        // Don't schedule if notifications are disabled
+        guard notificationsEnabled else {
+            // Still remove existing notifications if disabled
+            cancelReminderNotifications()
+            return
+        }
         
         // Remove existing notifications
         cancelReminderNotifications()
@@ -122,11 +129,49 @@ final class HabitItem: Identifiable {
         content.sound = .default
         content.categoryIdentifier = "HABIT_REMINDER"
         
-        // Schedule for today and next 7 days
         let calendar = Calendar.current
-        let components = calendar.dateComponents([.hour, .minute], from: reminderTime)
         
-        for i in 0..<7 {
+        // If specific dates are selected, use them
+        if let reminderDates = reminderDates, !reminderDates.isEmpty {
+            scheduleForSpecificDates(content: content, dates: reminderDates, calendar: calendar)
+        }
+        // Otherwise, use reminderTime for daily scheduling
+        else if let reminderTime = reminderTime {
+            scheduleForDailyReminder(content: content, time: reminderTime, calendar: calendar)
+        }
+    }
+    
+    private func scheduleForSpecificDates(content: UNMutableNotificationContent, dates: [Date], calendar: Calendar) {
+        let timeComponents = reminderTime != nil ? calendar.dateComponents([.hour, .minute], from: reminderTime!) : DateComponents(hour: 9, minute: 0)
+        
+        for (index, date) in dates.enumerated() {
+            // Only schedule for future dates
+            guard date > Date() else { continue }
+            
+            guard let triggerDate = calendar.date(bySettingHour: timeComponents.hour ?? 9,
+                                                  minute: timeComponents.minute ?? 0,
+                                                  second: 0,
+                                                  of: date) else { continue }
+            
+            let triggerComponents = calendar.dateComponents([.year, .month, .day, .hour, .minute], from: triggerDate)
+            let trigger = UNCalendarNotificationTrigger(dateMatching: triggerComponents, repeats: false)
+            
+            let identifier = "\(id.uuidString)_date_\(index)"
+            let request = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
+            
+            UNUserNotificationCenter.current().add(request) { error in
+                if let error = error {
+                } else {
+                }
+            }
+        }
+    }
+    
+    private func scheduleForDailyReminder(content: UNMutableNotificationContent, time: Date, calendar: Calendar) {
+        let components = calendar.dateComponents([.hour, .minute], from: time)
+        
+        // Schedule for today and next 30 days
+        for i in 0..<30 {
             guard let scheduleDate = calendar.date(byAdding: .day, value: i, to: Date()),
                   let triggerDate = calendar.date(bySettingHour: components.hour ?? 9,
                                                   minute: components.minute ?? 0,
@@ -136,21 +181,24 @@ final class HabitItem: Identifiable {
             let triggerComponents = calendar.dateComponents([.year, .month, .day, .hour, .minute], from: triggerDate)
             let trigger = UNCalendarNotificationTrigger(dateMatching: triggerComponents, repeats: false)
             
-            let identifier = "\(id.uuidString)_reminder_\(i)"
+            let identifier = "\(id.uuidString)_daily_\(i)"
             let request = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
             
             UNUserNotificationCenter.current().add(request) { error in
                 if let error = error {
-                    print("❌ Failed to schedule habit reminder: \(error)")
                 } else {
-                    print("✅ Habit reminder scheduled for \(self.title) at \(triggerDate)")
                 }
             }
         }
     }
     
     /// Schedule streak celebration notification
-    func scheduleStreakCelebrationNotification() {
+    func scheduleStreakCelebrationNotification(notificationsEnabled: Bool = true) {
+        // Don't schedule if notifications are disabled
+        guard notificationsEnabled else {
+            return
+        }
+        
         let content = UNMutableNotificationContent()
         content.title = "habit.notification.celebration.title".localized
         content.body = String(format: "habit.notification.celebration.body".localized, currentStreak, title, streakEmoji)
@@ -164,9 +212,7 @@ final class HabitItem: Identifiable {
         
         UNUserNotificationCenter.current().add(request) { error in
             if let error = error {
-                print("❌ Failed to schedule celebration notification: \(error)")
             } else {
-                print("🎉 Celebration notification scheduled for \(self.title) - \(self.currentStreak) days!")
             }
         }
     }
@@ -175,22 +221,35 @@ final class HabitItem: Identifiable {
     func cancelReminderNotifications() {
         var identifiers: [String] = []
         
-        // Add reminder notification identifiers
-        for i in 0..<7 {
-            identifiers.append("\(id.uuidString)_reminder_\(i)")
+        // Add daily reminder notification identifiers
+        for i in 0..<30 {
+            identifiers.append("\(id.uuidString)_daily_\(i)")
+        }
+        
+        // Add date-specific reminder notification identifiers
+        if let reminderDates = reminderDates {
+            for i in 0..<reminderDates.count {
+                identifiers.append("\(id.uuidString)_date_\(i)")
+            }
         }
         
         UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: identifiers)
-        print("🚫 Cancelled reminder notifications for habit: \(title)")
     }
     
     /// Cancel all notifications for this habit
     func cancelAllNotifications() {
         var identifiers: [String] = []
         
-        // Add reminder notification identifiers
-        for i in 0..<7 {
-            identifiers.append("\(id.uuidString)_reminder_\(i)")
+        // Add daily reminder notification identifiers
+        for i in 0..<30 {
+            identifiers.append("\(id.uuidString)_daily_\(i)")
+        }
+        
+        // Add date-specific reminder notification identifiers
+        if let reminderDates = reminderDates {
+            for i in 0..<reminderDates.count {
+                identifiers.append("\(id.uuidString)_date_\(i)")
+            }
         }
         
         // Add celebration notification identifiers for common streaks
@@ -199,6 +258,5 @@ final class HabitItem: Identifiable {
         }
         
         UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: identifiers)
-        print("🚫 Cancelled all notifications for habit: \(title)")
     }
 }

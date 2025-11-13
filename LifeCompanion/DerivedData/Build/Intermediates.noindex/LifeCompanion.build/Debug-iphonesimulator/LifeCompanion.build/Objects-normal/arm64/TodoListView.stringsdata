@@ -1,0 +1,88 @@
+{
+  "source": "/Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/LifeCompanion/Controller/ToDo/TodoListView.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "menu.todos",
+        "location": {
+          "startingColumn": 26,
+          "startingLine": 180
+        }
+      },
+      {
+        "comment": "",
+        "key": "Zaman Filtresi",
+        "location": {
+          "startingColumn": 30,
+          "startingLine": 52
+        }
+      },
+      {
+        "comment": "",
+        "key": "Durum Filtresi",
+        "location": {
+          "startingColumn": 30,
+          "startingLine": 99
+        }
+      },
+      {
+        "comment": "",
+        "key": "%lld görev",
+        "location": {
+          "startingColumn": 26,
+          "startingLine": 230
+        }
+      },
+      {
+        "comment": "",
+        "key": "%lld",
+        "location": {
+          "startingColumn": 26,
+          "startingLine": 282
+        }
+      },
+      {
+        "comment": "",
+        "key": "0",
+        "location": {
+          "startingColumn": 26,
+          "startingLine": 286
+        }
+      },
+      {
+        "comment": "",
+        "key": "Sil",
+        "location": {
+          "startingColumn": 43,
+          "startingLine": 324
+        }
+      },
+      {
+        "comment": "",
+        "key": "empty.noTasks",
+        "location": {
+          "startingColumn": 18,
+          "startingLine": 355
+        }
+      },
+      {
+        "comment": "",
+        "key": "empty.addTaskPrompt",
+        "location": {
+          "startingColumn": 18,
+          "startingLine": 358
+        }
+      },
+      {
+        "comment": "",
+        "key": "%lld",
+        "location": {
+          "startingColumn": 18,
+          "startingLine": 373
+        }
+      }
+    ]
+  },
+  "version": 1
+}

@@ -9,14 +9,18 @@ import SwiftUI
 
 // MARK: - Main View
 struct ContentView: View {
+    @Environment(\.modelContext) private var modelContext
+    @Environment(\.scenePhase) private var scenePhase
     @EnvironmentObject private var themeManager: ThemeManager
     @EnvironmentObject private var feedbackManager: FeedbackManager
     @EnvironmentObject private var settingsManager: SettingsManager
     @EnvironmentObject private var dataManager: DataManager
     @EnvironmentObject private var languageManager: LanguageManager
     @State private var refreshKey = UUID()
+    @StateObject private var habitViewModel = HabitListViewModel()
     
-    var menuItems: [MenuItem] {
+    // Performance optimization: Cache menu items to avoid repeated localization calls
+    private var menuItems: [MenuItem] {
         [
             MenuItem(title: "menu.todos".localized, icon: "checklist", color: .blue),
             MenuItem(title: "menu.habits".localized, icon: "chart.bar", color: .green),
@@ -50,6 +54,27 @@ struct ContentView: View {
             .id(refreshKey)
             .onReceive(NotificationCenter.default.publisher(for: .languageDidChange)) { _ in
                 refreshKey = UUID()
+            }
+            .onChange(of: scenePhase) { _, newPhase in
+                switch newPhase {
+                case .active:
+                    print("🔄 App became active, checking habit reset...")
+                    habitViewModel.configure(settingsManager: settingsManager)
+                    habitViewModel.fetchHabits(from: modelContext)
+                    habitViewModel.checkAutoReset(in: modelContext, settingsManager: settingsManager)
+                case .background:
+                    print("📱 App went to background")
+                case .inactive:
+                    print("😴 App became inactive")
+                @unknown default:
+                    break
+                }
+            }
+            .onAppear {
+                print("🚀 ContentView appeared, initial habit reset check...")
+                habitViewModel.configure(settingsManager: settingsManager)
+                habitViewModel.fetchHabits(from: modelContext)
+                habitViewModel.checkAutoReset(in: modelContext, settingsManager: settingsManager)
             }
         }
     }
@@ -97,5 +122,7 @@ struct MenuItemView: View {
                 .fill(item.color)
                 .shadow(color: item.color.opacity(0.3), radius: 10, x: 0, y: 5)
         )
+        .scaleEffect(1.0)
+        .animation(.easeInOut(duration: 0.15), value: item.id)
     }
 }

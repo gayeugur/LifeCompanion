@@ -12,6 +12,7 @@ import UserNotifications
 struct AddTodoView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
+    @EnvironmentObject var settingsManager: SettingsManager
 
     @State private var title: String = ""
     @State private var subtitle: String = ""
@@ -252,24 +253,45 @@ struct AddTodoView: View {
             }
             dismiss()
         } catch {
-            print("Todo kaydedilirken hata: \(error)")
         }
     }
 
     private func scheduleNotification(for todo: TodoItem) {
+        // Don't schedule notification if notifications are disabled
+        guard settingsManager.notificationsEnabled else {
+            return
+        }
+        
+        // Don't schedule notification for completed todos
+        guard !todo.isCompleted else {
+            return
+        }
+        
+        guard let date = todo.dueDate else {
+            return
+        }
+        
+        // Don't schedule notification for past dates
+        guard date > Date() else {
+            return
+        }
+        
         let content = UNMutableNotificationContent()
-        content.title = todo.title
-        if let subtitle = todo.notes { content.subtitle = subtitle }
+        content.title = "📝 " + todo.title
+        content.body = "todo.notification.body".localized
+        if let subtitle = todo.notes, !subtitle.isEmpty { 
+            content.body = subtitle 
+        }
         content.sound = .default
+        content.categoryIdentifier = "TODO_REMINDER"
 
-        guard let date = todo.dueDate else { return }
         let components = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute], from: date)
         let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: false)
         let request = UNNotificationRequest(identifier: todo.id.uuidString, content: content, trigger: trigger)
 
         UNUserNotificationCenter.current().add(request) { error in
             if let error = error {
-                print("Notification schedule error: \(error)")
+            } else {
             }
         }
     }
