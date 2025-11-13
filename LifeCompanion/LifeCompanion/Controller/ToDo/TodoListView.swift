@@ -85,28 +85,24 @@ struct TodoListView: View {
                 .background(
                     RoundedRectangle(cornerRadius: 20)
                         .fill(.ultraThinMaterial)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 20)
-                                .stroke(Color.blue.opacity(0.2), lineWidth: 1)
-                        )
                 )
                 .padding(.horizontal, 16)
 
                 // MARK: - Status Filter Bar
-                VStack(spacing: 6) {
+                VStack(spacing: 4) {
                     HStack {
                         Image(systemName: "list.bullet.circle.fill")
-                            .font(.system(size: 12, weight: .medium))
+                            .font(.system(size: 10, weight: .medium))
                             .foregroundColor(.green)
                         Text("todo.filter.status".localized)
-                            .font(.system(size: 12, weight: .semibold))
+                            .font(.system(size: 11, weight: .semibold))
                             .foregroundColor(.primary)
                         Spacer()
                     }
-                    .padding(.horizontal, 14)
-                    .padding(.top, 8)
+                    .padding(.horizontal, 12)
+                    .padding(.top, 6)
                     
-                    LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 6), count: 3), spacing: 6) {
+                    LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 4), count: 3), spacing: 4) {
                         ForEach(StatusFilter.allCases, id: \.self) { status in
                             let isSelected = viewModel.statusFilter == status
                             Button {
@@ -125,16 +121,12 @@ struct TodoListView: View {
                             }
                         }
                     }
-                    .padding(.horizontal, 14)
-                    .padding(.bottom, 8)
+                    .padding(.horizontal, 12)
+                    .padding(.bottom, 6)
                 }
                 .background(
                     RoundedRectangle(cornerRadius: 20)
                         .fill(.ultraThinMaterial)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 20)
-                                .stroke(Color.green.opacity(0.2), lineWidth: 1)
-                        )
                 )
                 .padding(.horizontal, 16)
                 .padding(.bottom, 8)
@@ -146,6 +138,7 @@ struct TodoListView: View {
                     listView(sections: sections)
                 }
             }
+            .padding(.top, 8)
 
             // MARK: - Floating Add Button
             VStack {
@@ -181,7 +174,7 @@ struct TodoListView: View {
             }
         }
         .navigationTitle("menu.todos".localized)
-        .navigationBarTitleDisplayMode(.large)
+        .navigationBarTitleDisplayMode(.inline)
         .sheet(isPresented: $viewModel.showingAddTodo) {
             AddTodoView()
         }
@@ -240,10 +233,10 @@ struct TodoListView: View {
         .padding(.vertical, 10)
         .background(
             Capsule()
-                .fill(isSelected ? tint.opacity(0.1) : Color.gray.opacity(0.05))
+                .fill(isSelected ? tint.opacity(0.15) : Color.gray.opacity(0.05))
                 .overlay(
                     Capsule()
-                        .stroke(isSelected ? tint.opacity(0.3) : Color.gray.opacity(0.2), lineWidth: 1.5)
+                        .stroke(isSelected ? tint.opacity(0.7) : Color.gray.opacity(0.3), lineWidth: isSelected ? 2.5 : 1.5)
                 )
         )
         .scaleEffect(isSelected ? 1.05 : 1.0)
@@ -263,43 +256,43 @@ struct TodoListView: View {
         tint: Color,
         isSelected: Bool
     ) -> some View {
-        VStack(spacing: 6) {
+        VStack(spacing: 3) {
             ZStack {
-                RoundedRectangle(cornerRadius: 10)
+                RoundedRectangle(cornerRadius: 8)
                     .fill(isSelected ? tint.opacity(0.15) : Color.gray.opacity(0.05))
-                    .frame(width: 28, height: 28)
+                    .frame(width: 22, height: 22)
                 
                 Image(systemName: icon)
-                    .font(.system(size: 14, weight: .semibold))
+                    .font(.system(size: 11, weight: .semibold))
                     .foregroundColor(isSelected ? tint : .gray)
             }
             
-            VStack(spacing: 1) {
+            VStack(spacing: 0) {
                 Text(title)
-                    .font(.system(size: 10, weight: .semibold))
+                    .font(.system(size: 9, weight: .semibold))
                     .foregroundColor(isSelected ? tint : .primary)
                     .lineLimit(1)
                     .minimumScaleFactor(0.7)
                 
                 if let count, count > 0 {
                     Text("\(count)")
-                        .font(.system(size: 14, weight: .bold))
+                        .font(.system(size: 12, weight: .bold))
                         .foregroundColor(isSelected ? tint : .secondary)
                 } else {
                     Text("0")
-                        .font(.system(size: 14, weight: .bold))
+                        .font(.system(size: 12, weight: .bold))
                         .foregroundColor(.gray.opacity(0.5))
                 }
             }
         }
         .frame(maxWidth: .infinity)
-        .padding(.vertical, 8)
+        .padding(.vertical, 6)
         .background(
             RoundedRectangle(cornerRadius: 12)
-                .fill(isSelected ? tint.opacity(0.05) : Color.clear)
+                .fill(isSelected ? tint.opacity(0.08) : Color.primary.opacity(0.05))
                 .overlay(
                     RoundedRectangle(cornerRadius: 12)
-                        .stroke(isSelected ? tint.opacity(0.4) : Color.gray.opacity(0.2), lineWidth: isSelected ? 1.5 : 1)
+                        .stroke(isSelected ? tint.opacity(0.7) : Color.primary.opacity(0.3), lineWidth: 2)
                 )
         )
         .scaleEffect(isSelected ? 1.02 : 1.0)

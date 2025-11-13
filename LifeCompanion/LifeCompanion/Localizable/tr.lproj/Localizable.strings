@@ -6,17 +6,16 @@
   
 */
 
-"todo.title" = "To‑Do";
-"empty.title" = "No tasks yet";
-"empty.subtitle" = "Tap + to add a new task";
-
-"add.title" = "New Task";
-"add.cancel" = "Cancel";
-"add.save" = "Save";
-"add.ok" = "OK";
-"add.title.placeholder" = "Title (required)";
-"add.subtitle.placeholder" = "Subtitle (optional)";
-"add.priority" = "Priority";
+"todo.title" = "Yapılacaklar";
+"empty.title" = "Henüz Görev Eklenmedi";
+"empty.subtitle" = "Yeni Task Eklemek İçin + Butonuna Basınız";
+"add.title" = "Yeni Kayıt";
+"add.cancel" = "İptal";
+"add.save" = "Kaydet";
+"add.ok" = "Tamam";
+"add.title.placeholder" = "Başlık (Gerekli)";
+"add.subtitle.placeholder" = "Alt Başlık (Opsiyonel)";
+"add.priority" = "Öncelik";
 "add.reminder" = "Hatırlatıcı ekle";
 "add.section.details" = "Görev Detayları";
 "add.section.reminder" = "Hatırlatıcı";
@@ -38,9 +37,9 @@
 "edit.validation.title" = "Başlık gerekli";
 "edit.validation.message" = "Lütfen görev için bir başlık girin.";
 
-"priority.low" = "Low";
-"priority.medium" = "Medium";
-"priority.high" = "High";
+"priority.low" = "Düşük";
+"priority.medium" = "Orta";
+"priority.high" = "Yüksek";
 "filter.time.all" = "Tüm Görevler";
 "filter.time.today" = "Bugün";
 "filter.time.thisWeek" = "Gelecek";
@@ -455,7 +454,8 @@
 "memoryGame.expert" = "6x6 (Uzman)";
 "memoryGame.gameSettings" = "Oyun Ayarları";
 "memoryGame.gridSize" = "Izgara Boyutu";
-"memoryGame.cards" = "kart";
+"memoryGame.cards" = "%lld kart";
+"memoryGame.selectDifficulty" = "Zorluk Seviyesi Seçin";
 "memory.game.welcome" = "Hafıza Oyununa Hoş Geldiniz!";
 "memory.game.description" = "Kazanmak için kart çiftlerini eşleştirin. Aynı anda iki kart çevirin ve konumlarını hatırlamaya çalışın.";
 "memory.game.start" = "Oyunu Başlat";
@@ -465,7 +465,7 @@
 "memory.game.new" = "Yeni Oyun";
 "memory.game.settings" = "Ayarlar";
 "memory.game.complete.title" = "Oyun Tamamlandı!";
-"memory.game.complete.message" = "Süre: %@\nHamle: %d\nDoğruluk: %@";
+"memory.game.complete.message" = "Tebrikler! Oyunu %@ sürede ve %@ hamlede tamamladın.\n\nSkorun: %@ puan";
 "memory.game.winner" = "%@ kazandı!";
 "memory.game.tie" = "Berabere!";
 
@@ -473,6 +473,10 @@
 "memory.stats.time" = "Süre";
 "memory.stats.moves" = "Hamle";
 "memory.stats.accuracy" = "Doğruluk";
+"memory.stats.matches" = "Eşleşme";
+"memory.game.scores" = "Skorlar";
+"memory.game.highscores" = "En İyi Skorlar";
+"memory.cards" = "kart";
 "memory.cards" = "kart";
 
 //Memory Game Players

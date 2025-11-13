@@ -262,7 +262,7 @@ struct EditHabitView: View {
                 // klavye done butonu
                 ToolbarItemGroup(placement: .keyboard) {
                     Spacer()
-                    Button("Done") { isFieldFocused = false }
+                    Button("highScores.done".localized) { isFieldFocused = false }
                 }
                 
                 ToolbarItem(placement: .topBarLeading) {

@@ -15,4 +15,8 @@ extension String {
     func localized(comment: String = "") -> String {
         LanguageManager.shared.getLocalizedString(for: self, comment: comment)
     }
+    
+    func localizedFormat(_ args: CVarArg...) -> String {
+        String(format: NSLocalizedString(self, comment: ""), arguments: args)
+    }
 }

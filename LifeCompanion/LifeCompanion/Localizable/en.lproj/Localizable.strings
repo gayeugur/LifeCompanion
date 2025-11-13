@@ -455,7 +455,7 @@
 "memoryGame.expert" = "6x6 (Expert)";
 "memoryGame.gameSettings" = "Game Settings";
 "memoryGame.gridSize" = "Grid Size";
-"memoryGame.cards" = "cards";
+"memoryGame.cards" = " %lld cards";
 "memory.game.welcome" = "Welcome to Memory Game!";
 "memory.game.description" = "Match pairs of cards to win. Flip two cards at a time and try to remember their positions.";
 "memory.game.start" = "Start Game";
@@ -465,7 +465,7 @@
 "memory.game.new" = "New Game";
 "memory.game.settings" = "Settings";
 "memory.game.complete.title" = "Game Complete!";
-"memory.game.complete.message" = "Time: %@\nMoves: %d\nAccuracy: %@";
+"memory.game.complete.message" = "Congratulations! You completed the game in %@ and %@ moves.\n\nYour Score: %@ points";
 "memory.game.winner" = "%@ wins!";
 "memory.game.tie" = "It's a tie!";
 
@@ -473,6 +473,10 @@
 "memory.stats.time" = "Time";
 "memory.stats.moves" = "Moves";
 "memory.stats.accuracy" = "Accuracy";
+"memory.stats.matches" = "Matches";
+"memory.game.scores" = "Scores";
+"memory.game.highscores" = "High Scores";
+"memory.cards" = "cards";
 "memory.cards" = "cards";
 
 //Memory Game Players

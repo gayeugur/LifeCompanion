@@ -111,8 +111,8 @@ struct MeditationView: View {
             .alert("meditation.goal.alert.title".localized, isPresented: $showingGoalAlert) {
                 TextField("meditation.goal.alert.placeholder".localized, text: $newGoalText)
                     .keyboardType(.numberPad)
-                Button("Cancel", role: .cancel) { }
-                Button("Save") {
+                Button("add.cancel".localized, role: .cancel) { }
+                Button("add.save".localized) {
                     if let newGoal = Int(newGoalText), newGoal > 0 {
                         viewModel.updateDailyGoal(newGoal)
                     }

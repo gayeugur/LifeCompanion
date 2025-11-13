@@ -14,7 +14,6 @@ struct HealthView: View {
     @StateObject private var viewModel = HealthViewModel()
     @EnvironmentObject private var settingsManager: SettingsManager
     @EnvironmentObject private var feedbackManager: FeedbackManager
-
     
     // SwiftData Query for medications - simplified
     @Query(sort: \MedicationEntry.createdAt, order: .reverse) 
@@ -115,9 +114,45 @@ struct HealthView: View {
                     
                     // Check for auto reset
                     viewModel.checkAutoReset(context: modelContext)
+                    
+                    // Debug current water goal
+                    print("🏥 HealthView onAppear - Current water goal: \(settingsManager.dailyWaterGoal)ml")
+                    if let todayIntake = viewModel.todayWaterIntake {
+                        print("🏥 Today's water intake goal: \(todayIntake.dailyGoal)ml")
+                    }
                 } catch {
                 }
             }
+        }
+        .onReceive(settingsManager.objectWillChange) { _ in
+            // Settings değiştiğinde health view'ı güncelle
+            viewModel.updateFromSettings(settingsManager)
+        }
+        .onReceive(NotificationCenter.default.publisher(for: NSNotification.Name("WaterGoalUpdated"))) { notification in
+            // Su hedefi değiştiğinde özel olarak güncelle
+            print("🌊 HealthView received WaterGoalUpdated notification")
+            print("🌊 SettingsManager current value: \(settingsManager.dailyWaterGoal)ml")
+            
+            // Bugünkü intake'i de güncelle
+            if let todayIntake = viewModel.todayWaterIntake {
+                print("🌊 Old goal: \(todayIntake.dailyGoal)ml -> New goal: \(settingsManager.dailyWaterGoal)ml")
+                todayIntake.dailyGoal = settingsManager.dailyWaterGoal
+                
+                do {
+                    try modelContext.save()
+                    print("✅ ModelContext saved successfully")
+                    print("✅ Intake goal now: \(todayIntake.dailyGoal)ml")
+                } catch {
+                    print("❌ Water goal update failed: \(error)")
+                }
+            } else {
+                print("⚠️ No todayWaterIntake found")
+                viewModel.fetchTodayWaterIntake(from: modelContext)
+            }
+            
+            // ViewModel'i güncelle ve UI'ı refresh et
+            viewModel.updateFromSettings(settingsManager)
+            viewModel.objectWillChange.send()
         }
         .sheet(isPresented: $showingBodyMetricsEdit) {
             bodyMetricsEditSheet

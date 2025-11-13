@@ -50,13 +50,9 @@ struct WorkingMemoryGameView: View {
             VStack(spacing: 20) {
                 // Header
                 VStack {
-                    Text("🧠 Memory Game")
+                    Text("🧠" + "memoryGame.title".localized)
                         .font(.largeTitle)
                         .fontWeight(.bold)
-                    
-                    Text(gameMode)
-                        .font(.subheadline)
-                        .foregroundColor(.secondary)
                 }
                 
                 // Game Stats
@@ -125,12 +121,12 @@ struct WorkingMemoryGameView: View {
                     }
                     .buttonStyle(.borderedProminent)
                     
-                    Button("Settings") {
+                    Button("memory.game.settings".localized) {
                         showSettings = true
                     }
                     .buttonStyle(.bordered)
                     
-                    Button("🏆 Scores") {
+                    Button("memoryGame.scores".localized) {
                         showHighScores = true
                     }
                     .buttonStyle(.bordered)
@@ -140,7 +136,7 @@ struct WorkingMemoryGameView: View {
             }
             .padding()
         }
-        .navigationTitle("Memory Game")
+        .navigationTitle("memoryGame.title".localized)
         .navigationBarTitleDisplayMode(.inline)
         .onAppear {
             gridSize = settingsManager.memoryGameDefaultSize
@@ -358,10 +354,10 @@ struct GameSettingsSheet: View {
     @Environment(\.dismiss) private var dismiss
     
     private let gridSizes = [
-        (size: 3, name: "3x3 (Easy)", cards: 9),
-        (size: 4, name: "4x4 (Medium)", cards: 16),
-        (size: 5, name: "5x5 (Hard)", cards: 25),
-        (size: 6, name: "6x6 (Expert)", cards: 36)
+        (size: 3, name: "memoryGame.easy".localized, cards: 9),
+        (size: 4, name: "memoryGame.medium".localized, cards: 16),
+        (size: 5, name: "memoryGame.hard".localized, cards: 25),
+        (size: 6, name: "memoryGame.expert".localized, cards: 36)
     ]
     
     var body: some View {
@@ -370,13 +366,13 @@ struct GameSettingsSheet: View {
                 VStack(spacing: 8) {
                     Text("🧠")
                         .font(.system(size: 50))
-                    Text("Game Settings")
+                    Text("memoryGame.gameSettings".localized)
                         .font(.title)
                         .fontWeight(.bold)
                 }
                 
                 VStack(alignment: .leading, spacing: 16) {
-                    Text("Grid Size")
+                    Text("memoryGame.gridSize".localized)
                         .font(.headline)
                     
                     LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 12) {
@@ -394,7 +390,7 @@ struct GameSettingsSheet: View {
                                     Text(grid.name)
                                         .font(.caption)
                                     
-                                    Text("\(grid.cards) cards")
+                                    Text("memoryGame.cards".localizedFormat(grid.cards))
                                         .font(.caption2)
                                         .foregroundColor(.secondary)
                                 }
@@ -413,11 +409,11 @@ struct GameSettingsSheet: View {
                 Spacer()
             }
             .padding()
-            .navigationTitle("Settings")
+            .navigationTitle("memoryGame.settings".localized)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Done") {
+                    Button("highScores.done".localized) {
                         dismiss()
                     }
                 }

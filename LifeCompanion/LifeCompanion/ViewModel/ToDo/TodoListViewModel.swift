@@ -220,7 +220,7 @@ enum StatusFilter: String, CaseIterable, Identifiable {
     }
     var tint: Color {
         switch self {
-        case .all: return .gray
+        case .all: return .blue
         case .completed: return .green
         case .incomplete: return .red
         }

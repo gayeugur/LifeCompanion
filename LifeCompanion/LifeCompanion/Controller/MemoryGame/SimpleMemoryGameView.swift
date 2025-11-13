@@ -27,7 +27,7 @@ struct SimpleMemoryGameView: View {
             .buttonStyle(.borderedProminent)
         }
         .padding()
-        .navigationTitle("Memory Game")
+        .navigationTitle("memoryGame.title".localized)
         .navigationBarTitleDisplayMode(.large)
     }
 }

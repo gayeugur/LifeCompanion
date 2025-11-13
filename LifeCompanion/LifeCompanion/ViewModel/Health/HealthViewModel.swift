@@ -414,6 +414,7 @@ final class HealthViewModel: ObservableObject {
         // Update current water intake goal if exists and valid (ml-based)
         if let todayIntake = todayWaterIntake, settingsManager.dailyWaterGoal > 0 {
             todayIntake.dailyGoal = settingsManager.dailyWaterGoal // Store goal in ml
+            objectWillChange.send() // UI'ı güncelle
         }
     }
     

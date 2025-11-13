@@ -264,7 +264,7 @@ struct SettingsView: View {
                     Label("settings.habits.show_streak_info".localized, systemImage: "chart.line.uptrend.xyaxis")
                     Spacer()
                     Toggle("", isOn: $settingsManager.showStreakInfo)
-                        .tint(.green)
+                    .tint(.purple)
                 }
              
             }
@@ -293,14 +293,6 @@ struct SettingsView: View {
                                 settingsManager.dailyWaterGoal = goal
                                 print("🎯 Settings: SettingsManager updated to \(settingsManager.dailyWaterGoal)ml")
                                 feedbackManager.lightHaptic()
-                                
-                                // Notify HealthViewModel about the change with context
-                                NotificationCenter.default.post(
-                                    name: NSNotification.Name("WaterGoalUpdated"), 
-                                    object: modelContext, 
-                                    userInfo: ["newGoal": goal]
-                                )
-                                print("🎯 Settings: Notification sent with goal \(goal)ml")
                             }) {
                                 VStack(spacing: 4) {
                                     Text("\(goal)")
@@ -314,7 +306,7 @@ struct SettingsView: View {
                                 .frame(maxWidth: .infinity)
                                 .background(
                                     RoundedRectangle(cornerRadius: 12)
-                                        .fill(settingsManager.dailyWaterGoal == goal ? Color.blue : Color.gray.opacity(0.15))
+                                        .fill(settingsManager.dailyWaterGoal == goal ? Color.purple : Color.gray.opacity(0.15))
                                 )
                                 .foregroundColor(settingsManager.dailyWaterGoal == goal ? .white : .primary)
                             }
@@ -648,11 +640,11 @@ struct SettingsView: View {
                         Text("settings.about.features".localized)
                             .font(.headline)
                         
-                        FeatureRow(icon: "checkmark.circle", title: "settings.about.feature.habits".localized)
+                        FeatureRow(icon: "target", title: "settings.about.feature.habits".localized)
                         FeatureRow(icon: "heart.fill", title: "settings.about.feature.health".localized)
-                        FeatureRow(icon: "brain.head.profile", title: "settings.about.feature.memory".localized)
-                        FeatureRow(icon: "list.bullet", title: "settings.about.feature.todos".localized)
-                        FeatureRow(icon: "om", title: "settings.about.feature.meditation".localized)
+                        FeatureRow(icon: "brain", title: "settings.about.feature.memory".localized)
+                        FeatureRow(icon: "checklist", title: "settings.about.feature.todos".localized)
+                        FeatureRow(icon: "leaf.fill", title: "settings.about.feature.meditation".localized)
                     }
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding()
@@ -681,12 +673,22 @@ struct SettingsView: View {
         let title: String
         
         var body: some View {
-            HStack {
-                Image(systemName: icon)
-                    .foregroundColor(.blue)
-                    .frame(width: 20)
+            HStack(spacing: 12) {
+                ZStack {
+                    Circle()
+                        .fill(Color.blue.opacity(0.15))
+                        .frame(width: 28, height: 28)
+                    
+                    Image(systemName: icon)
+                        .foregroundColor(.blue)
+                        .font(.system(size: 14, weight: .semibold))
+                }
+                
                 Text(title)
                     .font(.subheadline)
+                    .fontWeight(.medium)
+                
+                Spacer()
             }
         }
     }
