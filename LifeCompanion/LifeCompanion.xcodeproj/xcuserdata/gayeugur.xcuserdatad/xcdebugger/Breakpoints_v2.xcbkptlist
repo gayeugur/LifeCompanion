@@ -20,5 +20,51 @@
             landmarkType = "24">
          </BreakpointContent>
       </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "E23280C9-6D76-448D-8E1F-16C82D248E47"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "LifeCompanion/App/LifeCompanionApp.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "40"
+            endingLineNumber = "40"
+            landmarkName = "LifeCompanionApp"
+            landmarkType = "14">
+            <Locations>
+               <Location
+                  uuid = "E23280C9-6D76-448D-8E1F-16C82D248E47 - 6dee86a76bf7a71d"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "LifeCompanion.LifeCompanionApp.appDelegate.getter : LifeCompanion.AppDelegate"
+                  moduleName = "LifeCompanion.debug.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/%3Cstdin%3E"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "0"
+                  endingLineNumber = "0">
+               </Location>
+               <Location
+                  uuid = "E23280C9-6D76-448D-8E1F-16C82D248E47 - 16ec9f659ebb1a3e"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "LifeCompanion.LifeCompanionApp.init() -&gt; LifeCompanion.LifeCompanionApp"
+                  moduleName = "LifeCompanion.debug.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/gayeugur/Desktop/git/LifeCompanion/LifeCompanion/LifeCompanion/App/LifeCompanionApp.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "40"
+                  endingLineNumber = "40">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
    </Breakpoints>
 </Bucket>

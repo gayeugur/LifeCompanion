@@ -158,7 +158,10 @@ final class TodoListViewModel: ObservableObject {
 
     private func formattedTitle(for date: Date) -> String {
         let fmt = DateFormatter()
-        fmt.locale = Locale.current
+        let language = LanguageManager.shared.currentLanguage == "system" ? 
+            Locale.preferredLanguages.first?.components(separatedBy: "-").first ?? "en" : 
+            LanguageManager.shared.currentLanguage
+        fmt.locale = Locale(identifier: language)
         fmt.dateFormat = "d MMMM yyyy, EEEE"
         return fmt.string(from: date)
     }

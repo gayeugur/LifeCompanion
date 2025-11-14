@@ -15,9 +15,14 @@ struct MemoryGameView: View {
     
     var body: some View {
         ZStack {
-            // Background gradient
+            // Orange gradient background matching Memory Game theme
             LinearGradient(
-                colors: [Color.blue.opacity(0.1), Color.purple.opacity(0.1)],
+                colors: [
+                    Color.orange.opacity(0.12),
+                    Color.orange.opacity(0.06),
+                    Color.yellow.opacity(0.04),
+                    Color.clear
+                ],
                 startPoint: .topLeading,
                 endPoint: .bottomTrailing
             )

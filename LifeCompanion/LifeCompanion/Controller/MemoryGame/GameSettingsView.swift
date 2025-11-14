@@ -200,7 +200,7 @@ struct GameSettingsView: View {
                     .font(.caption2)
                     .foregroundColor(viewModel.selectedGridSize == size ? .white.opacity(0.8) : .secondary)
                 
-                Text("\(size.totalCards) " + "memory.cards".localized)
+                Text("\(size.totalCards) " + LanguageManager.shared.getLocalizedString(for: "memory.cards"))
                     .font(.caption2)
                     .foregroundColor(viewModel.selectedGridSize == size ? .white.opacity(0.8) : .secondary)
             }

@@ -8,9 +8,36 @@
 import SwiftUI
 import SwiftData
 import UserNotifications
+import UIKit
+
+// MARK: - App Delegate for Notification Handling
+class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDelegate {
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        // Set notification center delegate
+        UNUserNotificationCenter.current().delegate = self
+        return true
+    }
+    
+    // This method is called when app is in foreground and notification arrives
+    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+        print("📱 Notification received while app is open: \(notification.request.content.title)")
+        
+        // Show notification even when app is open
+        completionHandler([.banner, .sound, .badge])
+    }
+    
+    // This method is called when user taps on notification
+    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
+        print("📱 User tapped notification: \(response.notification.request.content.title)")
+        
+        // Handle notification tap if needed
+        completionHandler()
+    }
+}
 
 @main
 struct LifeCompanionApp: App {
+    @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     
     let container: ModelContainer
     @StateObject private var themeManager = ThemeManager()

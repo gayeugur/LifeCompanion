@@ -28,6 +28,7 @@ struct SettingsView: View {
     @State private var showingEmailAlert = false
     @State private var showingExportFormatAlert = false
     @State private var showingExportError = false
+    @State private var isExporting = false
     
     private let languages = [
         ("system", "🌐 System Default", "Sistem Varsayılanı"),
@@ -154,11 +155,17 @@ struct SettingsView: View {
     private var exportFormatAlert: some View {
         Button(LanguageManager.shared.getLocalizedString(for: "settings.export.format.pdf")) {
             print("🔥 PDF FORMAT SELECTED!")
-            exportUserData(format: .pdf)
+            showingExportFormatAlert = false
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                exportUserData(format: .pdf)
+            }
         }
         Button(LanguageManager.shared.getLocalizedString(for: "settings.export.format.json")) {
             print("🔥 JSON FORMAT SELECTED!")
-            exportUserData(format: .json)
+            showingExportFormatAlert = false
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                exportUserData(format: .json)
+            }
         }
         Button("common.cancel".localized, role: .cancel) { }
     }
@@ -354,11 +361,26 @@ struct SettingsView: View {
                     HStack {
                         Label("settings.privacy.data.export".localized, systemImage: "square.and.arrow.up")
                         Spacer()
-                        Image(systemName: "chevron.right")
-                            .foregroundColor(.secondary)
-                            .font(.caption)
+                        
+                        if isExporting {
+                            ProgressView()
+                                .scaleEffect(0.8)
+                                .foregroundColor(.secondary)
+                        } else {
+                            Button(action: {
+                                print("🔥 EXPORT ICON TAPPED!")
+                                feedbackManager.buttonTap()
+                                showingExportFormatAlert = true
+                            }) {
+                                Image(systemName: "chevron.right")
+                                    .foregroundColor(.secondary)
+                                    .font(.caption)
+                            }
+                            .buttonStyle(PlainButtonStyle())
+                        }
                     }
                 }
+                .disabled(isExporting)
                 .buttonStyle(PlainButtonStyle())
                 
                 Divider()
@@ -399,18 +421,6 @@ struct SettingsView: View {
                 }
                 .buttonStyle(PlainButtonStyle())
                 
-                Divider()
-                
-                Button(action: {}) {
-                    HStack {
-                        Label("settings.about.privacy".localized, systemImage: "doc.text")
-                        Spacer()
-                        Image(systemName: "chevron.right")
-                            .foregroundColor(.secondary)
-                            .font(.caption)
-                    }
-                }
-                .buttonStyle(PlainButtonStyle())
                 
                 Divider()
                 
@@ -736,25 +746,34 @@ struct SettingsView: View {
         // Immediate feedback for better UX
         feedbackManager.buttonTap()
         
+        // Show loading state immediately
+        isExporting = true
+        
         // Run export in background to avoid UI blocking
-        Task.detached(priority: .userInitiated) { @MainActor in
+        Task {
             let context = modelContext
-            let result = await Task {
-                dataManager.exportUserData(context: context, format: format)
+            let result = await Task.detached(priority: .userInitiated) {
+                return dataManager.exportUserData(context: context, format: format)
             }.value
             
-            if let url = result {
-                // Verify file exists
-                if FileManager.default.fileExists(atPath: url.path) {
-                    showShareSheet(url: url)
-                    feedbackManager.successHaptic()
+            // Update UI on main thread
+            await MainActor.run {
+                // Hide loading state
+                isExporting = false
+                
+                if let url = result {
+                    // Verify file exists
+                    if FileManager.default.fileExists(atPath: url.path) {
+                        showShareSheet(url: url)
+                        feedbackManager.successHaptic()
+                    } else {
+                        showingExportError = true
+                        feedbackManager.errorHaptic()
+                    }
                 } else {
                     showingExportError = true
                     feedbackManager.errorHaptic()
                 }
-            } else {
-                showingExportError = true
-                feedbackManager.errorHaptic()
             }
         }
     }
@@ -762,40 +781,43 @@ struct SettingsView: View {
     private func showShareSheet(url: URL) {
         print("🔄 Attempting to show share sheet for: \(url.path)")
         
-        let activityVC = UIActivityViewController(activityItems: [url], applicationActivities: nil)
-        activityVC.excludedActivityTypes = [
-            .assignToContact,
-            .saveToCameraRoll,
-            .postToFlickr,
-            .postToVimeo
-        ]
-        
-        // iPad support
-        if let popover = activityVC.popoverPresentationController,
-           let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-           let window = windowScene.windows.first {
-            popover.sourceView = window.rootViewController?.view
-            popover.sourceRect = CGRect(x: UIScreen.main.bounds.width / 2, y: UIScreen.main.bounds.height / 2, width: 0, height: 0)
-            popover.permittedArrowDirections = []
-        }
-        
-        // Find the topmost presented view controller
-        guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-              let window = windowScene.windows.first,
-              let rootVC = window.rootViewController else {
-            print("❌ Could not find root view controller")
-            showingExportError = true
-            return
-        }
-        
-        var presentingVC = rootVC
-        while let presentedVC = presentingVC.presentedViewController {
-            presentingVC = presentedVC
-        }
-        
-        print("✅ Presenting share sheet from: \(presentingVC)")
-        presentingVC.present(activityVC, animated: true) {
-            print("📱 Share sheet presented successfully")
+        // Ensure we're on main thread for UI operations
+        DispatchQueue.main.async {
+            let activityVC = UIActivityViewController(activityItems: [url], applicationActivities: nil)
+            activityVC.excludedActivityTypes = [
+                .assignToContact,
+                .saveToCameraRoll,
+                .postToFlickr,
+                .postToVimeo
+            ]
+            
+            // iPad support
+            if let popover = activityVC.popoverPresentationController,
+               let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+               let window = windowScene.windows.first {
+                popover.sourceView = window.rootViewController?.view
+                popover.sourceRect = CGRect(x: UIScreen.main.bounds.width / 2, y: UIScreen.main.bounds.height / 2, width: 0, height: 0)
+                popover.permittedArrowDirections = []
+            }
+            
+            // Find the topmost presented view controller
+            guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+                  let window = windowScene.windows.first,
+                  let rootVC = window.rootViewController else {
+                print("❌ Could not find root view controller")
+                self.showingExportError = true
+                return
+            }
+            
+            var presentingVC = rootVC
+            while let presentedVC = presentingVC.presentedViewController {
+                presentingVC = presentedVC
+            }
+            
+            print("✅ Presenting share sheet from: \(presentingVC)")
+            presentingVC.present(activityVC, animated: true) {
+                print("📱 Share sheet presented successfully")
+            }
         }
     }
     

@@ -227,14 +227,19 @@ final class MeditationViewModel: ObservableObject {
         stopAmbientSound()
         
         guard sound != .none, let fileName = sound.fileName else {
+            print("🔇 No sound selected or filename not found for: \(sound)")
             return
         }
         
+        print("🎵 Attempting to play ambient sound: \(sound) with filename: \(fileName)")
+        
         // Try to play from bundle first
         if let path = Bundle.main.path(forResource: fileName, ofType: "mp3") {
+            print("✅ Found audio file at path: \(path)")
             let url = URL(fileURLWithPath: path)
             playAudioFromURL(url, sound: sound)
         } else {
+            print("❌ Audio file not found in bundle for: \(fileName).mp3")
             // Fallback to system sounds for demo
             playSystemSoundForAmbient(sound)
         }
@@ -242,6 +247,8 @@ final class MeditationViewModel: ObservableObject {
     
     private func playAudioFromURL(_ url: URL, sound: AmbientSound) {
         do {
+            print("🎼 Configuring audio session and creating player for: \(sound)")
+            
             // Configure audio session
             try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default)
             try AVAudioSession.sharedInstance().setActive(true)
@@ -252,22 +259,31 @@ final class MeditationViewModel: ObservableObject {
             audioPlayer?.volume = Float(ambientVolume)
             audioPlayer?.prepareToPlay()
             
+            print("🎵 Audio player created successfully, attempting to play...")
+            
             // Start playing
             if audioPlayer?.play() == true {
+                print("✅ Successfully started playing: \(sound)")
                 selectedAmbientSound = sound
                 isAmbientSoundPlaying = true
                 
                 // Haptic feedback
                 let impactFeedback = UIImpactFeedbackGenerator(style: .light)
                 impactFeedback.impactOccurred()
+            } else {
+                print("❌ Failed to start audio player for: \(sound)")
+                playSystemSoundForAmbient(sound)
             }
         } catch {
+            print("❌ Error creating audio player for \(sound): \(error.localizedDescription)")
             // Fallback to system sound
             playSystemSoundForAmbient(sound)
         }
     }
     
     private func playSystemSoundForAmbient(_ sound: AmbientSound) {
+        print("⚠️ Using system sound fallback for: \(sound) - actual audio file not found or failed to load")
+        
         // For demo purposes, we'll simulate playing
         selectedAmbientSound = sound
         isAmbientSoundPlaying = true
@@ -277,6 +293,7 @@ final class MeditationViewModel: ObservableObject {
         impactFeedback.impactOccurred()
         
         // Show message that sound files are needed
+        print("💡 Note: This is just a simulation - no actual audio is being played")
     }
     
     func stopAmbientSound() {

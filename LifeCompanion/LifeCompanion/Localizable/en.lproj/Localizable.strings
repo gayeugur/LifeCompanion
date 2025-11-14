@@ -455,7 +455,7 @@
 "memoryGame.expert" = "6x6 (Expert)";
 "memoryGame.gameSettings" = "Game Settings";
 "memoryGame.gridSize" = "Grid Size";
-"memoryGame.cards" = " %lld cards";
+"memoryGame.cards" = "%d cards";
 "memory.game.welcome" = "Welcome to Memory Game!";
 "memory.game.description" = "Match pairs of cards to win. Flip two cards at a time and try to remember their positions.";
 "memory.game.start" = "Start Game";
@@ -476,7 +476,6 @@
 "memory.stats.matches" = "Matches";
 "memory.game.scores" = "Scores";
 "memory.game.highscores" = "High Scores";
-"memory.cards" = "cards";
 "memory.cards" = "cards";
 
 //Memory Game Players

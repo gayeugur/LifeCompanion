@@ -78,8 +78,8 @@ struct TodoListView: View {
                                 }
                             }
                         }
-                        .padding(.horizontal, 16)
-                        .padding(.bottom, 12)
+                        .padding(.horizontal, 20)
+                        .padding(.vertical, 6)
                     }
                 }
                 .background(
@@ -121,8 +121,8 @@ struct TodoListView: View {
                             }
                         }
                     }
-                    .padding(.horizontal, 12)
-                    .padding(.bottom, 6)
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 8)
                 }
                 .background(
                     RoundedRectangle(cornerRadius: 20)
@@ -239,12 +239,12 @@ struct TodoListView: View {
                         .stroke(isSelected ? tint.opacity(0.7) : Color.gray.opacity(0.3), lineWidth: isSelected ? 2.5 : 1.5)
                 )
         )
-        .scaleEffect(isSelected ? 1.05 : 1.0)
+        .scaleEffect(isSelected ? 1.02 : 1.0)
         .shadow(
-            color: isSelected ? tint.opacity(0.3) : Color.black.opacity(0.1),
-            radius: isSelected ? 8 : 2,
+            color: isSelected ? tint.opacity(0.25) : Color.black.opacity(0.08),
+            radius: isSelected ? 4 : 1,
             x: 0,
-            y: isSelected ? 4 : 1
+            y: isSelected ? 2 : 0.5
         )
     }
     

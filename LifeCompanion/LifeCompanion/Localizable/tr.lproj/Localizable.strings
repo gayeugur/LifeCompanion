@@ -454,7 +454,7 @@
 "memoryGame.expert" = "6x6 (Uzman)";
 "memoryGame.gameSettings" = "Oyun Ayarları";
 "memoryGame.gridSize" = "Izgara Boyutu";
-"memoryGame.cards" = "%lld kart";
+"memoryGame.cards" = "%d kart";
 "memoryGame.selectDifficulty" = "Zorluk Seviyesi Seçin";
 "memory.game.welcome" = "Hafıza Oyununa Hoş Geldiniz!";
 "memory.game.description" = "Kazanmak için kart çiftlerini eşleştirin. Aynı anda iki kart çevirin ve konumlarını hatırlamaya çalışın.";
@@ -476,7 +476,6 @@
 "memory.stats.matches" = "Eşleşme";
 "memory.game.scores" = "Skorlar";
 "memory.game.highscores" = "En İyi Skorlar";
-"memory.cards" = "kart";
 "memory.cards" = "kart";
 
 //Memory Game Players

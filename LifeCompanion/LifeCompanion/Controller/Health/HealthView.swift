@@ -126,33 +126,18 @@ struct HealthView: View {
         }
         .onReceive(settingsManager.objectWillChange) { _ in
             // Settings değiştiğinde health view'ı güncelle
-            viewModel.updateFromSettings(settingsManager)
+            print("🔄 SettingsManager objectWillChange received")
+            updateWaterGoal()
         }
         .onReceive(NotificationCenter.default.publisher(for: NSNotification.Name("WaterGoalUpdated"))) { notification in
             // Su hedefi değiştiğinde özel olarak güncelle
             print("🌊 HealthView received WaterGoalUpdated notification")
-            print("🌊 SettingsManager current value: \(settingsManager.dailyWaterGoal)ml")
-            
-            // Bugünkü intake'i de güncelle
-            if let todayIntake = viewModel.todayWaterIntake {
-                print("🌊 Old goal: \(todayIntake.dailyGoal)ml -> New goal: \(settingsManager.dailyWaterGoal)ml")
-                todayIntake.dailyGoal = settingsManager.dailyWaterGoal
-                
-                do {
-                    try modelContext.save()
-                    print("✅ ModelContext saved successfully")
-                    print("✅ Intake goal now: \(todayIntake.dailyGoal)ml")
-                } catch {
-                    print("❌ Water goal update failed: \(error)")
-                }
-            } else {
-                print("⚠️ No todayWaterIntake found")
-                viewModel.fetchTodayWaterIntake(from: modelContext)
-            }
-            
-            // ViewModel'i güncelle ve UI'ı refresh et
-            viewModel.updateFromSettings(settingsManager)
-            viewModel.objectWillChange.send()
+            updateWaterGoal()
+        }
+        .onChange(of: settingsManager.dailyWaterGoal) { oldValue, newValue in
+            // Su hedefi değiştiğinde direkt güncelle
+            print("🎯 Water goal changed from \(oldValue)ml to \(newValue)ml")
+            updateWaterGoal()
         }
         .sheet(isPresented: $showingBodyMetricsEdit) {
             bodyMetricsEditSheet
@@ -223,6 +208,41 @@ struct HealthView: View {
                 }
             }
         }
+    }
+    
+    // MARK: - Private Methods
+    
+    private func updateWaterGoal() {
+        print("🔄 updateWaterGoal called - New goal: \(settingsManager.dailyWaterGoal)ml")
+        
+        // Bugünkü intake'i güncelle
+        if let todayIntake = viewModel.todayWaterIntake {
+            print("🌊 Old goal: \(todayIntake.dailyGoal)ml -> New goal: \(settingsManager.dailyWaterGoal)ml")
+            todayIntake.dailyGoal = settingsManager.dailyWaterGoal
+            
+            do {
+                try modelContext.save()
+                print("✅ Water goal updated successfully to \(todayIntake.dailyGoal)ml")
+            } catch {
+                print("❌ Water goal update failed: \(error)")
+            }
+        } else {
+            print("⚠️ No todayWaterIntake found, fetching...")
+            viewModel.fetchTodayWaterIntake(from: modelContext)
+            
+            // Tekrar dene
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                if let todayIntake = viewModel.todayWaterIntake {
+                    todayIntake.dailyGoal = settingsManager.dailyWaterGoal
+                    try? modelContext.save()
+                    print("✅ Water goal updated after fetch: \(todayIntake.dailyGoal)ml")
+                }
+            }
+        }
+        
+        // ViewModel'i güncelle ve UI'ı refresh et
+        viewModel.updateFromSettings(settingsManager)
+        viewModel.objectWillChange.send()
     }
     
     // MARK: - Quick Water Button Helper
@@ -306,7 +326,7 @@ struct HealthView: View {
                 Spacer()
                 
                 if let intake = viewModel.todayWaterIntake {
-                    Text("\(intake.totalAmountInMl)ml/\(intake.goalAmountInMl)ml")
+                    Text("\(intake.totalAmountInMl)ml/\(settingsManager.dailyWaterGoal)ml")
                         .font(.title3)
                         .fontWeight(.bold)
                         .foregroundColor(.blue)
@@ -364,8 +384,8 @@ struct HealthView: View {
                             .fontWeight(.bold)
                             .foregroundColor(.primary)
                         
-                        if intake.amountProgressPercentage < 1.0 {
-                            let remainingML = max(0, intake.goalAmountInMl - intake.totalAmountInMl)
+                        if intake.totalAmountInMl < settingsManager.dailyWaterGoal {
+                            let remainingML = max(0, settingsManager.dailyWaterGoal - intake.totalAmountInMl)
                             Text("\(remainingML)ml \("health.water.remaining".localized)")
                                 .font(.caption)
                                 .foregroundColor(.secondary)
