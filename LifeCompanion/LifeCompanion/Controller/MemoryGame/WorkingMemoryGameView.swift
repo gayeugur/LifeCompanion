@@ -155,17 +155,17 @@ struct WorkingMemoryGameView: View {
         .sheet(isPresented: $showHighScores) {
             HighScoresView()
         }
-        .alert("🎉 Game Complete!", isPresented: $isGameComplete) {
-            Button("New Game") {
+        .alert("memoryGame.gameComplete".localized, isPresented: $isGameComplete) {
+            Button("memory.game.new".localized) {
                 startNewGame()
             }
-            Button("View Scores") {
+            Button("memoryGame.viewScores".localized) {
                 showHighScores = true
             }
-            Button("OK") { }
+            Button("common.ok".localized) { }
         } message: {
             let score = calculateScore()
-            Text("Congratulations! You completed the game in \(moves) moves and \(timeString).\n\nYour Score: \(score) points")
+            Text("memory.game.complete.message".localizedFormat(moves, timeString, score))
         }
     }
     

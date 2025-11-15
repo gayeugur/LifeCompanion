@@ -22,19 +22,6 @@ struct AddHabitView: View {
 
     var onSave: (String, HabitFrequency, Int, Date?, [Date]?) -> Void
     
-    enum ReminderType: String, CaseIterable {
-        case none = "none"
-        case daily = "daily"
-        case specificDates = "specificDates"
-        
-        var displayName: String {
-            switch self {
-            case .none: return "reminder.none".localized
-            case .daily: return "reminder.daily".localized
-            case .specificDates: return "reminder.specificDates".localized
-            }
-        }
-    }
     var initialTitle: String?
     
     init(initialTitle: String? = nil, onSave: @escaping (String, HabitFrequency, Int, Date?, [Date]?) -> Void) {

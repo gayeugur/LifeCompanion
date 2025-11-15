@@ -137,7 +137,7 @@ struct EditTodoView: View {
                 // Klavye üstü Done butonu
                 ToolbarItemGroup(placement: .keyboard) {
                     Spacer()
-                    Button("Done") { isFieldFocused = false }
+                    Button("common.done".localized) { isFieldFocused = false }
                 }
 
                 ToolbarItem(placement: .topBarLeading) {
@@ -147,10 +147,10 @@ struct EditTodoView: View {
                     }
                 }
             }
-            .alert(LocalizedStringKey("edit.validation.title"), isPresented: $showValidationAlert) {
-                Button("edit.ok", role: .cancel) {}
+            .alert(LocalizedStringKey("edit.validation.title".localized), isPresented: $showValidationAlert) {
+                Button("edit.ok".localized, role: .cancel) {}
             } message: {
-                Text("edit.validation.message")
+                Text("edit.validation.message".localized)
             }
         }
         .onAppear {

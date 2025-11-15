@@ -181,7 +181,6 @@ struct MemoryCardGrid: View {
     
     // Calculate grid aspect ratio for proper layout
     private var gridAspectRatio: CGFloat {
-        let cardAspectRatio: CGFloat = 1.0 // Square cards
         let spacing: CGFloat = 8
         
         let totalWidth = CGFloat(gridSize.columns) + (CGFloat(gridSize.columns - 1) * spacing / 80) // Approximate spacing ratio
@@ -190,22 +189,4 @@ struct MemoryCardGrid: View {
         return totalWidth / totalHeight
     }
 
-}
-
-// MARK: - Preview
-#Preview {
-    @Previewable @StateObject var viewModel = MemoryGameViewModel()
-    
-    return VStack {
-        MemoryCardView(
-            card: MemoryCard(symbol: "🐶"),
-            onTap: {},
-            viewModel: viewModel
-        )
-        .frame(width: 80, height: 80)
-    }
-    .padding()
-    .onAppear {
-        viewModel.startNewGame()
-    }
 }

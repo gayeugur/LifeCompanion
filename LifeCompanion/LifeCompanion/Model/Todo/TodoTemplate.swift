@@ -5,6 +5,8 @@
 //  Created by gayeugur on 3.11.2025.
 //
 
+
+//For Suggestions Screen
 import Foundation
 import SwiftUI
 

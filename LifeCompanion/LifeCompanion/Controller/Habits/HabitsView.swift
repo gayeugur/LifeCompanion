@@ -130,7 +130,6 @@ struct HabitsView: View {
         .navigationTitle("habits.title".localized)
         .navigationBarTitleDisplayMode(.large)
         .toolbar {
-            // ...existing code...
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button {
                     showingHistory = true

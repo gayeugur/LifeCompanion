@@ -160,7 +160,7 @@ struct AddTodoView: View {
                 // Klavye üstü Done butonu
                 ToolbarItemGroup(placement: .keyboard) {
                     Spacer()
-                    Button("Done") { isFieldFocused = false }
+                    Button("common.done".localized) { isFieldFocused = false }
                 }
 
                 ToolbarItem(placement: .topBarLeading) {
@@ -170,10 +170,10 @@ struct AddTodoView: View {
                     }
                 }
             }
-            .alert(LocalizedStringKey("add.validation.title"), isPresented: $showValidationAlert) {
-                Button("add.ok", role: .cancel) {}
+            .alert(LocalizedStringKey("add.validation.title".localized), isPresented: $showValidationAlert) {
+                Button("add.ok".localized, role: .cancel) {}
             } message: {
-                Text("add.validation.message")
+                Text("add.validation.message".localized)
             }
             .sheet(isPresented: $showingSuggestionsSheet) {
                 TodoSuggestionsSheet { template in

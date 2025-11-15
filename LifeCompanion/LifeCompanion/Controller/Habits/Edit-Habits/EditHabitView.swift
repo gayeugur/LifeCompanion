@@ -7,6 +7,20 @@
 
 import SwiftUI
 
+enum ReminderType: String, CaseIterable {
+    case none = "none"
+    case daily = "daily"
+    case specificDates = "specificDates"
+    
+    var displayName: String {
+        switch self {
+        case .none: return "reminder.none".localized
+        case .daily: return "reminder.daily".localized
+        case .specificDates: return "reminder.specificDates".localized
+        }
+    }
+}
+
 struct EditHabitView: View {
     @Environment(\.dismiss) private var dismiss
     
@@ -21,20 +35,6 @@ struct EditHabitView: View {
     @FocusState private var isFieldFocused: Bool
 
     var onSave: (String, HabitFrequency, Int, Date?, [Date]?) -> Void
-    
-    enum ReminderType: String, CaseIterable {
-        case none = "none"
-        case daily = "daily"
-        case specificDates = "specificDates"
-        
-        var displayName: String {
-            switch self {
-            case .none: return NSLocalizedString("reminder.none", comment: "No Reminder")
-            case .daily: return NSLocalizedString("reminder.daily", comment: "Daily")
-            case .specificDates: return NSLocalizedString("reminder.specificDates", comment: "Specific Dates")
-            }
-        }
-    }
 
     var body: some View {
         NavigationStack {
@@ -72,7 +72,7 @@ struct EditHabitView: View {
                         // Sıklık
                         card {
                             VStack(alignment: .leading, spacing: 10) {
-                                Text(NSLocalizedString("editHabit.frequencyLabel", comment: "Frequency"))
+                                Text(NSLocalizedString("editHabit.frequencyLabel".localized, comment: "Frequency"))
                                     .font(.callout)
                                     .foregroundStyle(.secondary)
                                 Picker("", selection: $frequency) {

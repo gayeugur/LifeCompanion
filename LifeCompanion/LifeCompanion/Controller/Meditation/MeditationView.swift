@@ -825,16 +825,6 @@ struct MeditationView: View {
     }
 }
 
-// MARK: - Timer Functions - Now handled by ViewModel
-
-// MARK: - Ambient Sound Functions
-
-
-// MARK: - Breathing Exercise Functions - Now handled by ViewModel
-
-// MARK: - Data Management - Now handled by ViewModel
-
-// MARK: - Custom Button Style
 struct FloatingButtonStyle: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
         configuration.label

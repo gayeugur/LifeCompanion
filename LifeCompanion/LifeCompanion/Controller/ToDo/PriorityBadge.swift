@@ -42,11 +42,3 @@ struct PriorityBadge: View {
         }
     }
 }
-
-#Preview {
-    HStack {
-        PriorityBadge(priority: .low)
-        PriorityBadge(priority: .medium)
-        PriorityBadge(priority: .high)
-    }
-}
