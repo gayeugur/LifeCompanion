@@ -246,6 +246,7 @@ struct TodoListView: View {
             x: 0,
             y: isSelected ? 2 : 0.5
         )
+        .clipped()
     }
     
     // MARK: - Modern Status Card
@@ -302,6 +303,7 @@ struct TodoListView: View {
             x: 0,
             y: isSelected ? 2 : 1
         )
+        .clipped()
     }
 
     // MARK: - List View
