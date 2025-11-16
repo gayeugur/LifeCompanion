@@ -379,8 +379,6 @@ final class HealthViewModel: ObservableObject {
         
         do {
             todayMedications = try context.fetch(request)
-            for med in todayMedications {
-            }
         } catch {
             todayMedications = []
         }

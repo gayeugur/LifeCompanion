@@ -51,7 +51,7 @@ struct AddMedicationView: View {
                 
                 VStack(spacing: 0) {
                     ScrollView {
-                        VStack(spacing: 24) {
+                        VStack(spacing: 16) {
                             // Header
                             VStack(spacing: 16) {
                                 Image(systemName: "pills.fill")
