@@ -6,7 +6,9 @@
 //
 
 import Foundation
+import SwiftUI
 
+@MainActor
 class MemoryGame: ObservableObject {
     @Published var cards: [MemoryCard] = []
     @Published var gameState: GameState = .notStarted
@@ -21,6 +23,11 @@ class MemoryGame: ObservableObject {
     let gameMode: GameMode
     private var timer: Timer?
     private var matchCheckTimer: Timer?
+    
+    deinit {
+        timer?.invalidate()
+        matchCheckTimer?.invalidate()
+    }
     
     init(gridSize: GridSize, gameMode: GameMode) {
         self.gridSize = gridSize
@@ -83,28 +90,23 @@ class MemoryGame: ObservableObject {
     // MARK: - Game Timer
     private func startTimer() {
         timer?.invalidate()
-        timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
-            self.timeElapsed += 1
+        timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] _ in
+            Task { @MainActor in
+                self?.timeElapsed += 1
+            }
         }
     }
     
     // MARK: - Card Logic
     func flipCard(_ card: MemoryCard) {
-        
-        guard gameState == .playing else { 
-            return 
-        }
-        guard !card.isFlipped && !card.isMatched else { 
-            return 
-        }
-        guard flippedCards.count < 2 else { 
-            return 
-        }
+        guard gameState == .playing else { return }
+        guard !card.isFlipped && !card.isMatched else { return }
+        guard flippedCards.count < 2 else { return }
         
         // Flip the card
         if let index = cards.firstIndex(where: { $0.id == card.id }) {
             cards[index].isFlipped = true
-            moves += 1
+            flippedCards.append(cards[index])
         }
         
         // Check for match if two cards are flipped
@@ -134,7 +136,6 @@ class MemoryGame: ObservableObject {
         for flippedCard in flippedCards {
             if let index = cards.firstIndex(where: { $0.id == flippedCard.id }) {
                 cards[index].isMatched = true
-                cards[index].isShowing = true
             }
         }
         

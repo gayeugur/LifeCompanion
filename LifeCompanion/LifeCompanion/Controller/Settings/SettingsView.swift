@@ -154,14 +154,12 @@ struct SettingsView: View {
     @ViewBuilder 
     private var exportFormatAlert: some View {
         Button(LanguageManager.shared.getLocalizedString(for: "settings.export.format.pdf")) {
-            print("🔥 PDF FORMAT SELECTED!")
             showingExportFormatAlert = false
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                 exportUserData(format: .pdf)
             }
         }
         Button(LanguageManager.shared.getLocalizedString(for: "settings.export.format.json")) {
-            print("🔥 JSON FORMAT SELECTED!")
             showingExportFormatAlert = false
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                 exportUserData(format: .json)
@@ -171,7 +169,6 @@ struct SettingsView: View {
     }
     
 
-    
     // MARK: - General Section
     @ViewBuilder
     private var generalSection: some View {
@@ -256,6 +253,20 @@ struct SettingsView: View {
                     .tint(.purple)
                 }
                 
+                Divider()
+                
+                // Haptic Feedback
+                HStack {
+                    Label("settings.general.haptic_feedback".localized, systemImage: "iphone.radiowaves.left.and.right")
+                    Spacer()
+                    Toggle("", isOn: $feedbackManager.hapticFeedbackEnabled)
+                        .tint(.purple)
+                        .onChange(of: feedbackManager.hapticFeedbackEnabled) { _, newValue in
+                            if newValue {
+                                feedbackManager.lightHaptic()
+                            }
+                        }
+                }
                 
             }
         }
@@ -296,9 +307,7 @@ struct SettingsView: View {
                     ], spacing: 8) {
                         ForEach(waterGoalOptions, id: \.self) { goal in
                             Button(action: {
-                                print("🎯 Settings: Water goal button pressed, changing to \(goal)ml")
                                 settingsManager.dailyWaterGoal = goal
-                                print("🎯 Settings: SettingsManager updated to \(settingsManager.dailyWaterGoal)ml")
                                 feedbackManager.lightHaptic()
                             }) {
                                 VStack(spacing: 4) {
@@ -328,20 +337,33 @@ struct SettingsView: View {
     // MARK: - Memory Game Section
     @ViewBuilder
     private var memoryGameSection: some View {
-        SettingsCard(title: "settings.memory.title".localized, icon: "brain.head.profile") {
+        SettingsCard(title: NSLocalizedString("settings.memory.title", comment: "Memory Game"), icon: "brain.head.profile") {
             VStack(spacing: 16) {
                 // Default Grid Size
                 VStack(alignment: .leading, spacing: 8) {
-                    Label("settings.memory.grid.size".localized, systemImage: "grid")
+                    Label(NSLocalizedString("settings.memory.grid.size", comment: "Default Grid Size"), systemImage: "grid")
                     
-                    Picker("", selection: $settingsManager.memoryGameDefaultSize) {
-                        ForEach(gridSizeOptions, id: \.self) { size in
-                            Text("\(size)×\(size)").tag(size)
+                    if !gridSizeOptions.isEmpty {
+                        Picker("", selection: Binding(
+                            get: { 
+                                gridSizeOptions.contains(settingsManager.memoryGameDefaultSize) ? 
+                                settingsManager.memoryGameDefaultSize : gridSizeOptions.first ?? 4
+                            },
+                            set: { newValue in
+                                if gridSizeOptions.contains(newValue) {
+                                    settingsManager.memoryGameDefaultSize = newValue
+                                    feedbackManager.lightHaptic()
+                                }
+                            }
+                        )) {
+                            ForEach(gridSizeOptions, id: \.self) { size in
+                                Text("\(size)×\(size)").tag(size)
+                            }
                         }
-                    }
-                    .pickerStyle(SegmentedPickerStyle())
-                    .onChange(of: settingsManager.memoryGameDefaultSize) { _, _ in
-                        feedbackManager.lightHaptic()
+                        .pickerStyle(SegmentedPickerStyle())
+                    } else {
+                        Text("No grid options available")
+                            .foregroundColor(.secondary)
                     }
                 }
             }
@@ -354,7 +376,6 @@ struct SettingsView: View {
         SettingsCard(title: "settings.privacy.title".localized, icon: "lock.shield") {
             VStack(spacing: 16) {
                 Button(action: {
-                    print("🔥 EXPORT BUTTON TAPPED!")
                     feedbackManager.buttonTap()
                     showingExportFormatAlert = true
                 }) {
@@ -368,7 +389,6 @@ struct SettingsView: View {
                                 .foregroundColor(.secondary)
                         } else {
                             Button(action: {
-                                print("🔥 EXPORT ICON TAPPED!")
                                 feedbackManager.buttonTap()
                                 showingExportFormatAlert = true
                             }) {
@@ -626,7 +646,7 @@ struct SettingsView: View {
                         .foregroundColor(.red)
                     
                     VStack(spacing: 8) {
-                        Text("LifeCompanion")
+                        Text("Life Companion")
                             .font(.largeTitle)
                             .fontWeight(.bold)
                         
@@ -779,7 +799,6 @@ struct SettingsView: View {
     }
     
     private func showShareSheet(url: URL) {
-        print("🔄 Attempting to show share sheet for: \(url.path)")
         
         // Ensure we're on main thread for UI operations
         DispatchQueue.main.async {
@@ -804,7 +823,6 @@ struct SettingsView: View {
             guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
                   let window = windowScene.windows.first,
                   let rootVC = window.rootViewController else {
-                print("❌ Could not find root view controller")
                 self.showingExportError = true
                 return
             }
@@ -814,10 +832,7 @@ struct SettingsView: View {
                 presentingVC = presentedVC
             }
             
-            print("✅ Presenting share sheet from: \(presentingVC)")
-            presentingVC.present(activityVC, animated: true) {
-                print("📱 Share sheet presented successfully")
-            }
+            presentingVC.present(activityVC, animated: true)
         }
     }
     

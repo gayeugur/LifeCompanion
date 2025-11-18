@@ -44,16 +44,11 @@ final class MedicationEntry: Identifiable {
         let today = calendar.startOfDay(for: Date())
         var scheduledTimes: [Date] = []
         
-        print("🏗️ GENERATING SCHEDULED TIMES")
-        print("   Frequency: \(frequency)")
-        
         guard frequency != .asNeeded, let baseTime = reminderTime else {
-            print("   Result: No scheduled times (asNeeded or no reminder time)")
             return scheduledTimes
         }
         
         let components = calendar.dateComponents([.hour, .minute], from: baseTime)
-        print("   Base time: \(components.hour ?? 0):\(components.minute ?? 0)")
         
         // Generate scheduled times for next 7 days
         for dayOffset in 0..<7 {
@@ -109,10 +104,8 @@ final class MedicationEntry: Identifiable {
         }
         
         let sortedTimes = scheduledTimes.sorted()
-        print("   Generated \(sortedTimes.count) scheduled times for 7 days")
         
         let todayTimes = sortedTimes.filter { calendar.isDateInToday($0) }
-        print("   Today's times: \(todayTimes.count)")
         
         return sortedTimes
     }
@@ -127,8 +120,6 @@ final class MedicationEntry: Identifiable {
         guard todayScheduled.count > 0 else { return 0 }
         
         let percentage = Double(todayTaken.count) / Double(todayScheduled.count)
-        
-        print("📊 \(medicationName): \(todayTaken.count)/\(todayScheduled.count) = \(Int(percentage * 100))%")
         
         return percentage
     }

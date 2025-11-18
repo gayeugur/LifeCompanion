@@ -47,29 +47,20 @@ final class HealthViewModel: ObservableObject {
                   let context = notification.object as? ModelContext else { return }
             
             Task { @MainActor in
-                print("🚰 Water goal notification received: \(newGoal)ml")
-                print("🚰 dailyWaterGoal computed property now returns: \(self.dailyWaterGoal)")
                 
                 // Update today's water intake goal if it exists
                 if let todayIntake = self.todayWaterIntake {
                     let oldGoal = todayIntake.dailyGoal
-                    print("🚰 Updating todayWaterIntake dailyGoal from \(oldGoal) to \(newGoal)")
                     todayIntake.dailyGoal = newGoal
                     
                     // Save the changes to persist the new goal
                     do {
                         try context.save()
-                        print("🚰 Successfully saved water goal to database")
-                    } catch {
-                        print("❌ Error saving water goal update: \(error)")
-                    }
-                } else {
-                    print("⚠️ No todayWaterIntake found to update")
+                    } catch { }
                 }
                 
                 // Force UI refresh to reflect the new goal from SettingsManager
                 self.objectWillChange.send()
-                print("🚰 UI refresh triggered - new goal from SettingsManager: \(self.dailyWaterGoal)ml")
             }
         }
         
@@ -85,7 +76,6 @@ final class HealthViewModel: ObservableObject {
             Task { @MainActor in
                 // Trigger UI update to reflect new reset time
                 self.objectWillChange.send()
-                print("🕐 Reset time updated to: \(newResetTime)")
             }
         }
         

@@ -39,7 +39,7 @@ final class TodoListViewModel: ObservableObject {
             groups[key, default: []].append(todo)
         }
 
-        let sortedKeys = groups.keys.sorted()
+        let sortedKeys = groups.keys.sorted(by: >) // Latest date first
         return sortedKeys.map { date in
             TodoSection(
                 id: "\(date.timeIntervalSince1970)",
@@ -149,11 +149,26 @@ final class TodoListViewModel: ObservableObject {
     // MARK: - Helpers
 
     private func sortTodos(_ a: TodoItem, _ b: TodoItem) -> Bool {
+        // First, prioritize incomplete tasks
         if a.isCompleted != b.isCompleted { return !a.isCompleted }
-        if let ad = a.dueDate, let bd = b.dueDate { return ad < bd }
+        
+        // Second, prioritize "günün önerisi" (today's suggestion) at the top
+        let isASuggestion = a.title.lowercased().contains("günün önerisi") || a.title.lowercased().contains("today's suggestion")
+        let isBSuggestion = b.title.lowercased().contains("günün önerisi") || b.title.lowercased().contains("today's suggestion")
+        
+        if isASuggestion && !isBSuggestion {
+            return true // a (suggestion) comes first
+        } else if !isASuggestion && isBSuggestion {
+            return false // b (suggestion) comes first
+        }
+        
+        // Then sort by due date if available
+        if let ad = a.dueDate, let bd = b.dueDate { return ad > bd } // Latest date first
         if a.dueDate != nil && b.dueDate == nil { return true }
         if a.dueDate == nil && b.dueDate != nil { return false }
-        return a.createdAt < b.createdAt
+        
+        // Finally sort by creation date (latest first)
+        return a.createdAt > b.createdAt
     }
 
     private func formattedTitle(for date: Date) -> String {

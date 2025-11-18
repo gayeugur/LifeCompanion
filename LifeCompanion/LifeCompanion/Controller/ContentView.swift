@@ -58,20 +58,18 @@ struct ContentView: View {
             .onChange(of: scenePhase) { _, newPhase in
                 switch newPhase {
                 case .active:
-                    print("🔄 App became active, checking habit reset...")
                     habitViewModel.configure(settingsManager: settingsManager)
                     habitViewModel.fetchHabits(from: modelContext)
                     habitViewModel.checkAutoReset(in: modelContext, settingsManager: settingsManager)
                 case .background:
-                    print("📱 App went to background")
+                    break
                 case .inactive:
-                    print("😴 App became inactive")
+                    break
                 @unknown default:
                     break
                 }
             }
             .onAppear {
-                print("🚀 ContentView appeared, initial habit reset check...")
                 habitViewModel.configure(settingsManager: settingsManager)
                 habitViewModel.fetchHabits(from: modelContext)
                 habitViewModel.checkAutoReset(in: modelContext, settingsManager: settingsManager)

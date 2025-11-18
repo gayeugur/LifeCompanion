@@ -18,10 +18,33 @@ import SwiftData
 struct TodoListView: View {
     @Environment(\.modelContext) private var modelContext
     @EnvironmentObject private var feedbackManager: FeedbackManager
-    @Query(sort: \TodoItem.createdAt, order: .forward) private var todos: [TodoItem]
+    @Query private var allTodos: [TodoItem]
     @StateObject private var viewModel = TodoListViewModel()
     @State private var showingAddHabit = false
     @State private var selectedTodoForHabit: TodoItem?
+    
+    // Computed property to sort todos by completion status and special rules
+    private var todos: [TodoItem] {
+        return allTodos.sorted { todo1, todo2 in
+            // First, prioritize incomplete tasks
+            if todo1.isCompleted != todo2.isCompleted {
+                return !todo1.isCompleted && todo2.isCompleted // Incomplete tasks first
+            }
+            
+            // Second, prioritize "günün önerisi" (today's suggestion) at the top
+            let isTodo1Suggestion = todo1.title.lowercased().contains("günün önerisi") || todo1.title.lowercased().contains("today's suggestion")
+            let isTodo2Suggestion = todo2.title.lowercased().contains("günün önerisi") || todo2.title.lowercased().contains("today's suggestion")
+            
+            if isTodo1Suggestion && !isTodo2Suggestion {
+                return true // todo1 (suggestion) comes first
+            } else if !isTodo1Suggestion && isTodo2Suggestion {
+                return false // todo2 (suggestion) comes first
+            }
+            
+            // Then sort by createdAt - latest creation date first (today at top, going backwards)
+            return todo1.createdAt > todo2.createdAt // Most recently created first
+        }
+    }
 
     var body: some View {
         let counts = viewModel.counts(for: todos)
@@ -233,18 +256,15 @@ struct TodoListView: View {
         .padding(.vertical, 10)
         .background(
             Capsule()
-                .fill(isSelected ? tint.opacity(0.15) : Color.gray.opacity(0.05))
-                .overlay(
-                    Capsule()
-                        .stroke(isSelected ? tint.opacity(0.7) : Color.gray.opacity(0.3), lineWidth: isSelected ? 2.5 : 1.5)
-                )
+                .fill(isSelected ? tint.opacity(0.12) : Color.secondary.opacity(0.06))
+                .stroke(isSelected ? tint : Color.secondary.opacity(0.2), lineWidth: isSelected ? 1.0 : 0.8)
         )
-        .scaleEffect(isSelected ? 1.02 : 1.0)
+        .scaleEffect(isSelected ? 1.0 : 1.0)
         .shadow(
-            color: isSelected ? tint.opacity(0.25) : Color.black.opacity(0.08),
-            radius: isSelected ? 4 : 1,
+            color: isSelected ? tint.opacity(0.2) : Color.clear,
+            radius: isSelected ? 2 : 0,
             x: 0,
-            y: isSelected ? 2 : 0.5
+            y: isSelected ? 1 : 0
         )
         .clipped()
     }
@@ -290,18 +310,15 @@ struct TodoListView: View {
         .padding(.vertical, 6)
         .background(
             RoundedRectangle(cornerRadius: 12)
-                .fill(isSelected ? tint.opacity(0.08) : Color.primary.opacity(0.05))
-                .overlay(
-                    RoundedRectangle(cornerRadius: 12)
-                        .stroke(isSelected ? tint.opacity(0.7) : Color.primary.opacity(0.3), lineWidth: 2)
-                )
+                .fill(isSelected ? tint.opacity(0.1) : Color.secondary.opacity(0.04))
+                .stroke(isSelected ? tint : Color.secondary.opacity(0.15), lineWidth: isSelected ? 1.0 : 0.5)
         )
-        .scaleEffect(isSelected ? 1.02 : 1.0)
+        .scaleEffect(isSelected ? 1.0 : 1.0)
         .shadow(
-            color: isSelected ? tint.opacity(0.15) : Color.black.opacity(0.03),
-            radius: isSelected ? 4 : 1,
+            color: isSelected ? tint.opacity(0.15) : Color.clear,
+            radius: isSelected ? 3 : 0,
             x: 0,
-            y: isSelected ? 2 : 1
+            y: isSelected ? 1 : 0
         )
         .clipped()
     }

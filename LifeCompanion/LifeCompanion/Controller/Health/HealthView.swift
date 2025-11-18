@@ -115,31 +115,23 @@ struct HealthView: View {
                     // Check for auto reset
                     viewModel.checkAutoReset(context: modelContext)
                     
-                    // Debug current water goal
-                    print("🏥 HealthView onAppear - Current water goal: \(settingsManager.dailyWaterGoal)ml")
-                    if let todayIntake = viewModel.todayWaterIntake {
-                        print("🏥 Today's water intake goal: \(todayIntake.dailyGoal)ml")
-                    }
                 } catch {
                 }
             }
         }
         .onReceive(settingsManager.objectWillChange) { _ in
             // Settings değiştiğinde health view'ı güncelle
-            print("🔄 SettingsManager objectWillChange received")
             updateWaterGoal()
         }
         .onReceive(NotificationCenter.default.publisher(for: NSNotification.Name("WaterGoalUpdated"))) { notification in
             // Su hedefi değiştiğinde özel olarak güncelle
-            print("🌊 HealthView received WaterGoalUpdated notification")
             updateWaterGoal()
         }
         .onChange(of: settingsManager.dailyWaterGoal) { oldValue, newValue in
             // Su hedefi değiştiğinde direkt güncelle
-            print("🎯 Water goal changed from \(oldValue)ml to \(newValue)ml")
             updateWaterGoal()
         }
-        .sheet(isPresented: $showingBodyMetricsEdit) {
+        .fullScreenCover(isPresented: $showingBodyMetricsEdit) {
             bodyMetricsEditSheet
         }
         .alert("health.set.manual.goal".localized, isPresented: $showingManualGoalInput) {
@@ -213,21 +205,15 @@ struct HealthView: View {
     // MARK: - Private Methods
     
     private func updateWaterGoal() {
-        print("🔄 updateWaterGoal called - New goal: \(settingsManager.dailyWaterGoal)ml")
         
         // Bugünkü intake'i güncelle
         if let todayIntake = viewModel.todayWaterIntake {
-            print("🌊 Old goal: \(todayIntake.dailyGoal)ml -> New goal: \(settingsManager.dailyWaterGoal)ml")
             todayIntake.dailyGoal = settingsManager.dailyWaterGoal
             
             do {
                 try modelContext.save()
-                print("✅ Water goal updated successfully to \(todayIntake.dailyGoal)ml")
-            } catch {
-                print("❌ Water goal update failed: \(error)")
-            }
+            } catch { }
         } else {
-            print("⚠️ No todayWaterIntake found, fetching...")
             viewModel.fetchTodayWaterIntake(from: modelContext)
             
             // Tekrar dene
@@ -235,7 +221,6 @@ struct HealthView: View {
                 if let todayIntake = viewModel.todayWaterIntake {
                     todayIntake.dailyGoal = settingsManager.dailyWaterGoal
                     try? modelContext.save()
-                    print("✅ Water goal updated after fetch: \(todayIntake.dailyGoal)ml")
                 }
             }
         }
@@ -666,100 +651,336 @@ struct HealthView: View {
     // MARK: - Body Metrics Card
     @ViewBuilder
     private var bodyMetricsCard: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            HStack {
-                Image(systemName: "figure.arms.open")
-                    .font(.title2)
-                    .foregroundColor(.orange)
-                
-                Text("health.body.metrics".localized)
-                    .font(.headline)
-                    .fontWeight(.semibold)
-                
-                Spacer()
-                
-                Button("health.edit".localized) {
-                    editHeight = String(Int(viewModel.height))
-                    editWeight = String(Int(viewModel.weight))
-                    showingBodyMetricsEdit = true
-                }
-                .font(.caption)
-                .foregroundColor(.blue)
-            }
-            
-            HStack(spacing: 20) {
-                VStack(alignment: .leading) {
-                    Text("health.height".localized)
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                    Text("\(Int(viewModel.height)) cm")
-                        .font(.title3)
-                        .fontWeight(.medium)
-                }
-                
-                VStack(alignment: .leading) {
-                    Text("health.weight".localized)
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                    Text("\(Int(viewModel.weight)) kg")
-                        .font(.title3)
-                        .fontWeight(.medium)
-                }
-                
-                VStack(alignment: .leading) {
-                    Text("health.bmi".localized)
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                    Text(String(format: "%.1f", viewModel.bmi))
-                        .font(.title3)
-                        .fontWeight(.medium)
-                }
-            }
-            
-            Text(viewModel.bmiCategory)
-                .font(.caption)
-                .padding(.horizontal, 12)
-                .padding(.vertical, 6)
-                .background(
-                    Capsule()
-                        .fill(Color.orange.opacity(0.1))
-                        .overlay(
-                            Capsule().stroke(Color.orange.opacity(0.3), lineWidth: 1)
-                        )
-                )
-                .foregroundColor(.orange)
-            
-            Divider()
-            
-            VStack(alignment: .leading, spacing: 8) {
-                Text("health.water.goal".localized)
-                    .font(.subheadline)
-                    .fontWeight(.medium)
-                
+        VStack(alignment: .leading, spacing: 20) {
+            // Header with gradient background
+            VStack(alignment: .leading, spacing: 12) {
                 HStack {
-                    Toggle("health.use.calculated".localized, isOn: Binding(
-                        get: { viewModel.useCalculatedGoal },
-                        set: { _ in viewModel.toggleGoalType(in: modelContext) }
-                    ))
-                        .toggleStyle(SwitchToggleStyle())
+                    ZStack {
+                        Circle()
+                            .fill(LinearGradient(
+                                colors: [.orange.opacity(0.2), .pink.opacity(0.15)],
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
+                            ))
+                            .frame(width: 44, height: 44)
+                        
+                        Image(systemName: "figure.arms.open")
+                            .font(.title2)
+                            .foregroundColor(.orange)
+                    }
                     
-                    Spacer()
-                }
-                
-                HStack {
-                    Text("\("health.daily.goal".localized): \(viewModel.dailyWaterGoal)ml")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text("health.body.metrics".localized)
+                            .font(.title2)
+                            .fontWeight(.bold)
+                            .foregroundColor(.primary)
+                        
+                        Text("Track your health metrics")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                    }
                     
                     Spacer()
                     
-                    if !viewModel.useCalculatedGoal {
-                        Button("health.change".localized) {
-                            manualGoalInput = String(viewModel.manualWaterGoal)
-                            showingManualGoalInput = true
+                    Button {
+                        editHeight = String(Int(viewModel.height))
+                        editWeight = String(Int(viewModel.weight))
+                        showingBodyMetricsEdit = true
+                    } label: {
+                        HStack(spacing: 4) {
+                            Image(systemName: "pencil")
+                                .font(.caption)
+                            Text("health.edit".localized)
+                                .font(.caption)
+                                .fontWeight(.medium)
                         }
-                        .font(.caption)
+                        .padding(.horizontal, 12)
+                        .padding(.vertical, 6)
+                        .background(
+                            Capsule()
+                                .fill(.blue.opacity(0.1))
+                        )
                         .foregroundColor(.blue)
+                    }
+                }
+                
+                // Metrics Cards
+                HStack(spacing: 12) {
+                    // Height Card
+                    VStack(spacing: 8) {
+                        ZStack {
+                            Circle()
+                                .fill(LinearGradient(
+                                    colors: [.green.opacity(0.15), .mint.opacity(0.1)],
+                                    startPoint: .top,
+                                    endPoint: .bottom
+                                ))
+                                .frame(width: 36, height: 36)
+                            
+                            Image(systemName: "ruler")
+                                .font(.system(size: 16, weight: .medium))
+                                .foregroundColor(.green)
+                        }
+                        
+                        VStack(spacing: 2) {
+                            Text("health.height".localized)
+                                .font(.caption2)
+                                .foregroundColor(.secondary)
+                                .textCase(.uppercase)
+                                .fontWeight(.medium)
+                            
+                            Text("\(Int(viewModel.height))")
+                                .font(.title2)
+                                .fontWeight(.bold)
+                                .foregroundColor(.primary)
+                            
+                            Text("cm")
+                                .font(.caption)
+                                .foregroundColor(.green)
+                                .fontWeight(.medium)
+                        }
+                    }
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 16)
+                    .background(
+                        RoundedRectangle(cornerRadius: 16)
+                            .fill(.regularMaterial)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 16)
+                                    .stroke(.green.opacity(0.2), lineWidth: 1)
+                            )
+                    )
+                    
+                    // Weight Card
+                    VStack(spacing: 8) {
+                        ZStack {
+                            Circle()
+                                .fill(LinearGradient(
+                                    colors: [.blue.opacity(0.15), .cyan.opacity(0.1)],
+                                    startPoint: .top,
+                                    endPoint: .bottom
+                                ))
+                                .frame(width: 36, height: 36)
+                            
+                            Image(systemName: "scalemass")
+                                .font(.system(size: 16, weight: .medium))
+                                .foregroundColor(.blue)
+                        }
+                        
+                        VStack(spacing: 2) {
+                            Text("health.weight".localized)
+                                .font(.caption2)
+                                .foregroundColor(.secondary)
+                                .textCase(.uppercase)
+                                .fontWeight(.medium)
+                            
+                            Text("\(Int(viewModel.weight))")
+                                .font(.title2)
+                                .fontWeight(.bold)
+                                .foregroundColor(.primary)
+                            
+                            Text("kg")
+                                .font(.caption)
+                                .foregroundColor(.blue)
+                                .fontWeight(.medium)
+                        }
+                    }
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 16)
+                    .background(
+                        RoundedRectangle(cornerRadius: 16)
+                            .fill(.regularMaterial)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 16)
+                                    .stroke(.blue.opacity(0.2), lineWidth: 1)
+                            )
+                    )
+                    
+                    // BMI Card
+                    VStack(spacing: 8) {
+                        ZStack {
+                            Circle()
+                                .fill(LinearGradient(
+                                    colors: [.orange.opacity(0.15), .yellow.opacity(0.1)],
+                                    startPoint: .top,
+                                    endPoint: .bottom
+                                ))
+                                .frame(width: 36, height: 36)
+                            
+                            Image(systemName: "heart.text.square")
+                                .font(.system(size: 16, weight: .medium))
+                                .foregroundColor(.orange)
+                        }
+                        
+                        VStack(spacing: 2) {
+                            Text("health.bmi".localized)
+                                .font(.caption2)
+                                .foregroundColor(.secondary)
+                                .textCase(.uppercase)
+                                .fontWeight(.medium)
+                            
+                            Text(String(format: "%.1f", viewModel.bmi))
+                                .font(.title2)
+                                .fontWeight(.bold)
+                                .foregroundColor(.primary)
+                            
+                            Text("BMI")
+                                .font(.caption)
+                                .foregroundColor(.orange)
+                                .fontWeight(.medium)
+                        }
+                    }
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 16)
+                    .background(
+                        RoundedRectangle(cornerRadius: 16)
+                            .fill(.regularMaterial)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 16)
+                                    .stroke(.orange.opacity(0.2), lineWidth: 1)
+                            )
+                    )
+                }
+                
+                // BMI Category Badge
+                HStack {
+                    Spacer()
+                    
+                    HStack(spacing: 6) {
+                        Circle()
+                            .fill(getBMIColor(for: viewModel.bmiCategory))
+                            .frame(width: 8, height: 8)
+                        
+                        Text(viewModel.bmiCategory)
+                            .font(.caption)
+                            .fontWeight(.medium)
+                    }
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 8)
+                    .background(
+                        Capsule()
+                            .fill(getBMIColor(for: viewModel.bmiCategory).opacity(0.1))
+                            .overlay(
+                                Capsule().stroke(getBMIColor(for: viewModel.bmiCategory).opacity(0.3), lineWidth: 1)
+                            )
+                    )
+                    .foregroundColor(getBMIColor(for: viewModel.bmiCategory))
+                    
+                    Spacer()
+                }
+            }
+            
+            // Water Goal Section
+            VStack(alignment: .leading, spacing: 16) {
+                Rectangle()
+                    .fill(LinearGradient(
+                        colors: [.blue.opacity(0.1), .cyan.opacity(0.05)],
+                        startPoint: .leading,
+                        endPoint: .trailing
+                    ))
+                    .frame(height: 1)
+                
+                VStack(alignment: .leading, spacing: 12) {
+                    HStack(spacing: 8) {
+                        ZStack {
+                            Circle()
+                                .fill(LinearGradient(
+                                    colors: [.cyan.opacity(0.2), .blue.opacity(0.15)],
+                                    startPoint: .topLeading,
+                                    endPoint: .bottomTrailing
+                                ))
+                                .frame(width: 28, height: 28)
+                            
+                            Image(systemName: "drop.fill")
+                                .font(.system(size: 14, weight: .medium))
+                                .foregroundColor(.cyan)
+                        }
+                        
+                        Text("health.water.goal".localized)
+                            .font(.subheadline)
+                            .fontWeight(.semibold)
+                        
+                        Spacer()
+                    }
+                    
+                    VStack(spacing: 12) {
+                        HStack {
+                            HStack(spacing: 8) {
+                                Image(systemName: viewModel.useCalculatedGoal ? "checkmark.circle.fill" : "circle")
+                                    .foregroundColor(viewModel.useCalculatedGoal ? .green : .secondary)
+                                    .font(.system(size: 16))
+                                
+                                Text("health.use.calculated".localized)
+                                    .font(.callout)
+                                    .fontWeight(.medium)
+                            }
+                            
+                            Spacer()
+                            
+                            Toggle("", isOn: Binding(
+                                get: { viewModel.useCalculatedGoal },
+                                set: { _ in viewModel.toggleGoalType(in: modelContext) }
+                            ))
+                                .toggleStyle(SwitchToggleStyle(tint: .cyan))
+                                .scaleEffect(0.8)
+                        }
+                        
+                        // Goal Display Card
+                        HStack {
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text("health.daily.goal".localized)
+                                    .font(.caption)
+                                    .foregroundColor(.secondary)
+                                    .textCase(.uppercase)
+                                    .fontWeight(.medium)
+                                
+                                HStack(alignment: .bottom, spacing: 2) {
+                                    Text("\(viewModel.dailyWaterGoal)")
+                                        .font(.title3)
+                                        .fontWeight(.bold)
+                                        .foregroundColor(.primary)
+                                    
+                                    Text("ml")
+                                        .font(.caption)
+                                        .foregroundColor(.cyan)
+                                        .fontWeight(.medium)
+                                        .padding(.bottom, 2)
+                                }
+                            }
+                            
+                            Spacer()
+                            
+                            if !viewModel.useCalculatedGoal {
+                                Button {
+                                    manualGoalInput = String(viewModel.manualWaterGoal)
+                                    showingManualGoalInput = true
+                                } label: {
+                                    HStack(spacing: 4) {
+                                        Image(systemName: "slider.horizontal.3")
+                                            .font(.caption)
+                                        Text("health.change".localized)
+                                            .font(.caption)
+                                            .fontWeight(.medium)
+                                    }
+                                    .padding(.horizontal, 10)
+                                    .padding(.vertical, 6)
+                                    .background(
+                                        Capsule()
+                                            .fill(.cyan.opacity(0.1))
+                                    )
+                                    .foregroundColor(.cyan)
+                                }
+                            }
+                        }
+                        .padding(16)
+                        .background(
+                            RoundedRectangle(cornerRadius: 12)
+                                .fill(.regularMaterial)
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 12)
+                                        .stroke(.cyan.opacity(0.2), lineWidth: 1)
+                                )
+                        )
                     }
                 }
             }
@@ -1022,113 +1243,252 @@ struct HealthView: View {
     // MARK: - Body Metrics Edit Sheet
     @ViewBuilder
     private var bodyMetricsEditSheet: some View {
-        NavigationView {
-            VStack(spacing: 24) {
-                VStack(alignment: .leading, spacing: 16) {
+        ZStack {
+            // Background blur
+            Color.black.opacity(0.1)
+                .background(.ultraThinMaterial)
+                .ignoresSafeArea(.all)
+            
+            VStack(spacing: 0) {
+                // Header with close button
+                HStack {
+                    Button(action: {
+                        showingBodyMetricsEdit = false
+                    }) {
+                        Image(systemName: "xmark")
+                            .font(.title2)
+                            .foregroundColor(.primary)
+                            .frame(width: 32, height: 32)
+                            .background(.regularMaterial)
+                            .clipShape(Circle())
+                    }
+                    
+                    Spacer()
+                    
                     Text("health.edit.body.metrics".localized)
                         .font(.title2)
                         .fontWeight(.bold)
-                        .padding(.top)
+                        .foregroundColor(.primary)
                     
-                    Text("health.edit.body.description".localized)
-                        .font(.subheadline)
-                        .foregroundColor(.secondary)
+                    Spacer()
+                    
+                    // Invisible spacer for centering
+                    Rectangle()
+                        .fill(.clear)
+                        .frame(width: 32, height: 32)
                 }
+                .padding(.horizontal, 20)
+                .padding(.top, 20)
+                .padding(.bottom, 30)
                 
-                VStack(spacing: 20) {
+                ScrollView {
+                    VStack(spacing: 24) {
+                        // Description
+                        Text("health.edit.body.description".localized)
+                            .font(.subheadline)
+                            .foregroundColor(.secondary)
+                            .multilineTextAlignment(.center)
+                            .padding(.horizontal, 20)
+
+                
+                // Input fields with modern design
+                VStack(spacing: 16) {
+                    // Height input
                     VStack(alignment: .leading, spacing: 8) {
                         Text("health.height".localized)
                             .font(.subheadline)
                             .fontWeight(.medium)
+                            .foregroundColor(.primary)
                         
-                        HStack {
+                        HStack(spacing: 12) {
                             TextField("170", text: $editHeight)
                                 .keyboardType(.numberPad)
-                                .textFieldStyle(RoundedBorderTextFieldStyle())
+                                .font(.title3)
+                                .fontWeight(.medium)
+                                .padding(.horizontal, 16)
+                                .padding(.vertical, 12)
+                                .background(
+                                    RoundedRectangle(cornerRadius: 12)
+                                        .fill(.ultraThinMaterial)
+                                        .overlay(
+                                            RoundedRectangle(cornerRadius: 12)
+                                                .stroke(Color.blue.opacity(0.3), lineWidth: 1)
+                                        )
+                                )
                             
                             Text("cm")
+                                .font(.subheadline)
                                 .foregroundColor(.secondary)
+                                .fontWeight(.medium)
                         }
                     }
                     
+                    // Weight input
                     VStack(alignment: .leading, spacing: 8) {
                         Text("health.weight".localized)
                             .font(.subheadline)
                             .fontWeight(.medium)
+                            .foregroundColor(.primary)
                         
-                        HStack {
+                        HStack(spacing: 12) {
                             TextField("70", text: $editWeight)
                                 .keyboardType(.numberPad)
-                                .textFieldStyle(RoundedBorderTextFieldStyle())
+                                .font(.title3)
+                                .fontWeight(.medium)
+                                .padding(.horizontal, 16)
+                                .padding(.vertical, 12)
+                                .background(
+                                    RoundedRectangle(cornerRadius: 12)
+                                        .fill(.ultraThinMaterial)
+                                        .overlay(
+                                            RoundedRectangle(cornerRadius: 12)
+                                                .stroke(Color.green.opacity(0.3), lineWidth: 1)
+                                        )
+                                )
                             
                             Text("kg")
+                                .font(.subheadline)
                                 .foregroundColor(.secondary)
+                                .fontWeight(.medium)
                         }
                     }
                 }
+                .padding(.horizontal, 20)
                 
+                // Preview section with enhanced design
                 if let height = Double(editHeight), let weight = Double(editWeight), height > 0, weight > 0 {
                     let newBMI = weight / ((height / 100) * (height / 100))
                     let waterGoal = Int(weight * 35)
+                    let bmiCategory: String = {
+                        switch newBMI {
+                        case ..<18.5:
+                            return "health.bmi.underweight".localized
+                        case 18.5..<25:
+                            return "health.bmi.normal".localized
+                        case 25..<30:
+                            return "health.bmi.overweight".localized
+                        default:
+                            return "health.bmi.obese".localized
+                        }
+                    }()
+                    let bmiColor = getBMIColor(for: bmiCategory)
                     
-                    VStack(spacing: 12) {
-                        Text("health.preview".localized)
-                            .font(.subheadline)
-                            .fontWeight(.medium)
-                            .foregroundColor(.secondary)
+                    VStack(spacing: 16) {
+                        HStack {
+                            Image(systemName: "eye")
+                                .font(.subheadline)
+                                .foregroundColor(.blue)
+                            Text("health.preview".localized)
+                                .font(.subheadline)
+                                .fontWeight(.medium)
+                                .foregroundColor(.blue)
+                        }
                         
-                        HStack(spacing: 20) {
-                            VStack {
+                        HStack(spacing: 16) {
+                            // BMI Preview Card
+                            VStack(spacing: 8) {
                                 Text("health.bmi".localized)
                                     .font(.caption)
                                     .foregroundColor(.secondary)
-                                Text(String(format: "%.1f", newBMI))
-                                    .font(.title3)
                                     .fontWeight(.medium)
+                                
+                                Text(String(format: "%.1f", newBMI))
+                                    .font(.title2)
+                                    .fontWeight(.bold)
+                                    .foregroundColor(bmiColor)
                             }
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, 16)
+                            .background(
+                                RoundedRectangle(cornerRadius: 16)
+                                    .fill(
+                                        LinearGradient(
+                                            colors: [bmiColor.opacity(0.1), bmiColor.opacity(0.05)],
+                                            startPoint: .topLeading,
+                                            endPoint: .bottomTrailing
+                                        )
+                                    )
+                                    .overlay(
+                                        RoundedRectangle(cornerRadius: 16)
+                                            .stroke(bmiColor.opacity(0.2), lineWidth: 1)
+                                    )
+                            )
                             
-                            VStack {
+                            // Water Goal Preview Card
+                            VStack(spacing: 8) {
                                 Text("health.water.goal".localized)
                                     .font(.caption)
                                     .foregroundColor(.secondary)
-                                Text("\(waterGoal)ml")
-                                    .font(.title3)
                                     .fontWeight(.medium)
+                                
+                                Text("\(waterGoal)ml")
+                                    .font(.title2)
+                                    .fontWeight(.bold)
+                                    .foregroundColor(.blue)
                             }
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, 16)
+                            .background(
+                                RoundedRectangle(cornerRadius: 16)
+                                    .fill(
+                                        LinearGradient(
+                                            colors: [Color.blue.opacity(0.1), Color.cyan.opacity(0.05)],
+                                            startPoint: .topLeading,
+                                            endPoint: .bottomTrailing
+                                        )
+                                    )
+                                    .overlay(
+                                        RoundedRectangle(cornerRadius: 16)
+                                            .stroke(Color.blue.opacity(0.2), lineWidth: 1)
+                                    )
+                            )
                         }
-                        .padding()
-                        .background(Color.blue.opacity(0.1))
-                        .cornerRadius(12)
                     }
+                    .padding(.horizontal, 20)
+                    .padding(.bottom, 24)
+                        }
+                    }
+                    .padding(.bottom, 100) // Space for floating save button
                 }
                 
                 Spacer()
-            }
-            .padding()
-            .navigationTitle("health.edit.body.metrics".localized)
-            .navigationBarTitleDisplayMode(.inline)
-            .navigationBarBackButtonHidden(true)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Button("common.cancel".localized) {
+                
+                // Save button at bottom
+                Button(action: {
+                    if let height = Double(editHeight), let weight = Double(editWeight),
+                       height > 0, weight > 0 {
+                        viewModel.updateBodyMetrics(height: height, weight: weight, in: modelContext)
                         showingBodyMetricsEdit = false
                     }
-                }
-                
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("common.save".localized) {
-                        if let height = Double(editHeight), let weight = Double(editWeight),
-                           height > 0, weight > 0 {
-                            viewModel.updateBodyMetrics(height: height, weight: weight, in: modelContext)
-                            showingBodyMetricsEdit = false
-                        }
+                }) {
+                    HStack(spacing: 12) {
+                        Image(systemName: "checkmark.circle.fill")
+                            .font(.title3)
+                        Text("common.save".localized)
+                            .font(.headline)
+                            .fontWeight(.semibold)
                     }
-                    .disabled(editHeight.isEmpty || editWeight.isEmpty || 
-                             Double(editHeight) == nil || Double(editWeight) == nil ||
-                             Double(editHeight)! <= 0 || Double(editWeight)! <= 0)
+                    .foregroundColor(.white)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 16)
+                    .background(
+                        LinearGradient(
+                            colors: [.blue, .blue.opacity(0.8)],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        )
+                    )
+                    .clipShape(RoundedRectangle(cornerRadius: 16))
+                    .shadow(color: .blue.opacity(0.3), radius: 8, x: 0, y: 4)
                 }
+                .disabled(editHeight.isEmpty || editWeight.isEmpty || 
+                         Double(editHeight) == nil || Double(editWeight) == nil ||
+                         Double(editHeight)! <= 0 || Double(editWeight)! <= 0)
+                .padding(.horizontal, 20)
+                .padding(.bottom, 40)
             }
         }
+        .ignoresSafeArea(.keyboard, edges: .bottom)
     }
     
     private func dayOfWeek(_ index: Int) -> String {
@@ -1138,56 +1498,38 @@ struct HealthView: View {
     
     // MARK: - Medication Actions
     private func takeMedication(_ medication: MedicationEntry) {
-        print("\n💊 TAKING MEDICATION: \(medication.medicationName)")
-        print("📋 Frequency: \(medication.frequency)")
-        
+       
         // Debug scheduled times
         let todayScheduled = medication.scheduledTimes.filter { Calendar.current.isDateInToday($0) }
-        print("📅 Total scheduled times: \(medication.scheduledTimes.count)")
-        print("📅 Today scheduled times: \(todayScheduled.count)")
         
         if todayScheduled.isEmpty {
-            print("⚠️ ERROR: No scheduled times for today!")
-            print("� All scheduled times:")
             let formatter = DateFormatter()
             formatter.dateStyle = .medium
             formatter.timeStyle = .short
-            for time in medication.scheduledTimes {
-                print("   - \(formatter.string(from: time))")
-            }
+            for time in medication.scheduledTimes { }
         }
         
         let todayTaken = medication.takenTimes.filter { Calendar.current.isDateInToday($0) }
-        print("✅ Before: \(todayTaken.count)/\(todayScheduled.count)")
-        print("✅ Current completion: \(Int(medication.completionPercentage * 100))%")
         
         // Mark medication as taken
         let currentTime = Date()
         medication.takenTimes.append(currentTime)
-        print("✅ Added taken time: \(currentTime)")
-        
+      
         let newTodayTaken = medication.takenTimes.filter { Calendar.current.isDateInToday($0) }
         let newPercentage = todayScheduled.count > 0 ? Double(newTodayTaken.count) / Double(todayScheduled.count) : 0
-        print("✅ After: \(newTodayTaken.count)/\(todayScheduled.count) = \(Int(newPercentage * 100))%")
-        print("✅ New completion should be: \(Int(medication.completionPercentage * 100))%")
         
         // Save to context with error handling
         do {
             try modelContext.save()
-            print("✅ Context saved successfully")
             
             // Additional debugging - check if data persisted
             let allMeds = try modelContext.fetch(FetchDescriptor<MedicationEntry>())
             if let savedMed = allMeds.first(where: { $0.id == medication.id }) {
                 let savedTodayTaken = savedMed.takenTimes.filter { Calendar.current.isDateInToday($0) }
-                print("✅ Verified - saved medication has \(savedTodayTaken.count) taken times today")
-                print("✅ Verified - completion percentage: \(Int(savedMed.completionPercentage * 100))%")
             }
             
             // SwiftData @Query will automatically refresh the UI
-        } catch {
-            print("❌ Error saving medication: \(error)")
-        }
+        } catch { }
         
         // Haptic feedback
         let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
@@ -1218,6 +1560,22 @@ struct HealthView: View {
         impactFeedback.impactOccurred()
     }
     
+    // MARK: - BMI Color Helper
+    private func getBMIColor(for category: String) -> Color {
+        switch category.lowercased() {
+        case let cat where cat.contains("underweight") || cat.contains("düşük"):
+            return .blue
+        case let cat where cat.contains("normal") || cat.contains("ideal"):
+            return .green
+        case let cat where cat.contains("overweight") || cat.contains("fazla"):
+            return .orange
+        case let cat where cat.contains("obese") || cat.contains("obez"):
+            return .red
+        default:
+            return .orange
+        }
+    }
+    
     // MARK: - Notification Permission
     private func requestNotificationPermission(completion: @escaping (Bool) -> Void) {
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { granted, error in
@@ -1225,7 +1583,6 @@ struct HealthView: View {
                 if let error = error {
                     completion(false)
                 } else {
-                    print(granted ? "✅ Notification permission granted" : "❌ Notification permission denied")
                     completion(granted)
                 }
             }

@@ -22,8 +22,7 @@ class SettingsManager: ObservableObject {
     }
     @AppStorage("defaultReminderTimeData") var defaultReminderTimeData: Data = Data()
     @AppStorage("dailyWaterGoal") var dailyWaterGoal: Int = 2000 {
-        didSet { 
-            print("⚙️ SettingsManager - Water goal changed from \(oldValue) to \(dailyWaterGoal)ml")
+        didSet {
             objectWillChange.send()
             // Su hedefi değiştiğinde özel notification gönder
             NotificationCenter.default.post(
@@ -31,7 +30,6 @@ class SettingsManager: ObservableObject {
                 object: nil,
                 userInfo: ["newGoal": dailyWaterGoal]
             )
-            print("⚙️ SettingsManager - Posted WaterGoalUpdated notification")
         }
     }
     @AppStorage("streakCelebrationEnabled") var streakCelebrationEnabled: Bool = true {

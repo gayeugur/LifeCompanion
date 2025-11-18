@@ -18,6 +18,6 @@ extension String {
     
     func localizedFormat(_ args: CVarArg...) -> String {
         let localized = LanguageManager.shared.getLocalizedString(for: self)
-        return String(format: localized, arguments: args)
+        return String(format: localized, args)
     }
 }

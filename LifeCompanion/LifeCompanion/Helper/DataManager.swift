@@ -15,53 +15,33 @@ class DataManager: ObservableObject {
     
     // MARK: - Data Export
     func exportUserData(context: ModelContext, format: ExportFormat = .json) -> URL? {
-        print("🚀 ExportUserData called with format: \(format)")
-        print("📱 ModelContext provided: \(context)")
         
         do {
-            print("🔄 Starting export with format: \(format)")
             let exportData = try gatherAllUserData(context: context)
-            print("📊 Gathered data - Habits: \(exportData.habits.count), Todos: \(exportData.todos.count), Medications: \(exportData.medications.count), Water: \(exportData.waterIntakes.count), Games: \(exportData.gameScores.count)")
-            
             let tempURL: URL
             
             switch format {
             case .json:
-                print("📄 Creating JSON export...")
                 tempURL = try createJSONExport(exportData: exportData)
             case .pdf:
-                print("📄 Creating Text Report export...")
                 tempURL = try createPDFExport(exportData: exportData)
             }
             
-            print("✅ Export successful, file created at: \(tempURL)")
-            print("🔍 Absolute path: \(tempURL.absoluteString)")
-            
             // Verify file exists
             if !FileManager.default.fileExists(atPath: tempURL.path) {
-                print("❌ File does not exist at path: \(tempURL.path)")
                 return nil
             }
             
             // Check file size
             if let attributes = try? FileManager.default.attributesOfItem(atPath: tempURL.path),
                let fileSize = attributes[.size] as? Int64 {
-                print("📄 File size: \(fileSize) bytes")
                 if fileSize == 0 {
-                    print("❌ File is empty!")
                     return nil
                 }
-            } else {
-                print("⚠️ Could not get file attributes")
             }
             
             return tempURL
         } catch {
-            print("❌ Export failed with error: \(error)")
-            print("❌ Error details: \(error.localizedDescription)")
-            if let decodingError = error as? DecodingError {
-                print("❌ Decoding error: \(decodingError)")
-            }
             return nil
         }
     }
@@ -76,14 +56,7 @@ class DataManager: ObservableObject {
         let tempURL = FileManager.default.temporaryDirectory
             .appendingPathComponent("LifeCompanion_Export_\(dateString).json")
         
-        print("📝 Writing JSON to: \(tempURL.path)")
         try jsonData.write(to: tempURL)
-        
-        // Verify file was written
-        if let jsonString = String(data: jsonData, encoding: .utf8) {
-            print("📄 JSON preview (first 200 chars): \(String(jsonString.prefix(200)))")
-        }
-        
         return tempURL
     }
     
@@ -227,9 +200,6 @@ class DataManager: ObservableObject {
         let tempURL = FileManager.default.temporaryDirectory
             .appendingPathComponent("LifeCompanion_Export_\(dateString).txt")
         
-        print("📝 Writing text report to: \(tempURL.path)")
-        print("📄 Report preview (first 300 chars): \(String(reportContent.prefix(300)))")
-        
         try reportContent.write(to: tempURL, atomically: true, encoding: .utf8)
         
         return tempURL
@@ -262,31 +232,15 @@ class DataManager: ObservableObject {
         return currentY + 8
     }
     
-
-    
     private func gatherAllUserData(context: ModelContext) throws -> ExportData {
-        print("🔄 Starting to gather user data...")
         
-        // Gather all data from different models
         do {
             let habits = try context.fetch(FetchDescriptor<HabitItem>())
-            print("✅ Fetched \(habits.count) habits")
-            
             let todos = try context.fetch(FetchDescriptor<TodoItem>())
-            print("✅ Fetched \(todos.count) todos")
-            
             let medications = try context.fetch(FetchDescriptor<MedicationEntry>())
-            print("✅ Fetched \(medications.count) medications")
-            
             let waterIntakes = try context.fetch(FetchDescriptor<WaterIntake>())
-            print("✅ Fetched \(waterIntakes.count) water intakes")
-            
             let gameScores = try context.fetch(FetchDescriptor<GameScore>())
-            print("✅ Fetched \(gameScores.count) game scores")
-            
-            print("📊 Raw data counts - Habits: \(habits.count), Todos: \(todos.count), Medications: \(medications.count), Water: \(waterIntakes.count), Games: \(gameScores.count)")
-            
-            print("🔄 Converting to export format...")
+         
             let exportData = ExportData(
                 exportDate: Date(),
                 appVersion: "1.0.0",
@@ -294,7 +248,6 @@ class DataManager: ObservableObject {
                     do {
                         return ExportHabit(from: $0)
                     } catch {
-                        print("❌ Error converting habit '\($0.title)': \(error)")
                         return nil
                     }
                 },
@@ -302,7 +255,6 @@ class DataManager: ObservableObject {
                     do {
                         return ExportTodo(from: $0)
                     } catch {
-                        print("❌ Error converting todo '\($0.title)': \(error)")
                         return nil
                     }
                 },
@@ -310,7 +262,6 @@ class DataManager: ObservableObject {
                     do {
                         return ExportMedication(from: $0)
                     } catch {
-                        print("❌ Error converting medication '\($0.medicationName)': \(error)")
                         return nil
                     }
                 },
@@ -318,7 +269,6 @@ class DataManager: ObservableObject {
                     do {
                         return ExportWaterIntake(from: $0)
                     } catch {
-                        print("❌ Error converting water intake: \(error)")
                         return nil
                     }
                 },
@@ -326,23 +276,13 @@ class DataManager: ObservableObject {
                     do {
                         return ExportGameScore(from: $0)
                     } catch {
-                        print("❌ Error converting game score: \(error)")
                         return nil
                     }
                 }
             )
-            print("✅ Export data created successfully")
-            
-            // If no data exists, add some sample data indication
-            if exportData.habits.isEmpty && exportData.todos.isEmpty && 
-               exportData.medications.isEmpty && exportData.waterIntakes.isEmpty && 
-               exportData.gameScores.isEmpty {
-                print("⚠️ No user data found - export will show empty report")
-            }
-            
+         
             return exportData
         } catch {
-            print("❌ Error fetching data: \(error)")
             throw error
         }
     }

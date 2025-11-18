@@ -196,12 +196,6 @@ struct EditTodoView: View {
             return
         }
 
-        print("🔄 Updating Todo:")
-        print("   Original: '\(todo.title)' -> New: '\(trimmed)'")
-        print("   Notes: '\(todo.notes ?? "nil")' -> '\(subtitle)'")
-        print("   Priority: \(todo.priority) -> \(priority)")
-        print("   Due Date: \(String(describing: todo.dueDate)) -> \(enableReminder ? String(describing: dueDate) : "nil")")
-
         // Cancel old notification first
         cancelNotification(for: todo)
 
@@ -211,15 +205,8 @@ struct EditTodoView: View {
         todo.priority = priority
         todo.dueDate = enableReminder ? dueDate : nil
 
-        print("✏️ Updated todo object:")
-        print("   Title: '\(todo.title)'")
-        print("   Notes: '\(todo.notes ?? "nil")'")
-        print("   Priority: \(todo.priority)")
-        print("   Due Date: \(String(describing: todo.dueDate))")
-
         do {
             try modelContext.save()
-            print("✅ ModelContext saved successfully!")
             
             // Schedule new notification if needed
             if enableReminder, let _ = todo.dueDate, !todo.isCompleted {
@@ -227,9 +214,7 @@ struct EditTodoView: View {
             }
             
             dismiss()
-        } catch {
-            print("❌ Failed to save modelContext: \(error)")
-        }
+        } catch { }
     }
 
     private func cancelNotification(for todo: TodoItem) {

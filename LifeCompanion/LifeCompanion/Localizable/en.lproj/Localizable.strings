@@ -549,6 +549,7 @@
 "settings.general.darkmode" = "Dark Mode";
 "settings.general.language" = "Language";
 "settings.general.notifications" = "Notifications";
+"settings.general.haptic_feedback" = "Haptic Feedback";
 "settings.habits.title" = "Habits";
 "settings.habits.reminder.time" = "Default Reminder Time";
 "settings.habits.show_streak_info" = "Show Streak Info";
@@ -621,3 +622,5 @@
 "common.done" = "Done";
 "common.copy" = "Copy";
 "common.ok" = "OK";
+
+"coming.soon" = "Coming Soon!";

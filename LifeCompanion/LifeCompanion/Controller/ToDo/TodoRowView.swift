@@ -52,7 +52,6 @@ struct TodoRowView: View {
         .padding(.vertical, 4)
         .id(refreshID)
         .sheet(isPresented: $showingEditSheet, onDismiss: {
-            print("📱 TodoRowView: EditSheet dismissed, force refreshing view...")
             // Force complete view refresh by changing ID
             refreshID = UUID()
         }) {

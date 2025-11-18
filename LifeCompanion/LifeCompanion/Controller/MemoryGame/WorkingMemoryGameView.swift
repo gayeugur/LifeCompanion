@@ -28,6 +28,7 @@ struct WorkingMemoryGameView: View {
     @State private var isGameComplete = false
     @State private var showSettings = false
     @State private var showHighScores = false
+    @State private var isViewActive = true
     
     // Available symbols for cards
     private let symbols = ["🐶", "🐱", "🐭", "🐹", "🐰", "🦊", "🐻", "🐼", "🐨", "🐯", "🦁", "🐸", "🐵", "🐧", "🐔", "🦆", "🍎", "🍌", "🍊", "🍇", "🍓", "🥝", "🍑", "🥕"]
@@ -97,16 +98,7 @@ struct WorkingMemoryGameView: View {
                 )
                 
                 // Game Grid
-                LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 8), count: gridSize), spacing: 8) {
-                    ForEach(0..<cards.count, id: \.self) { index in
-                        GameCardView(
-                            symbol: cards[index],
-                            isFlipped: flippedIndices.contains(index) || matchedIndices.contains(index),
-                            isMatched: matchedIndices.contains(index),
-                            onTap: { cardTapped(index) }
-                        )
-                    }
-                }
+                gameGridView
                 .padding()
                 .background(
                     RoundedRectangle(cornerRadius: 20)
@@ -116,12 +108,12 @@ struct WorkingMemoryGameView: View {
                 
                 // Game Controls
                 HStack(spacing: 12) {
-                    Button("New Game") {
+                    Button("memoryGame.newGame".localized) {
                         startNewGame()
                     }
                     .buttonStyle(.borderedProminent)
                     
-                    Button("memory.game.settings".localized) {
+                    Button("memoryGame.settings".localized) {
                         showSettings = true
                     }
                     .buttonStyle(.bordered)
@@ -139,8 +131,14 @@ struct WorkingMemoryGameView: View {
         .navigationTitle("memoryGame.title".localized)
         .navigationBarTitleDisplayMode(.inline)
         .onAppear {
+            isViewActive = true
             gridSize = settingsManager.memoryGameDefaultSize
             startNewGame()
+        }
+        .onDisappear {
+            isViewActive = false
+            gameTimer?.invalidate()
+            gameTimer = nil
         }
         .sheet(isPresented: $showSettings) {
             GameSettingsSheet(
@@ -153,7 +151,18 @@ struct WorkingMemoryGameView: View {
             )
         }
         .sheet(isPresented: $showHighScores) {
-            HighScoresView()
+            VStack {
+                Text("highScores.title".localized)
+                    .font(.title)
+                Text("coming.soon".localized)
+                    .foregroundColor(.secondary)
+                Button("common.ok".localized) {
+                    showHighScores = false
+                }
+                .buttonStyle(.borderedProminent)
+                .padding()
+            }
+            .padding()
         }
         .alert("memoryGame.gameComplete".localized, isPresented: $isGameComplete) {
             Button("memory.game.new".localized) {
@@ -165,7 +174,7 @@ struct WorkingMemoryGameView: View {
             Button("common.ok".localized) { }
         } message: {
             let score = calculateScore()
-            Text("memory.game.complete.message".localizedFormat(moves, timeString, score))
+            Text("memory.game.complete.message".localizedFormat(timeString, "\(moves)", "\(score)"))
         }
     }
     
@@ -173,6 +182,32 @@ struct WorkingMemoryGameView: View {
         let minutes = timer / 60
         let seconds = timer % 60
         return String(format: "%02d:%02d", minutes, seconds)
+    }
+    
+    private var gameGridView: some View {
+        Group {
+            if !cards.isEmpty {
+                LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 8), count: max(1, gridSize)), spacing: 8) {
+                    ForEach(cards.indices, id: \.self) { index in
+                        if index < cards.count {
+                            GameCardView(
+                                symbol: cards[index],
+                                isFlipped: flippedIndices.contains(index) || matchedIndices.contains(index),
+                                isMatched: matchedIndices.contains(index),
+                                onTap: { 
+                                    if isViewActive {
+                                        cardTapped(index) 
+                                    }
+                                }
+                            )
+                        }
+                    }
+                }
+            } else {
+                ProgressView("Loading game...")
+                    .frame(height: 200)
+            }
+        }
     }
     
     private func calculateScore() -> Int {
@@ -184,16 +219,15 @@ struct WorkingMemoryGameView: View {
     }
     
     private func saveScore() {
-        let gameScore = GameScore(
-            gridSize: gridSize,
-            moves: moves,
-            timeInSeconds: timer
-        )
-        modelContext.insert(gameScore)
+        guard isViewActive else { return }
         
-        do {
-            try modelContext.save()
-        } catch {
+        // Save to UserDefaults for now (simple implementation)
+        let key = "bestScore_\\(gridSize)x\\(gridSize)"
+        let currentBest = UserDefaults.standard.integer(forKey: key)
+        let newScore = calculateScore()
+        
+        if currentBest == 0 || newScore > currentBest {
+            UserDefaults.standard.set(newScore, forKey: key)
         }
     }
     
@@ -213,7 +247,10 @@ struct WorkingMemoryGameView: View {
         
         // Start timer
         gameTimer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
-            timer += 1
+            guard self.isViewActive else { return }
+            DispatchQueue.main.async {
+                self.timer += 1
+            }
         }
     }
     
@@ -235,13 +272,17 @@ struct WorkingMemoryGameView: View {
     }
     
     private func cardTapped(_ index: Int) {
-        // Prevent tapping matched cards or if too many cards are flipped
+        // Safety checks
+        guard isViewActive else { return }
+        guard index >= 0 && index < cards.count else { return }
         guard !matchedIndices.contains(index) else { return }
         guard !flippedIndices.contains(index) else { return }
         guard flippedIndices.count < 2 else { return }
         
         // Play card flip feedback
-        feedbackManager.cardFlip()
+        DispatchQueue.main.async {
+            self.feedbackManager.cardFlip()
+        }
         
         // Flip the card
         flippedIndices.insert(index)
@@ -249,12 +290,18 @@ struct WorkingMemoryGameView: View {
         // Check for match when two cards are flipped
         if flippedIndices.count == 2 {
             moves += 1
-            checkForMatch()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                self.checkForMatch()
+            }
         }
     }
     
     private func checkForMatch() {
+        guard isViewActive else { return }
         let indices = Array(flippedIndices)
+        guard indices.count == 2 else { return }
+        guard indices[0] < cards.count && indices[1] < cards.count else { return }
+        
         let firstCard = cards[indices[0]]
         let secondCard = cards[indices[1]]
         
@@ -268,16 +315,19 @@ struct WorkingMemoryGameView: View {
             // Check if game is complete
             if matchedIndices.count == cards.count {
                 gameTimer?.invalidate()
+                gameTimer = nil
                 saveScore() // Save the score before showing completion
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                    isGameComplete = true
+                    guard self.isViewActive else { return }
+                    self.isGameComplete = true
                 }
             }
         } else {
             // No match - flip back after delay
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                guard self.isViewActive else { return }
                 withAnimation(.easeInOut) {
-                    flippedIndices.removeAll()
+                    self.flippedIndices.removeAll()
                 }
             }
         }
@@ -390,7 +440,7 @@ struct GameSettingsSheet: View {
                                     Text(grid.name)
                                         .font(.caption)
                                     
-                                    Text("memoryGame.cards".localizedFormat(grid.cards))
+                                    Text(String(format: NSLocalizedString("memoryGame.cards", comment: "Cards: %d"), grid.cards))
                                         .font(.caption2)
                                         .foregroundColor(.secondary)
                                 }

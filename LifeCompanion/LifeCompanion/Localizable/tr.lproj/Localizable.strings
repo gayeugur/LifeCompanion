@@ -549,6 +549,7 @@
 "settings.general.darkmode" = "Karanlık Mod";
 "settings.general.language" = "Dil";
 "settings.general.notifications" = "Bildirimler";
+"settings.general.haptic_feedback" = "Titreşim Geri Bildirimi";
 "settings.habits.title" = "Alışkanlıklar";
 "settings.habits.reminder.time" = "Varsayılan Hatırlatma Saati";
 "settings.habits.show_streak_info" = "Seri Bilgilerini Göster";
@@ -621,3 +622,5 @@
 "common.done" = "Tamam";
 "common.copy" = "Kopyala";
 "common.ok" = "Tamam";
+
+"coming.soon" = "Çok Yakında!";

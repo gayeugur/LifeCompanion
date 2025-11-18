@@ -6,13 +6,13 @@
 //
 
 import Foundation
+import SwiftUI
 
 struct MemoryCard: Identifiable, Equatable {
     let id = UUID()
     let symbol: String
     var isFlipped: Bool = false
     var isMatched: Bool = false
-    var isShowing: Bool = false
     
     static func == (lhs: MemoryCard, rhs: MemoryCard) -> Bool {
         return lhs.id == rhs.id

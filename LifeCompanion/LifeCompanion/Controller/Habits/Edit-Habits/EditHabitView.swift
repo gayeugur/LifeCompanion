@@ -59,10 +59,10 @@ struct EditHabitView: View {
                         // Başlık
                         card {
                             VStack(alignment: .leading, spacing: 10) {
-                                Text(NSLocalizedString("editHabit.nameLabel", comment: "Habit Name"))
+                                Text("editHabit.nameLabel".localized)
                                     .font(.callout)
                                     .foregroundStyle(.secondary)
-                                TextField(NSLocalizedString("editHabit.namePlaceholder", comment: "Enter habit name"), text: $title)
+                                TextField("editHabit.namePlaceholder".localized, text: $title)
                                     .focused($isFieldFocused)
                                     .padding(14)
                                     .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 16))
@@ -72,7 +72,7 @@ struct EditHabitView: View {
                         // Sıklık
                         card {
                             VStack(alignment: .leading, spacing: 10) {
-                                Text(NSLocalizedString("editHabit.frequencyLabel".localized, comment: "Frequency"))
+                                Text("editHabit.frequencyLabel".localized)
                                     .font(.callout)
                                     .foregroundStyle(.secondary)
                                 Picker("", selection: $frequency) {
@@ -87,21 +87,21 @@ struct EditHabitView: View {
                         // Hedef
                         card {
                             VStack(alignment: .leading, spacing: 10) {
-                                Text(NSLocalizedString("editHabit.targetLabel", comment: "Daily Target"))
+                                Text("editHabit.targetLabel".localized)
                                     .font(.callout)
                                     .foregroundStyle(.secondary)
-                                Stepper("\(frequency.displayName) \(targetCount) \(NSLocalizedString("editHabit.times", comment: "times"))", value: $targetCount, in: 1...50)
+                                Stepper("\(frequency.displayName) \(targetCount) \("editHabit.times".localized)", value: $targetCount, in: 1...50)
                             }
                         }
                         
                         // Hatırlatma
                         card {
                             VStack(alignment: .leading, spacing: 15) {
-                                Text(NSLocalizedString("editHabit.reminderLabel", comment: "Reminders"))
+                                Text("editHabit.reminderLabel".localized)
                                     .font(.callout)
                                     .foregroundStyle(.secondary)
                                 
-                                Picker(NSLocalizedString("reminder.type", comment: "Reminder Type"), selection: $reminderType) {
+                                Picker("reminder.type".localized, selection: $reminderType) {
                                     ForEach(ReminderType.allCases, id: \.self) { type in
                                         Text(type.displayName).tag(type)
                                     }
@@ -110,7 +110,7 @@ struct EditHabitView: View {
                                 
                                 if reminderType == .daily {
                                     VStack(alignment: .leading, spacing: 8) {
-                                        Text(NSLocalizedString("reminder.daily.time", comment: "Daily reminder time:"))
+                                        Text("reminder.daily.time".localized)
                                             .font(.subheadline)
                                             .foregroundStyle(.secondary)
                                         
@@ -130,14 +130,14 @@ struct EditHabitView: View {
                                 if reminderType == .specificDates {
                                     VStack(alignment: .leading, spacing: 8) {
                                         HStack {
-                                            Text(NSLocalizedString("reminder.specificDates.select", comment: "Select dates:"))
+                                            Text("reminder.specificDates.select".localized)
                                                 .font(.subheadline)
                                                 .foregroundStyle(.secondary)
                                             
                                             Spacer()
                                             
                                             if !reminderDates.isEmpty {
-                                                Text("\(reminderDates.count) \(NSLocalizedString("reminder.dates.selected", comment: "dates selected"))")
+                                                Text("\(reminderDates.count) \("reminder.dates.selected".localized)")
                                                     .font(.caption)
                                                     .foregroundStyle(.green)
                                             }
@@ -146,7 +146,7 @@ struct EditHabitView: View {
                                         // Time selector for specific dates
                                         if !reminderDates.isEmpty {
                                             VStack(alignment: .leading, spacing: 4) {
-                                                Text(NSLocalizedString("reminder.time", comment: "Reminder time:"))
+                                                Text("reminder.time".localized)
                                                     .font(.caption)
                                                     .foregroundStyle(.secondary)
                                                 
@@ -186,7 +186,7 @@ struct EditHabitView: View {
                                         // Selected dates list
                                         if !reminderDates.isEmpty {
                                             VStack(alignment: .leading, spacing: 4) {
-                                                Text(NSLocalizedString("reminder.selectedDates", comment: "Selected dates:"))
+                                                Text("reminder.selectedDates".localized)
                                                     .font(.caption)
                                                     .foregroundStyle(.secondary)
                                                 
@@ -234,7 +234,7 @@ struct EditHabitView: View {
                            finalReminderDates)
                     dismiss()
                 } label: {
-                    Text(NSLocalizedString("editHabit.updateButton", comment: "Update Habit"))
+                    Text("editHabit.updateButton".localized)
                         .font(.headline)
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 18)
@@ -255,7 +255,7 @@ struct EditHabitView: View {
                 .ignoresSafeArea(.keyboard, edges: .bottom)
             }
         }
-            .navigationTitle(NSLocalizedString("editHabit.title", comment: "Edit Habit"))
+            .navigationTitle("editHabit.title".localized)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 
