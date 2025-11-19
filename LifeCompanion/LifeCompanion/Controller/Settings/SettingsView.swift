@@ -337,11 +337,11 @@ struct SettingsView: View {
     // MARK: - Memory Game Section
     @ViewBuilder
     private var memoryGameSection: some View {
-        SettingsCard(title: NSLocalizedString("settings.memory.title", comment: "Memory Game"), icon: "brain.head.profile") {
+        SettingsCard(title: "settings.memory.title".localized, icon: "brain.head.profile") {
             VStack(spacing: 16) {
                 // Default Grid Size
                 VStack(alignment: .leading, spacing: 8) {
-                    Label(NSLocalizedString("settings.memory.grid.size", comment: "Default Grid Size"), systemImage: "grid")
+                    Label("settings.memory.grid.size".localized, systemImage: "grid")
                     
                     if !gridSizeOptions.isEmpty {
                         Picker("", selection: Binding(

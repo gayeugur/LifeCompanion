@@ -1,3 +1,10 @@
+"highScores.bestOverall" = "En İyi Genel Skor";
+"highScores.clearAll" = "Tüm Skorları Temizle";
+"highScores.tip1" = "• Oyunları tamamlayarak puan kazan";
+"highScores.tip2" = "• Daha hızlı bitir = daha yüksek skor";
+"highScores.tip3" = "• Daha az hamle = daha çok puan";
+"highScores.tip4" = "• Farklı zorlukları dene";
+"highScores.difficulty.custom" = "Özel";
 /* 
   Localizable.strings
   LifeCompanion
@@ -42,7 +49,7 @@
 "priority.high" = "Yüksek";
 "filter.time.all" = "Tüm Görevler";
 "filter.time.today" = "Bugün";
-"filter.time.thisWeek" = "Gelecek";
+"filter.time.thisWeek" = "Planlanan";
 "filter.time.overdue" = "Gecikenler";
 "filter.status.all" = "Tümü";
 "filter.status.completed" = "Tamamlanan";

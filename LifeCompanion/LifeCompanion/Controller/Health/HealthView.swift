@@ -44,6 +44,15 @@ struct HealthView: View {
     @State private var showingDeleteAlert = false
     @State private var medicationToDelete: MedicationEntry?
     
+    // Water Goal Settings
+    @State private var showingWaterGoalSettings = false
+    
+    // Water goal options (in ml)
+    private let waterGoalOptions = [1500, 2000, 2500, 3000, 3500, 4000]
+    
+    // Medication refresh trigger
+    @State private var medicationRefreshTrigger = UUID()
+    
     var body: some View {
         Group {
             if viewModel.todayWaterIntake != nil {
@@ -125,10 +134,12 @@ struct HealthView: View {
         }
         .onReceive(NotificationCenter.default.publisher(for: NSNotification.Name("WaterGoalUpdated"))) { notification in
             // Su hedefi değiştiğinde özel olarak güncelle
+            // Debug: Water goal notification received
             updateWaterGoal()
         }
         .onChange(of: settingsManager.dailyWaterGoal) { oldValue, newValue in
             // Su hedefi değiştiğinde direkt güncelle
+            // Debug: onChange detected
             updateWaterGoal()
         }
         .fullScreenCover(isPresented: $showingBodyMetricsEdit) {
@@ -179,6 +190,44 @@ struct HealthView: View {
                 Text(String(format: "health.delete.confirmation.message".localized, medication.medicationName))
             }
         }
+        .confirmationDialog(
+            "Water Goal Settings",
+            isPresented: $showingWaterGoalSettings,
+            presenting: waterGoalOptions
+        ) { options in
+            ForEach(options, id: \.self) { goal in
+                Button("\(goal)ml") {
+                    // Update settings manager first
+                    settingsManager.dailyWaterGoal = goal
+                    
+                    // Force immediate update of today's water intake
+                    if let todayIntake = viewModel.todayWaterIntake {
+                        todayIntake.dailyGoal = goal
+                        
+                        // Save changes to SwiftData
+                        do {
+                            try modelContext.save()
+                        } catch {
+                            print("Failed to save water goal: \(error)")
+                        }
+                    }
+                    
+                    // Update view model
+                    viewModel.updateFromSettings(settingsManager)
+                    
+                    // Trigger UI refresh
+                    DispatchQueue.main.async {
+                        viewModel.objectWillChange.send()
+                    }
+                    
+                    feedbackManager.lightHaptic()
+                }
+            }
+            
+            Button("Cancel", role: .cancel) { }
+        } message: { _ in
+            Text("Select your daily water goal")
+        }
         .sheet(isPresented: $showingAddMedication) {
             AddMedicationView { medication in
                 // Add medication to context
@@ -205,14 +254,15 @@ struct HealthView: View {
     // MARK: - Private Methods
     
     private func updateWaterGoal() {
-        
         // Bugünkü intake'i güncelle
         if let todayIntake = viewModel.todayWaterIntake {
             todayIntake.dailyGoal = settingsManager.dailyWaterGoal
             
             do {
                 try modelContext.save()
-            } catch { }
+            } catch { 
+                print("Failed to save water goal: \(error)")
+            }
         } else {
             viewModel.fetchTodayWaterIntake(from: modelContext)
             
@@ -228,6 +278,11 @@ struct HealthView: View {
         // ViewModel'i güncelle ve UI'ı refresh et
         viewModel.updateFromSettings(settingsManager)
         viewModel.objectWillChange.send()
+        
+        // Force UI refresh after a small delay
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
+            viewModel.objectWillChange.send()
+        }
     }
     
     // MARK: - Quick Water Button Helper
@@ -310,11 +365,24 @@ struct HealthView: View {
                 
                 Spacer()
                 
+                // Water Goal Settings Button
+                Button(action: {
+                    showingWaterGoalSettings = true
+                    feedbackManager.lightHaptic()
+                }) {
+                    Image(systemName: "gearshape.fill")
+                        .font(.title3)
+                        .foregroundColor(.blue.opacity(0.7))
+                }
+                
                 if let intake = viewModel.todayWaterIntake {
                     Text("\(intake.totalAmountInMl)ml/\(settingsManager.dailyWaterGoal)ml")
                         .font(.title3)
                         .fontWeight(.bold)
                         .foregroundColor(.blue)
+                        .onAppear {
+                            // Auto-refresh when view appears
+                        }
                         .onLongPressGesture {
                             if intake.amount > 0 {
                                 withAnimation(.spring()) {
@@ -952,7 +1020,7 @@ struct HealthView: View {
                             
                             if !viewModel.useCalculatedGoal {
                                 Button {
-                                    manualGoalInput = String(viewModel.manualWaterGoal)
+                                    manualGoalInput = String(settingsManager.dailyWaterGoal)
                                     showingManualGoalInput = true
                                 } label: {
                                     HStack(spacing: 4) {
@@ -1160,23 +1228,30 @@ struct HealthView: View {
             }
             
             Button(action: {
-                // Immediate haptic feedback
+                // Check for overdose protection
                 if medication.completionPercentage >= 1.0 {
                     feedbackManager.warningHaptic()
                     selectedMedication = medication
                     showingOverdoseAlert = true
                 } else {
-                    feedbackManager.buttonTap()
                     takeMedication(medication)
                 }
             }) {
-                Image(systemName: "checkmark.circle.fill")
-                    .font(.title2)
-                    .foregroundColor(.green)
+                ZStack {
+                    Circle()
+                        .fill(medication.completionPercentage >= 1.0 ? Color.green.opacity(0.3) : Color.green.opacity(0.1))
+                        .frame(width: 44, height: 44)
+                    
+                    Image(systemName: medication.completionPercentage >= 1.0 ? "checkmark.circle.fill" : "plus.circle.fill")
+                        .font(.title2)
+                        .foregroundColor(medication.completionPercentage >= 1.0 ? .green : .green.opacity(0.7))
+                }
             }
-            .buttonStyle(.borderless) // Use borderless style for better tap handling
+            .buttonStyle(.plain) // Use plain style for better interaction
+            .contentShape(Circle()) // Make entire circular area tappable
         }
         .padding(12)
+        .id("\(medication.id)_\(medicationRefreshTrigger)")
     }
     
     // MARK: - Health Tips Card
@@ -1358,7 +1433,8 @@ struct HealthView: View {
                 // Preview section with enhanced design
                 if let height = Double(editHeight), let weight = Double(editWeight), height > 0, weight > 0 {
                     let newBMI = weight / ((height / 100) * (height / 100))
-                    let waterGoal = Int(weight * 35)
+                    let (waterGoal, baseWaterPerKg) = calculateWaterGoal(bmi: newBMI, weight: weight)
+                    
                     let bmiCategory: String = {
                         switch newBMI {
                         case ..<18.5:
@@ -1384,6 +1460,31 @@ struct HealthView: View {
                                 .foregroundColor(.blue)
                         }
                         
+                        // BMI Category Badge
+                        HStack(spacing: 8) {
+                            Circle()
+                                .fill(bmiColor)
+                                .frame(width: 8, height: 8)
+                            
+                            Text(bmiCategory)
+                                .font(.caption)
+                                .fontWeight(.semibold)
+                                .foregroundColor(bmiColor)
+                            
+                            Text("(BMI: \(String(format: "%.1f", newBMI)))")
+                                .font(.caption2)
+                                .foregroundColor(.secondary)
+                        }
+                        .padding(.horizontal, 12)
+                        .padding(.vertical, 6)
+                        .background(
+                            Capsule()
+                                .fill(bmiColor.opacity(0.1))
+                                .overlay(
+                                    Capsule().stroke(bmiColor.opacity(0.3), lineWidth: 1)
+                                )
+                        )
+                        
                         HStack(spacing: 16) {
                             // BMI Preview Card
                             VStack(spacing: 8) {
@@ -1396,6 +1497,11 @@ struct HealthView: View {
                                     .font(.title2)
                                     .fontWeight(.bold)
                                     .foregroundColor(bmiColor)
+                                
+                                Text(bmiCategory)
+                                    .font(.caption2)
+                                    .foregroundColor(bmiColor)
+                                    .fontWeight(.medium)
                             }
                             .frame(maxWidth: .infinity)
                             .padding(.vertical, 16)
@@ -1425,6 +1531,11 @@ struct HealthView: View {
                                     .font(.title2)
                                     .fontWeight(.bold)
                                     .foregroundColor(.blue)
+                                
+                                Text("\(Int(baseWaterPerKg))ml/kg")
+                                    .font(.caption2)
+                                    .foregroundColor(.blue)
+                                    .fontWeight(.medium)
                             }
                             .frame(maxWidth: .infinity)
                             .padding(.vertical, 16)
@@ -1440,6 +1551,37 @@ struct HealthView: View {
                                     .overlay(
                                         RoundedRectangle(cornerRadius: 16)
                                             .stroke(Color.blue.opacity(0.2), lineWidth: 1)
+                                    )
+                            )
+                        }
+                        
+                        // Water intake explanation
+                        if viewModel.useCalculatedGoal {
+                            VStack(spacing: 4) {
+                                HStack(spacing: 6) {
+                                    Image(systemName: "info.circle.fill")
+                                        .font(.caption)
+                                        .foregroundColor(.blue)
+                                    
+                                    Text("BMI tabanlı su hedefi hesaplama aktif")
+                                        .font(.caption)
+                                        .foregroundColor(.secondary)
+                                }
+                                
+                                Text("Your water goal is automatically calculated based on your BMI category for optimal hydration.")
+                                    .font(.caption2)
+                                    .foregroundColor(.secondary)
+                                    .multilineTextAlignment(.center)
+                                    .lineLimit(2)
+                            }
+                            .padding(.horizontal, 16)
+                            .padding(.vertical, 8)
+                            .background(
+                                RoundedRectangle(cornerRadius: 12)
+                                    .fill(.blue.opacity(0.05))
+                                    .overlay(
+                                        RoundedRectangle(cornerRadius: 12)
+                                            .stroke(.blue.opacity(0.1), lineWidth: 1)
                                     )
                             )
                         }
@@ -1488,6 +1630,10 @@ struct HealthView: View {
                 .padding(.bottom, 40)
             }
         }
+        .onTapGesture {
+            // Dismiss keyboard when tapping on empty space
+            UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+        }
         .ignoresSafeArea(.keyboard, edges: .bottom)
     }
     
@@ -1498,42 +1644,29 @@ struct HealthView: View {
     
     // MARK: - Medication Actions
     private func takeMedication(_ medication: MedicationEntry) {
-       
-        // Debug scheduled times
-        let todayScheduled = medication.scheduledTimes.filter { Calendar.current.isDateInToday($0) }
-        
-        if todayScheduled.isEmpty {
-            let formatter = DateFormatter()
-            formatter.dateStyle = .medium
-            formatter.timeStyle = .short
-            for time in medication.scheduledTimes { }
-        }
-        
-        let todayTaken = medication.takenTimes.filter { Calendar.current.isDateInToday($0) }
-        
         // Mark medication as taken
         let currentTime = Date()
         medication.takenTimes.append(currentTime)
-      
-        let newTodayTaken = medication.takenTimes.filter { Calendar.current.isDateInToday($0) }
-        let newPercentage = todayScheduled.count > 0 ? Double(newTodayTaken.count) / Double(todayScheduled.count) : 0
         
         // Save to context with error handling
         do {
             try modelContext.save()
             
-            // Additional debugging - check if data persisted
-            let allMeds = try modelContext.fetch(FetchDescriptor<MedicationEntry>())
-            if let savedMed = allMeds.first(where: { $0.id == medication.id }) {
-                let savedTodayTaken = savedMed.takenTimes.filter { Calendar.current.isDateInToday($0) }
+            // Force comprehensive UI refresh
+            DispatchQueue.main.async {
+                // Trigger multiple refresh mechanisms
+                self.viewModel.objectWillChange.send()
+                self.medicationRefreshTrigger = UUID()
+                
+                // Force SwiftData to refresh
+                try? self.modelContext.save()
             }
-            
-            // SwiftData @Query will automatically refresh the UI
-        } catch { }
+        } catch {
+            print("Failed to save medication data: \(error)")
+        }
         
         // Haptic feedback
-        let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
-        impactFeedback.impactOccurred()
+        feedbackManager.successHaptic()
     }
     
     private func showDeleteAlert(for medication: MedicationEntry) {
@@ -1587,5 +1720,24 @@ struct HealthView: View {
                 }
             }
         }
+    }
+    
+    // MARK: - Water Goal Calculation Helper
+    private func calculateWaterGoal(bmi: Double, weight: Double) -> (waterGoal: Int, baseWaterPerKg: Double) {
+        let baseWaterPerKg: Double
+        
+        switch bmi {
+        case ..<18.5:
+            baseWaterPerKg = 40.0 // Underweight: Higher water intake
+        case 18.5..<25:
+            baseWaterPerKg = 35.0 // Normal: Standard water intake
+        case 25..<30:
+            baseWaterPerKg = 37.0 // Overweight: Slightly higher
+        default:
+            baseWaterPerKg = 40.0 // Obese: Higher for weight management
+        }
+        
+        let waterGoal = max(min(Int(weight * baseWaterPerKg), 4000), 1500)
+        return (waterGoal, baseWaterPerKg)
     }
 }

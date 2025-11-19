@@ -22,7 +22,6 @@ struct TodoListView: View {
     @StateObject private var viewModel = TodoListViewModel()
     @State private var showingAddHabit = false
     @State private var selectedTodoForHabit: TodoItem?
-    
     // Computed property to sort todos by completion status and special rules
     private var todos: [TodoItem] {
         return allTodos.sorted { todo1, todo2 in
@@ -155,7 +154,7 @@ struct TodoListView: View {
                 .padding(.bottom, 8)
 
                 // MARK: - List / Empty
-                if sections.isEmpty {
+                if todos.isEmpty {
                     emptyStateView
                 } else {
                     listView(sections: sections)
@@ -229,14 +228,16 @@ struct TodoListView: View {
         tint: Color,
         isSelected: Bool
     ) -> some View {
-        HStack(spacing: 6) {
+        HStack(spacing: 8) {
             ZStack {
                 Circle()
                     .fill(isSelected ? tint : Color.gray.opacity(0.2))
-                    .frame(width: 24, height: 24)
+                    .frame(width: 28, height: 28)
                 
                 Image(systemName: icon)
-                    .font(.system(size: 11, weight: .semibold))
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 15, height: 15)
                     .foregroundColor(isSelected ? .white : .gray)
             }
             

@@ -5,8 +5,14 @@
 //  Created on 06.11.2025.
 //
 
+
+
+
 import SwiftUI
 import SwiftData
+#if canImport(Helper)
+import Helper
+#endif
 
 struct WorkingMemoryGameView: View {
     @Environment(\.modelContext) private var modelContext
@@ -61,7 +67,7 @@ struct WorkingMemoryGameView: View {
                     VStack {
                         Text("⏱️")
                             .font(.title2)
-                        Text("Time")
+                        Text("memoryGame.time".localized)
                             .font(.caption)
                             .foregroundColor(.secondary)
                         Text(timeString)
@@ -72,7 +78,7 @@ struct WorkingMemoryGameView: View {
                     VStack {
                         Text("👆")
                             .font(.title2)
-                        Text("Moves")
+                        Text("memoryGame.moves".localized)
                             .font(.caption)
                             .foregroundColor(.secondary)
                         Text("\(moves)")
@@ -83,7 +89,7 @@ struct WorkingMemoryGameView: View {
                     VStack {
                         Text("✅")
                             .font(.title2)
-                        Text("Matches")
+                        Text("memoryGame.matches".localized)
                             .font(.caption)
                             .foregroundColor(.secondary)
                         Text("\(matchedIndices.count / 2)")
@@ -98,13 +104,15 @@ struct WorkingMemoryGameView: View {
                 )
                 
                 // Game Grid
-                gameGridView
-                .padding()
-                .background(
-                    RoundedRectangle(cornerRadius: 20)
-                        .fill(.regularMaterial)
-                        .shadow(color: .black.opacity(0.1), radius: 10)
-                )
+                ZStack {
+                    if gridSize < 6 {
+                        RoundedRectangle(cornerRadius: 20)
+                            .fill(.regularMaterial)
+                            .shadow(color: .black.opacity(0.1), radius: 10)
+                    }
+                    gameGridView
+                        .padding()
+                }
                 
                 // Game Controls
                 HStack(spacing: 12) {
@@ -151,18 +159,7 @@ struct WorkingMemoryGameView: View {
             )
         }
         .sheet(isPresented: $showHighScores) {
-            VStack {
-                Text("highScores.title".localized)
-                    .font(.title)
-                Text("coming.soon".localized)
-                    .foregroundColor(.secondary)
-                Button("common.ok".localized) {
-                    showHighScores = false
-                }
-                .buttonStyle(.borderedProminent)
-                .padding()
-            }
-            .padding()
+            HighScoresView()
         }
         .alert("memoryGame.gameComplete".localized, isPresented: $isGameComplete) {
             Button("memory.game.new".localized) {
@@ -221,13 +218,19 @@ struct WorkingMemoryGameView: View {
     private func saveScore() {
         guard isViewActive else { return }
         
-        // Save to UserDefaults for now (simple implementation)
-        let key = "bestScore_\\(gridSize)x\\(gridSize)"
-        let currentBest = UserDefaults.standard.integer(forKey: key)
-        let newScore = calculateScore()
+        // Create new GameScore and save to SwiftData
+        let gameScore = GameScore(
+            gridSize: gridSize,
+            moves: moves,
+            timeInSeconds: timer
+        )
         
-        if currentBest == 0 || newScore > currentBest {
-            UserDefaults.standard.set(newScore, forKey: key)
+        modelContext.insert(gameScore)
+        
+        do {
+            try modelContext.save()
+        } catch {
+            print("Failed to save score: \(error)")
         }
     }
     
@@ -355,13 +358,17 @@ struct GameCardView: View {
                         .animation(.spring(), value: isMatched)
                 } else {
                     VStack(spacing: 4) {
+                        Spacer(minLength: 0)
                         Image(systemName: "brain.head.profile")
                             .font(.system(size: cardFontSize * 0.6))
                             .foregroundColor(.blue.opacity(0.7))
-                        
                         Text("?")
                             .font(.system(size: cardFontSize * 0.4, weight: .bold))
                             .foregroundColor(.blue.opacity(0.7))
+                        Text("memory.card.tap".localized)
+                            .font(.system(size: 10, weight: .regular))
+                            .foregroundColor(.secondary)
+                        Spacer(minLength: 0)
                     }
                 }
             }
@@ -404,10 +411,10 @@ struct GameSettingsSheet: View {
     @Environment(\.dismiss) private var dismiss
     
     private let gridSizes = [
-        (size: 3, name: "memoryGame.easy".localized, cards: 9),
-        (size: 4, name: "memoryGame.medium".localized, cards: 16),
-        (size: 5, name: "memoryGame.hard".localized, cards: 25),
-        (size: 6, name: "memoryGame.expert".localized, cards: 36)
+        (size: 3, name: "memoryGame.easy".localized, icon: "tortoise", cards: 9),
+        (size: 4, name: "memoryGame.medium".localized, icon: "hare", cards: 16),
+        (size: 5, name: "memoryGame.hard".localized, icon: "bolt", cards: 25),
+        (size: 6, name: "memoryGame.expert".localized, icon: "flame", cards: 36)
     ]
     
     var body: some View {
@@ -425,27 +432,29 @@ struct GameSettingsSheet: View {
                     Text("memoryGame.gridSize".localized)
                         .font(.headline)
                     
-                    LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 12) {
+                    LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 8) {
                         ForEach(gridSizes, id: \.size) { grid in
                             Button(action: {
                                 gridSize = grid.size
                                 onApply()
                                 dismiss()
                             }) {
-                                VStack(spacing: 8) {
+                                VStack(spacing: 4) {
+                                    Image(systemName: grid.icon)
+                                        .font(.system(size: 20, weight: .bold))
+                                        .foregroundColor(gridSize == grid.size ? .white : .blue)
                                     Text("\(grid.size)×\(grid.size)")
-                                        .font(.title3)
+                                        .font(.headline)
                                         .fontWeight(.semibold)
-                                    
                                     Text(grid.name)
-                                        .font(.caption)
-                                    
-                                    Text(String(format: NSLocalizedString("memoryGame.cards", comment: "Cards: %d"), grid.cards))
+                                        .font(.caption2)
+                                    Text(String(format: "memoryGame.cards".localizedFormat(grid.cards)))
                                         .font(.caption2)
                                         .foregroundColor(.secondary)
                                 }
                                 .foregroundColor(gridSize == grid.size ? .white : .primary)
-                                .padding()
+                                .padding(.vertical, 8)
+                                .padding(.horizontal, 4)
                                 .frame(maxWidth: .infinity)
                                 .background(
                                     RoundedRectangle(cornerRadius: 12)
@@ -471,3 +480,5 @@ struct GameSettingsSheet: View {
         }
     }
 }
+
+

@@ -9,14 +9,7 @@ import SwiftUI
 import Foundation
 
 class SettingsManager: ObservableObject {
-    @AppStorage("selectedLanguage") var selectedLanguage: String = "system" {
-        didSet {
-            if selectedLanguage != oldValue {
-                LanguageManager.shared.currentLanguage = selectedLanguage
-                objectWillChange.send()
-            }
-        }
-    }
+    @AppStorage("selectedLanguage") var selectedLanguage: String = "system"
     @AppStorage("notificationsEnabled") var notificationsEnabled: Bool = true {
         didSet { objectWillChange.send() }
     }

@@ -276,8 +276,29 @@ final class HealthViewModel: ObservableObject {
     
     // MARK: - Body Metrics & Goal Calculation
     var calculatedWaterGoal: Int {
-        // Basic calculation: 35ml per kg of body weight
-        return max(Int(weight * 35), 1500) // Minimum 1.5L
+        // Advanced calculation based on BMI and body weight
+        let baseWaterPerKg: Double
+        
+        // Adjust water intake based on BMI category
+        switch bmi {
+        case ..<18.5:
+            // Underweight: Higher water intake to support metabolism
+            baseWaterPerKg = 40.0
+        case 18.5..<25:
+            // Normal weight: Standard water intake
+            baseWaterPerKg = 35.0
+        case 25..<30:
+            // Overweight: Slightly higher to support metabolism
+            baseWaterPerKg = 37.0
+        default:
+            // Obese: Higher water intake to support weight management
+            baseWaterPerKg = 40.0
+        }
+        
+        let calculatedAmount = Int(weight * baseWaterPerKg)
+        
+        // Set reasonable bounds: minimum 1.5L, maximum 4L
+        return max(min(calculatedAmount, 4000), 1500)
     }
     
     var currentWaterGoal: Int {
@@ -316,29 +337,54 @@ final class HealthViewModel: ObservableObject {
         UserDefaults.standard.set(height, forKey: "health_height")
         UserDefaults.standard.set(weight, forKey: "health_weight")
         
-        // Update current water intake goal if exists (ml-based)
-        if let todayIntake = todayWaterIntake {
-            todayIntake.dailyGoal = dailyWaterGoal // Already in ml
-            save(context)
+        // If using calculated goal, update water goal based on new BMI
+        if useCalculatedGoal {
+            let newCalculatedGoal = calculatedWaterGoal
+            
+            // Update settings manager with new calculated goal
+            settingsManager?.dailyWaterGoal = newCalculatedGoal
+            
+            // Update today's water intake goal if exists
+            if let todayIntake = todayWaterIntake {
+                todayIntake.dailyGoal = newCalculatedGoal
+                save(context)
+            }
+        } else {
+            // Even if using manual goal, still update today's intake with current goal
+            if let todayIntake = todayWaterIntake {
+                todayIntake.dailyGoal = dailyWaterGoal
+                save(context)
+            }
         }
         
+        // Trigger UI update to reflect BMI and water goal changes
+        objectWillChange.send()
     }
     
     func toggleGoalType(in context: ModelContext) {
         useCalculatedGoal.toggle()
         UserDefaults.standard.set(useCalculatedGoal, forKey: "health_use_calculated_goal")
         
+        // If switching to calculated goal, update with BMI-based calculation
+        if useCalculatedGoal {
+            let newCalculatedGoal = calculatedWaterGoal
+            settingsManager?.dailyWaterGoal = newCalculatedGoal
+        }
+        
         // Update current water intake goal if exists (ml-based)
         if let todayIntake = todayWaterIntake {
             todayIntake.dailyGoal = dailyWaterGoal // Already in ml
             save(context)
         }
         
+        // Trigger UI update
+        objectWillChange.send()
     }
     
     func updateManualGoal(_ goal: Int) {
         manualWaterGoal = goal
         UserDefaults.standard.set(manualWaterGoal, forKey: "health_manual_goal")
+        settingsManager?.dailyWaterGoal = goal
     }
     
     func loadBodyMetrics() {
@@ -403,6 +449,10 @@ final class HealthViewModel: ObservableObject {
         if let todayIntake = todayWaterIntake, settingsManager.dailyWaterGoal > 0 {
             todayIntake.dailyGoal = settingsManager.dailyWaterGoal // Store goal in ml
             objectWillChange.send() // UI'ı güncelle
+        } else if todayWaterIntake == nil {
+            print("⚠️ No todayWaterIntake found in ViewModel")
+        } else {
+            print("⚠️ Invalid water goal: \(settingsManager.dailyWaterGoal)ml")
         }
     }
     

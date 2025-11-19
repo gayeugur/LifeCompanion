@@ -1,3 +1,10 @@
+"highScores.bestOverall" = "Best Overall Score";
+"highScores.clearAll" = "Clear All Scores";
+"highScores.tip1" = "• Complete games to earn points";
+"highScores.tip2" = "• Faster completion = higher score";
+"highScores.tip3" = "• Fewer moves = more points";
+"highScores.tip4" = "• Try different difficulty levels";
+"highScores.difficulty.custom" = "Custom";
 /* 
   Localizable.strings
   LifeCompanion
@@ -43,7 +50,7 @@
 "priority.high" = "High";
 "filter.time.all" = "All Tasks";
 "filter.time.today" = "Today";
-"filter.time.thisWeek" = "Upcoming";
+"filter.time.thisWeek" = "Scheduled";
 "filter.time.overdue" = "Overdue";
 "filter.status.all" = "All";
 "filter.status.completed" = "Completed";
