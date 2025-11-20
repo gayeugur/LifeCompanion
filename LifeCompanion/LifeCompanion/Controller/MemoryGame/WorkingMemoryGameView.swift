@@ -365,9 +365,6 @@ struct GameCardView: View {
                         Text("?")
                             .font(.system(size: cardFontSize * 0.4, weight: .bold))
                             .foregroundColor(.blue.opacity(0.7))
-                        Text("memory.card.tap".localized)
-                            .font(.system(size: 10, weight: .regular))
-                            .foregroundColor(.secondary)
                         Spacer(minLength: 0)
                     }
                 }
@@ -440,9 +437,16 @@ struct GameSettingsSheet: View {
                                 dismiss()
                             }) {
                                 VStack(spacing: 4) {
-                                    Image(systemName: grid.icon)
-                                        .font(.system(size: 20, weight: .bold))
-                                        .foregroundColor(gridSize == grid.size ? .white : .blue)
+                                    ZStack {
+                                        Circle()
+                                            .fill(gridSize == grid.size ? Color.blue.opacity(0.8) : Color.gray.opacity(0.12))
+                                            .frame(width: 38, height: 38)
+                                        Image(systemName: grid.icon)
+                                            .resizable()
+                                            .aspectRatio(contentMode: .fit)
+                                            .frame(width: 22, height: 22)
+                                            .foregroundColor(gridSize == grid.size ? .white : .blue)
+                                    }
                                     Text("\(grid.size)×\(grid.size)")
                                         .font(.headline)
                                         .fontWeight(.semibold)

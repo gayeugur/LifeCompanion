@@ -54,42 +54,24 @@ struct HealthView: View {
     @State private var medicationRefreshTrigger = UUID()
     
     var body: some View {
-        Group {
-            if viewModel.todayWaterIntake != nil {
-                ScrollView {
-                    VStack(spacing: 24) {
-                        // Header
-                        headerSection
-                        
-                        // Water Intake Card
-                        waterIntakeCard
-                        
-                        // Quick Actions
-                        quickActionsCard
-                        
-                        // Body Metrics & Goal Settings
-                        bodyMetricsCard
-                        
-                        // Medication Tracking
-                        medicationCard
-                        
-                        // Weekly Progress
-                        weeklyProgressCard
-                        
-                        // Health Tips
-                        healthTipsCard
-                    }
-                    .padding(20)
-                }
-            } else {
-                // Loading state
-                VStack {
-                    ProgressView("Loading health data...")
-                        .foregroundColor(Color.primaryText)
-                }
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .background(Color.primaryBackground)
+        ScrollView {
+            VStack(spacing: 24) {
+                // Header
+                headerSection
+                // Water Intake Card
+                waterIntakeCard
+                // Quick Actions
+                quickActionsCard
+                // Body Metrics & Goal Settings
+                bodyMetricsCard
+                // Medication Tracking
+                medicationCard
+                // Weekly Progress
+                weeklyProgressCard
+                // Health Tips
+                healthTipsCard
             }
+            .padding(20)
         }
         .background(
             LinearGradient(
@@ -1148,7 +1130,7 @@ struct HealthView: View {
             VStack(spacing: 4) {
                 let percentage = Int(medication.completionPercentage * 100)
                 
-                if medication.completionPercentage > 1.0 {
+                if percentage >= 100 {
                     // Over 100% - show warning
                     Image(systemName: "exclamationmark.triangle.fill")
                         .foregroundColor(.orange)
@@ -1189,30 +1171,57 @@ struct HealthView: View {
     }
     
     private func medicationRowView(_ medication: MedicationEntry) -> some View {
-        HStack(spacing: 12) {
-            VStack(alignment: .leading, spacing: 4) {
-                Text(medication.medicationName)
-                    .font(.subheadline)
-                    .fontWeight(.medium)
-                
-                Text(medication.dosage + " • " + medication.frequency.localizedName)
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-                
-                if let nextDose = medication.nextDoseTime {
-                    Text("\("health.next.dose".localized): \(nextDose, style: .time)")
+        VStack(alignment: .leading, spacing: 8) {
+            HStack {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(medication.medicationName)
+                        .font(.subheadline)
+                        .fontWeight(.medium)
+                    Text(medication.dosage + " • " + medication.frequency.localizedName)
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                }
+                Spacer()
+            }
+            // Haftalık ilaçlar için sadece ilgili günlerde doz göster
+            let calendar = Calendar.current
+            let today = Date()
+            let isWeekly = medication.frequency.isWeekly
+            let todayScheduled = medication.scheduledTimes.filter { calendar.isDateInToday($0) }.sorted()
+            let todayTaken = medication.takenTimes.filter { calendar.isDateInToday($0) }.sorted()
+            if !isWeekly || (isWeekly && !todayScheduled.isEmpty) {
+                ForEach(todayScheduled, id: \.self) { scheduled in
+                    let takenIdx = todayTaken.firstIndex(where: { abs($0.timeIntervalSince(scheduled)) < 60*60 }) // 1 saat tolerans
+                    let isTaken = takenIdx != nil
+                    HStack {
+                        Text("\(scheduled, style: .time)")
+                            .font(.caption2)
+                            .foregroundColor(isTaken ? .green : .primary)
+                        Spacer()
+                        Button(action: {
+                            if !isTaken {
+                                takeMedication(medication, scheduled)
+                            }
+                        }) {
+                            Image(systemName: isTaken ? "checkmark.circle.fill" : "circle")
+                                .foregroundColor(isTaken ? .green : .gray)
+                                .font(.title3)
+                        }
+                        .disabled(isTaken)
+                    }
+                }
+            } else if isWeekly && todayScheduled.isEmpty {
+                HStack {
+                    Text("medication.notTakenToday".localized)
                         .font(.caption2)
-                        .foregroundColor(.red)
+                        .foregroundColor(.secondary)
+                    Spacer()
                 }
             }
-            
-            Spacer()
-            
-            VStack(spacing: 4) {
-                let percentage = Int(medication.completionPercentage * 100)
-                
+            // Yüzde ve uyarı
+            let percentage = Int(medication.completionPercentage * 100)
+            HStack {
                 if medication.completionPercentage > 1.0 {
-                    // Over 100% - show warning
                     Image(systemName: "exclamationmark.triangle.fill")
                         .foregroundColor(.orange)
                         .font(.title3)
@@ -1221,34 +1230,10 @@ struct HealthView: View {
                         .fill(medication.completionPercentage >= 1.0 ? Color.green : Color.gray.opacity(0.3))
                         .frame(width: 12, height: 12)
                 }
-                
                 Text("\(percentage)%")
                     .font(.caption2)
                     .foregroundColor(medication.completionPercentage > 1.0 ? .orange : .secondary)
             }
-            
-            Button(action: {
-                // Check for overdose protection
-                if medication.completionPercentage >= 1.0 {
-                    feedbackManager.warningHaptic()
-                    selectedMedication = medication
-                    showingOverdoseAlert = true
-                } else {
-                    takeMedication(medication)
-                }
-            }) {
-                ZStack {
-                    Circle()
-                        .fill(medication.completionPercentage >= 1.0 ? Color.green.opacity(0.3) : Color.green.opacity(0.1))
-                        .frame(width: 44, height: 44)
-                    
-                    Image(systemName: medication.completionPercentage >= 1.0 ? "checkmark.circle.fill" : "plus.circle.fill")
-                        .font(.title2)
-                        .foregroundColor(medication.completionPercentage >= 1.0 ? .green : .green.opacity(0.7))
-                }
-            }
-            .buttonStyle(.plain) // Use plain style for better interaction
-            .contentShape(Circle()) // Make entire circular area tappable
         }
         .padding(12)
         .id("\(medication.id)_\(medicationRefreshTrigger)")
@@ -1644,9 +1629,32 @@ struct HealthView: View {
     
     // MARK: - Medication Actions
     private func takeMedication(_ medication: MedicationEntry) {
-        // Mark medication as taken
-        let currentTime = Date()
-        medication.takenTimes.append(currentTime)
+        // Mark medication as taken at scheduled time
+        let scheduled: Date? = nil // Placeholder, will be replaced by overload
+        medication.takenTimes.append(Date())
+
+        // Save to context with error handling
+        do {
+            try modelContext.save()
+
+            // Force comprehensive UI refresh
+            DispatchQueue.main.async {
+                // Trigger multiple refresh mechanisms
+                self.viewModel.objectWillChange.send()
+                self.medicationRefreshTrigger = UUID()
+
+                // Force SwiftData to refresh
+                try? self.modelContext.save()
+            }
+        } catch {
+            print("Failed to save medication data: \(error)")
+        }
+    }
+
+    // Overload: takeMedication with scheduled time
+    private func takeMedication(_ medication: MedicationEntry, _ scheduled: Date) {
+        // Mark medication as taken at scheduled time
+        medication.takenTimes.append(scheduled)
         
         // Save to context with error handling
         do {
@@ -1679,8 +1687,8 @@ struct HealthView: View {
         let identifiers = medication.getNotificationIdentifiers()
         UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: identifiers)
         
-        // Delete from SwiftData context
-        modelContext.delete(medication)
+        // Sadece pasif yap, silme
+        medication.isActive = false
         
         // Save context
         do {

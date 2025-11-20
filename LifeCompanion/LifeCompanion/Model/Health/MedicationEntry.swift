@@ -41,26 +41,26 @@ final class MedicationEntry: Identifiable {
     // Helper function to generate scheduled times based on frequency
     private static func generateScheduledTimes(frequency: MedicationFrequency, reminderTime: Date?) -> [Date] {
         let calendar = Calendar.current
-        let today = calendar.startOfDay(for: Date())
+        let now = Date()
+        let today = calendar.startOfDay(for: now)
         var scheduledTimes: [Date] = []
-        
-        guard frequency != .asNeeded, let baseTime = reminderTime else {
+        guard let baseTime = reminderTime else {
             return scheduledTimes
         }
-        
         let components = calendar.dateComponents([.hour, .minute], from: baseTime)
-        
-        // Generate scheduled times for next 7 days
         for dayOffset in 0..<7 {
             guard let dayStart = calendar.date(byAdding: .day, value: dayOffset, to: today) else { continue }
-            
+            let weekday = calendar.component(.weekday, from: dayStart)
+            // DEBUG: Haftanın günü ve tarihini yazdır
+            #if DEBUG
+            print("[MedicationEntry] Offset: \(dayOffset), Date: \(dayStart), Weekday: \(weekday)")
+            #endif
             switch frequency {
             case .once:
                 if let time = calendar.date(byAdding: components, to: dayStart) {
                     scheduledTimes.append(time)
                 }
             case .twice:
-                // Morning and evening doses
                 if let morningTime = calendar.date(byAdding: components, to: dayStart) {
                     scheduledTimes.append(morningTime)
                 }
@@ -70,72 +70,58 @@ final class MedicationEntry: Identifiable {
                     scheduledTimes.append(eveningTime)
                 }
             case .thrice:
-                // Three times a day: morning, noon, evening
                 let baseHour = components.hour ?? 8
-                let intervals = [0, 6, 12] // 6-hour intervals to ensure all 3 doses fit in 24 hours
+                let intervals = [0, 6, 12]
                 for interval in intervals {
                     var timeComponents = components
                     let targetHour = baseHour + interval
-                    // Ensure we don't exceed 23 hours (valid hour range: 0-23)
                     timeComponents.hour = min(targetHour, 23)
                     if let time = calendar.date(byAdding: timeComponents, to: dayStart) {
                         scheduledTimes.append(time)
                     }
                 }
             case .twiceWeekly:
-                // Twice weekly: Monday and Thursday
-                let weekday = calendar.component(.weekday, from: dayStart)
-                if weekday == 2 || weekday == 5 { // Monday = 2, Thursday = 5
+                // Monday = 2, Thursday = 5 (Swift: 1=Sunday, 2=Monday, ..., 5=Thursday)
+                if weekday == 2 || weekday == 5 {
                     if let time = calendar.date(byAdding: components, to: dayStart) {
                         scheduledTimes.append(time)
                     }
                 }
             case .thriceWeekly:
-                // Three times weekly: Monday, Wednesday, Friday
-                let weekday = calendar.component(.weekday, from: dayStart)
-                if weekday == 2 || weekday == 4 || weekday == 6 { // Mon, Wed, Fri
+                if weekday == 2 || weekday == 4 || weekday == 6 {
                     if let time = calendar.date(byAdding: components, to: dayStart) {
                         scheduledTimes.append(time)
                     }
                 }
-            case .asNeeded:
-                break
             }
         }
-        
-        let sortedTimes = scheduledTimes.sorted()
-        
-        let todayTimes = sortedTimes.filter { calendar.isDateInToday($0) }
-        
-        return sortedTimes
+        return scheduledTimes
     }
     
     var completionPercentage: Double {
         guard !scheduledTimes.isEmpty else { 
             return 0 
         }
-        let todayScheduled = scheduledTimes.filter { Calendar.current.isDateInToday($0) }
-        let todayTaken = takenTimes.filter { Calendar.current.isDateInToday($0) }
+        let calendar = Calendar.current
+        let todayScheduled = scheduledTimes.filter { calendar.isDateInToday($0) }
+        let todayTaken = takenTimes.filter { calendar.isDateInToday($0) }
         
+        // Haftalık ilaçlarda, bugün alınacak doz yoksa %0 göster
+        if frequency.isWeekly && todayScheduled.isEmpty {
+            return 0
+        }
         guard todayScheduled.count > 0 else { return 0 }
-        
         let percentage = Double(todayTaken.count) / Double(todayScheduled.count)
-        
         return percentage
     }
     
     var nextDoseTime: Date? {
-        guard frequency != .asNeeded else { return nil }
-        
         let calendar = Calendar.current
         let now = Date()
-        
-        // First check if there are scheduled times for today that haven't passed
         let todayScheduled = scheduledTimes.filter { calendar.isDateInToday($0) }
         if let nextToday = todayScheduled.first(where: { $0 > now }) {
             return nextToday
         }
-        
         // If no more doses today, calculate next dose for tomorrow
         return calculateNextDoseForTomorrow()
     }
@@ -153,10 +139,9 @@ final class MedicationEntry: Identifiable {
     
     // MARK: - Notification Management
     func scheduleNotifications(notificationsEnabled: Bool = true) {
+        guard isActive else { return } // Sadece aktif ilaçlar için
         // Remove existing notifications for this medication
         UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [self.id.uuidString])
-        
-        guard self.frequency != .asNeeded else { return }
         
         // Don't schedule if notifications are disabled
         guard notificationsEnabled else { return }
@@ -164,8 +149,8 @@ final class MedicationEntry: Identifiable {
         // Schedule notifications for each scheduled time
         for scheduledTime in self.scheduledTimes {
             let content = UNMutableNotificationContent()
-            content.title = "medication.notification.title".localized
-            content.body = String(format: "medication.notification.body".localized, self.medicationName, self.dosage)
+            content.title = NSLocalizedString("medication.notification.title", comment: "")
+            content.body = String(format: NSLocalizedString("medication.notification.body", comment: ""), self.medicationName, self.dosage)
             content.sound = .default
             content.categoryIdentifier = "MEDICATION_REMINDER"
             
@@ -204,24 +189,21 @@ enum MedicationFrequency: String, CaseIterable, Codable {
     case once = "once"
     case twice = "twice"
     case thrice = "thrice"
-    case asNeeded = "asNeeded"
     case twiceWeekly = "twiceWeekly"
     case thriceWeekly = "thriceWeekly"
     
     var localizedName: String {
         switch self {
         case .once:
-            return "medication.frequency.once".localized
+            return NSLocalizedString("medication.frequency.once", comment: "")
         case .twice:
-            return "medication.frequency.twice".localized
+            return NSLocalizedString("medication.frequency.twice", comment: "")
         case .thrice:
-            return "medication.frequency.thrice".localized
-        case .asNeeded:
-            return "medication.frequency.asNeeded".localized
+            return NSLocalizedString("medication.frequency.thrice", comment: "")
         case .twiceWeekly:
-            return "medication.frequency.twiceWeekly".localized
+            return NSLocalizedString("medication.frequency.twiceWeekly", comment: "")
         case .thriceWeekly:
-            return "medication.frequency.thriceWeekly".localized
+            return NSLocalizedString("medication.frequency.thriceWeekly", comment: "")
         }
     }
     
@@ -230,7 +212,6 @@ enum MedicationFrequency: String, CaseIterable, Codable {
         case .once: return 1
         case .twice: return 2
         case .thrice: return 3
-        case .asNeeded: return 0
         case .twiceWeekly: return 0 // Weekly frequencies don't have daily times
         case .thriceWeekly: return 0
         }

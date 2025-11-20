@@ -1,3 +1,5 @@
+import SwiftData
+import LifeCompanion // Eğer model dosyası bir framework ya da modüldeyse, doğru modül adıyla değiştirin
 //
 //  AddMedicationView.swift
 //  LifeCompanion
@@ -98,6 +100,7 @@ struct AddMedicationView: View {
                                         .foregroundStyle(.secondary)
                                     
                                     TextField("health.medication.dosage.placeholder".localized, text: $dosage)
+                                        .keyboardType(.numberPad)
                                         .focused($focusedField, equals: .dosage)
                                         .textContentType(.none)
                                         .autocorrectionDisabled()

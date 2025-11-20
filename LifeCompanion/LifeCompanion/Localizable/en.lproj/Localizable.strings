@@ -5,14 +5,6 @@
 "highScores.tip3" = "• Fewer moves = more points";
 "highScores.tip4" = "• Try different difficulty levels";
 "highScores.difficulty.custom" = "Custom";
-/* 
-  Localizable.strings
-  LifeCompanion
-
-  Created by gayeugur on 26.10.2025.
-  
-*/
-
 "todo.title" = "To‑Do";
 "empty.title" = "No tasks yet";
 "empty.subtitle" = "Tap + to add a new task";
@@ -390,6 +382,7 @@
 "medication.frequency.asNeeded" = "As needed";
 "medication.frequency.twiceWeekly" = "Twice weekly (Mon, Thu)";
 "medication.frequency.thriceWeekly" = "Three times weekly (Mon, Wed, Fri)";
+"medication.notTakenToday" = "This medication will not be taken today.";
 
 //Habit Notifications
 "habit.notification.reminder.title" = "Habit Reminder";
@@ -523,8 +516,6 @@
 "memory.settings.confirm.message" = "You have an active game. Starting new game will lose your current progress.";
 "memory.settings.new.game" = "Start New Game";
 
-//Memory Card
-"memory.card.tap" = "Tap to flip";
 
 //High Scores
 "highScores.title" = "High Scores";
