@@ -93,19 +93,25 @@ struct HealthView: View {
                 do {
                     // Settings manager integration first
                     viewModel.updateFromSettings(settingsManager)
-                    
                     // Load saved data
                     viewModel.loadBodyMetrics()
                     viewModel.loadDailyQuickActions()
-                    
                     // Fetch data from context
                     viewModel.fetchTodayWaterIntake(from: modelContext)
                     viewModel.fetchWeeklyData(from: modelContext)
                     viewModel.fetchTodayMedications(from: modelContext)
-                    
                     // Check for auto reset
                     viewModel.checkAutoReset(context: modelContext)
-                    
+
+                    // --- İlaçlar için scheduledTimes ve bildirimleri güncelle ---
+                    for medication in medications {
+                        // scheduledTimes'ı ileriye dönük 1 yıl boyunca güncelle
+                        let newTimes = MedicationEntry.generateScheduledTimes(frequency: medication.frequency, reminderTime: medication.scheduledTimes.first)
+                        if medication.scheduledTimes != newTimes {
+                            medication.scheduledTimes = newTimes
+                        }
+                        medication.scheduleNotifications()
+                    }
                 } catch {
                 }
             }
@@ -1191,7 +1197,8 @@ struct HealthView: View {
             let todayTaken = medication.takenTimes.filter { calendar.isDateInToday($0) }.sorted()
             if !isWeekly || (isWeekly && !todayScheduled.isEmpty) {
                 ForEach(todayScheduled, id: \.self) { scheduled in
-                    let takenIdx = todayTaken.firstIndex(where: { abs($0.timeIntervalSince(scheduled)) < 60*60 }) // 1 saat tolerans
+                    // Mark as taken if the taken time matches the scheduled time at hour and minute level
+                    let takenIdx = todayTaken.firstIndex(where: { Calendar.current.compare($0, to: scheduled, toGranularity: .minute) == .orderedSame })
                     let isTaken = takenIdx != nil
                     HStack {
                         Text("\(scheduled, style: .time)")
@@ -1653,7 +1660,10 @@ struct HealthView: View {
 
     // Overload: takeMedication with scheduled time
     private func takeMedication(_ medication: MedicationEntry, _ scheduled: Date) {
-        // Mark medication as taken at scheduled time
+        // Aynı scheduledTime için tekrar tekrar eklenmesini engelle
+        // Only add if not already taken at this hour and minute
+        let alreadyTaken = medication.takenTimes.contains { Calendar.current.compare($0, to: scheduled, toGranularity: .minute) == .orderedSame }
+        if alreadyTaken { return }
         medication.takenTimes.append(scheduled)
         
         // Save to context with error handling

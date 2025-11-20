@@ -39,7 +39,7 @@ final class MedicationEntry: Identifiable {
     }
     
     // Helper function to generate scheduled times based on frequency
-    private static func generateScheduledTimes(frequency: MedicationFrequency, reminderTime: Date?) -> [Date] {
+    static func generateScheduledTimes(frequency: MedicationFrequency, reminderTime: Date?) -> [Date] {
         let calendar = Calendar.current
         let now = Date()
         let today = calendar.startOfDay(for: now)
@@ -47,49 +47,48 @@ final class MedicationEntry: Identifiable {
         guard let baseTime = reminderTime else {
             return scheduledTimes
         }
-        let components = calendar.dateComponents([.hour, .minute], from: baseTime)
+        let baseComponents = calendar.dateComponents([.hour, .minute], from: baseTime)
         for dayOffset in 0..<7 {
             guard let dayStart = calendar.date(byAdding: .day, value: dayOffset, to: today) else { continue }
             let weekday = calendar.component(.weekday, from: dayStart)
-            // DEBUG: Haftanın günü ve tarihini yazdır
-            #if DEBUG
-            print("[MedicationEntry] Offset: \(dayOffset), Date: \(dayStart), Weekday: \(weekday)")
-            #endif
             switch frequency {
             case .once:
-                if let time = calendar.date(byAdding: components, to: dayStart) {
+                if let time = calendar.date(byAdding: baseComponents, to: dayStart) {
                     scheduledTimes.append(time)
                 }
             case .twice:
-                if let morningTime = calendar.date(byAdding: components, to: dayStart) {
-                    scheduledTimes.append(morningTime)
-                }
-                var eveningComponents = components
-                eveningComponents.hour = (eveningComponents.hour ?? 0) + 12
-                if let eveningTime = calendar.date(byAdding: eveningComponents, to: dayStart) {
-                    scheduledTimes.append(eveningTime)
+                // 2 doz: 08:00 ve 20:00
+                let hours = [8, 20]
+                for hour in hours {
+                    var comps = baseComponents
+                    comps.hour = hour
+                    if let time = calendar.date(byAdding: comps, to: dayStart) {
+                        scheduledTimes.append(time)
+                    }
                 }
             case .thrice:
-                let baseHour = components.hour ?? 8
-                let intervals = [0, 6, 12]
-                for interval in intervals {
-                    var timeComponents = components
-                    let targetHour = baseHour + interval
-                    timeComponents.hour = min(targetHour, 23)
-                    if let time = calendar.date(byAdding: timeComponents, to: dayStart) {
+                // 3 doz: 08:00, 14:00, 20:00
+                let hours = [8, 14, 20]
+                for hour in hours {
+                    var comps = baseComponents
+                    comps.hour = hour
+                    if let time = calendar.date(byAdding: comps, to: dayStart) {
                         scheduledTimes.append(time)
                     }
                 }
             case .twiceWeekly:
-                // Monday = 2, Thursday = 5 (Swift: 1=Sunday, 2=Monday, ..., 5=Thursday)
                 if weekday == 2 || weekday == 5 {
-                    if let time = calendar.date(byAdding: components, to: dayStart) {
+                    var comps = baseComponents
+                    comps.hour = 8
+                    if let time = calendar.date(byAdding: comps, to: dayStart) {
                         scheduledTimes.append(time)
                     }
                 }
             case .thriceWeekly:
                 if weekday == 2 || weekday == 4 || weekday == 6 {
-                    if let time = calendar.date(byAdding: components, to: dayStart) {
+                    var comps = baseComponents
+                    comps.hour = 8
+                    if let time = calendar.date(byAdding: comps, to: dayStart) {
                         scheduledTimes.append(time)
                     }
                 }
