@@ -676,7 +676,7 @@ struct SettingsView: View {
                         .foregroundColor(.red)
                     
                     VStack(spacing: 8) {
-                        Text("Life Companion")
+                        Text("MindMate Hub")
                             .font(.largeTitle)
                             .fontWeight(.bold)
                         
@@ -965,7 +965,7 @@ extension SettingsView {
         #endif
         
         let email = "gayeugur00@gmail.com"
-        let subject = "LifeCompanion App - Help & Support"
+        let subject = "MindMate Hub App - Help & Support"
         let body = """
         Hello LifeCompanion Support Team,
         

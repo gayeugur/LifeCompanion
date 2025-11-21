@@ -49,7 +49,7 @@
 "filter.status.incomplete" = "Incomplete";
 "empty.noTasks" = "No tasks yet";
 "empty.addTaskPrompt" = "Tap the + button to get started";
-"app.title" = "Life Companion";
+"app.title" = "MindMate Hub";
 "menu.todos" = "To-Do List";
 "menu.habits" = "Habits";
 "menu.health" = "Health";
@@ -542,7 +542,7 @@
 //Settings
 "settings.title" = "Settings";
 "settings.welcome.title" = "Customize Your Experience";
-"settings.welcome.subtitle" = "Personalize LifeCompanion to fit your lifestyle";
+"settings.welcome.subtitle" = "Personalize MindMate Hub to fit your lifestyle";
 "settings.general.title" = "General";
 "settings.general.darkmode" = "Dark Mode";
 "settings.general.language" = "Language";
@@ -570,11 +570,11 @@
 "export_success_message" = "Your data has been successfully saved to the selected location.";
 "success" = "Success";
 "settings.about.title" = "About";
-"settings.about.app" = "About LifeCompanion";
+"settings.about.app" = "About MindMate Hub";
 "settings.about.version" = "Version";
 "settings.about.privacy" = "Privacy Policy";
 "settings.about.support" = "Help & Support";
-"settings.about.description" = "🌟 LifeCompanion is your personal assistant for building better habits, tracking health, and maintaining mental wellness. ✨";
+"settings.about.description" = "🌟 MindMate Hub is your personal assistant for building better habits, tracking health, and maintaining mental wellness. ✨";
 "settings.about.features" = "Features";
 "settings.about.feature.habits" = "Habit Tracking with Streaks";
 "settings.about.feature.health" = "Health & Medication Management";

@@ -48,7 +48,7 @@
 "filter.status.incomplete" = "Tamamlanmayan";
 "empty.noTasks" = "Henüz görev eklemediniz";
 "empty.addTaskPrompt" = "Başlamak için + butonuna tıklayın";
-"app.title" = "Life Companion";
+"app.title" = "MindMate Hub";
 "menu.todos" = "Yapılacaklar";
 "menu.habits" = "Alışkanlıklar";
 "menu.health" = "Sağlık";
@@ -542,7 +542,7 @@
 //Settings
 "settings.title" = "Ayarlar";
 "settings.welcome.title" = "Deneyiminizi Kişiselleştirin";
-"settings.welcome.subtitle" = "LifeCompanion'ı yaşam tarzınıza göre ayarlayın";
+"settings.welcome.subtitle" = "MindMate Hub'ı yaşam tarzınıza göre ayarlayın";
 "settings.general.title" = "Genel";
 "settings.general.darkmode" = "Karanlık Mod";
 "settings.general.language" = "Dil";
@@ -570,11 +570,11 @@
 "export_success_message" = "Verileriniz seçilen konuma başarıyla kaydedildi.";
 "success" = "Başarılı";
 "settings.about.title" = "Hakkında";
-"settings.about.app" = "LifeCompanion Hakkında";
+"settings.about.app" = "MindMate Hub Hakkında";
 "settings.about.version" = "Sürüm";
 "settings.about.privacy" = "Gizlilik Politikası";
 "settings.about.support" = "Yardım ve Destek";
-"settings.about.description" = "🌟 LifeCompanion, daha iyi alışkanlıklar edinmek, sağlığı takip etmek ve zihinsel sağlığı korumak için kişisel asistanınızdır. ✨";
+"settings.about.description" = "🌟 MindMate Hub, daha iyi alışkanlıklar edinmek, sağlığı takip etmek ve zihinsel sağlığı korumak için kişisel asistanınızdır. ✨";
 "settings.about.features" = "Özellikler";
 "settings.about.feature.habits" = "Seri Takipli Alışkanlık Yönetimi";
 "settings.about.feature.health" = "Sağlık ve İlaç Yönetimi";

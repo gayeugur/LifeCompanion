@@ -54,7 +54,7 @@ class DataManager: ObservableObject {
         let jsonData = try encoder.encode(exportData)
         
         let tempURL = FileManager.default.temporaryDirectory
-            .appendingPathComponent("LifeCompanion_Export_\(dateString).json")
+            .appendingPathComponent("MindMateHub_Export_\(dateString).json")
         
         try jsonData.write(to: tempURL)
         return tempURL
@@ -198,7 +198,7 @@ class DataManager: ObservableObject {
         """
         
         let tempURL = FileManager.default.temporaryDirectory
-            .appendingPathComponent("LifeCompanion_Export_\(dateString).txt")
+            .appendingPathComponent("MindMateHub_Export_\(dateString).txt")
         
         try reportContent.write(to: tempURL, atomically: true, encoding: .utf8)
         
