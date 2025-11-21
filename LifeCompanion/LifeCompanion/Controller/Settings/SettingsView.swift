@@ -11,6 +11,7 @@ import UserNotifications
 import UniformTypeIdentifiers
 
 struct SettingsView: View {
+        @State private var showingPrivacyPolicy = false
     @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var modelContext
     @EnvironmentObject var themeManager: ThemeManager
@@ -375,6 +376,22 @@ struct SettingsView: View {
     private var privacySection: some View {
         SettingsCard(title: "settings.privacy.title".localized, icon: "lock.shield") {
             VStack(spacing: 16) {
+                // Privacy Policy Button (TR/EN)
+                Button(action: {
+                    feedbackManager.buttonTap()
+                    showingPrivacyPolicy = true
+                }) {
+                    HStack {
+                        Image(systemName: "doc.text")
+                        Text("settings.about.privacy".localized)
+                        Spacer()
+                        Image(systemName: "chevron.right")
+                            .foregroundColor(.secondary)
+                            .font(.caption)
+                    }
+                }
+                .buttonStyle(PlainButtonStyle())
+                Divider()
                 Button(action: {
                     feedbackManager.buttonTap()
                     showingExportFormatAlert = true
@@ -403,6 +420,19 @@ struct SettingsView: View {
                 .disabled(isExporting)
                 .buttonStyle(PlainButtonStyle())
                 
+                                // Added Privacy Policy Sheet
+                                .sheet(isPresented: $showingPrivacyPolicy) {
+                                    NavigationStack {
+                                        WebView(url: Bundle.main.url(forResource: "PrivacyPolicy", withExtension: "html")!)
+                                            .navigationTitle(languageManager.currentLanguage == "tr" ? "Gizlilik Politikası" : "Privacy Policy")
+                                            .navigationBarTitleDisplayMode(.inline)
+                                            .toolbar {
+                                                ToolbarItem(placement: .cancellationAction) {
+                                                    Button(languageManager.currentLanguage == "tr" ? "Kapat" : "Done") { showingPrivacyPolicy = false }
+                                                }
+                                            }
+                                    }
+                                }
                 Divider()
                 
                 Button(action: {
