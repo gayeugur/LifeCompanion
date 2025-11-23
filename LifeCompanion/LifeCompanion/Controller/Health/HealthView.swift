@@ -1664,6 +1664,7 @@ struct HealthView: View {
         // Only add if not already taken at this hour and minute
         let alreadyTaken = medication.takenTimes.contains { Calendar.current.compare($0, to: scheduled, toGranularity: .minute) == .orderedSame }
         if alreadyTaken { return }
+        // Add the exact scheduled time to takenTimes
         medication.takenTimes.append(scheduled)
         
         // Save to context with error handling

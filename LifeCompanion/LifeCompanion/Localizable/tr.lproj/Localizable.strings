@@ -236,7 +236,7 @@
 //Health Section
 "health.water.title" = "Su Tüketimi";
 "health.water.remaining" = "kaldı";
-"health.water.goal.reached" = "Hedef Tamamlandı!";
+"health.water.goal.reached" = "Hedefe ulaşıldı!";
 "health.water.add.glass" = "Su Ekle";
 "health.daily.goal" = "Günlük Hedef";
 "health.quick.actions" = "Hızlı İşlemler";
