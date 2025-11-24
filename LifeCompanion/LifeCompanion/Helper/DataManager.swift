@@ -243,7 +243,7 @@ class DataManager: ObservableObject {
          
             let exportData = ExportData(
                 exportDate: Date(),
-                appVersion: "1.0.0",
+                appVersion: Bundle.main.appVersion,
                 habits: habits.compactMap { 
                     do {
                         return ExportHabit(from: $0)

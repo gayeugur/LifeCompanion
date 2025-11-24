@@ -462,7 +462,7 @@ struct SettingsView: View {
                     HStack {
                         Label("settings.about.app".localized, systemImage: "app.badge")
                         Spacer()
-                        Text("1.0.0")
+                        Text(Bundle.main.appVersion)
                             .foregroundColor(.secondary)
                         Image(systemName: "chevron.right")
                             .foregroundColor(.secondary)
@@ -680,7 +680,7 @@ struct SettingsView: View {
                             .font(.largeTitle)
                             .fontWeight(.bold)
                         
-                        Text("settings.about.version".localized + " 1.0.0")
+                        Text("settings.about.version".localized + " " + Bundle.main.appVersion)
                             .foregroundColor(.secondary)
                     }
                     
