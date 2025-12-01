@@ -17,7 +17,6 @@ LifeCompanion is a modern iOS app designed to help you manage your daily life in
 
 ## 🏗️ Technologies Used
 
-- Swift 6
 - SwiftUI
 - SwiftData
 - UserNotifications
