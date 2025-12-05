@@ -41,18 +41,9 @@ struct SettingsView: View {
     private let gridSizeOptions = [3, 4, 5, 6]
     
     var body: some View {
-        NavigationStack {
             settingsContent
                 .navigationTitle("menu.settings".localized)
                 .navigationBarTitleDisplayMode(.large)
-                .toolbar {
-                    ToolbarItem(placement: .topBarTrailing) {
-                        Button("common.done".localized) {
-                            dismiss()
-                        }
-                    }
-                }
-        }
         .onAppear { }
         .alert(LanguageManager.shared.getLocalizedString(for: "settings.export.format.title"), isPresented: $showingExportFormatAlert) {
             exportFormatAlert
@@ -93,7 +84,7 @@ struct SettingsView: View {
                 startPoint: .topLeading,
                 endPoint: .bottomTrailing
             )
-            .ignoresSafeArea(.container, edges: .bottom)
+            .ignoresSafeArea()
             
             ScrollView {
                 LazyVStack(spacing: 20) {

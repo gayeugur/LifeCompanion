@@ -1,3 +1,46 @@
+"memory.game.memorygame" = "Memory Game";
+"memory.game.memorygame.desc" = "Challenge your memory with fun mini games!";
+"memory.game.stop.title" = "Stop Game";
+"memory.game.stop.desc" = "A fun reaction and attention game. Try to stop at the right moment!";
+"memory.game.stroop.title" = "Stroop Test";
+"memory.game.stroop.desc" = "Measures attention, reaction time, and cognitive control. Both fun and neuropsychologically meaningful.";
+"memory.game.title" = "Memory Mini Games";
+"memory.game.subtitle" = "Challenge your memory with fun mini games! Each round gets harder.";
+"memory.game.nback.title" = "N-Back";
+"nback.n" = "N: %d";
+"memory.game.numberflash.desc" = "Remember the numbers in order and enter them below.";
+"memory.game.soundmemory.desc" = "Listen to the sound sequence and repeat it.";
+"memory.game.pathmemory.desc" = "Memorize and repeat the path shown on the grid.";
+"memory.game.nback.desc" = "Test your working memory with the N-Back challenge.";
+"memory.game.comingsoon.desc" = "New game coming soon!";
+"nback.title" = "N-Back";
+"nback.score" = "Score:";
+"nback.n" = "N: %d";
+"nback.match" = "Match";
+"nback.nomatch" = "No Match";
+"nback.hint" = "Hint";
+"nback.hint.letters" = "Last 5 Letters";
+"nback.finished" = "Finished!";
+"nback.restart" = "Restart";
+"pathmemory.restart" = "Restart";
+"pathmemory.title" = "Path Memory";
+"pathmemory.level" = "Level: %d";
+"pathmemory.step" = "Step: %d/%d";
+"pathmemory.attempts" = "Attempts: %d";
+"pathmemory.correct" = "Correct!";
+"pathmemory.wrong" = "Wrong!";
+"pathmemory.wrongAttempts" = "Wrong! Remaining attempts: %d";
+"pathmemory.failed" = "Failed!";
+"pathmemory.failedMessage" = "You have no attempts left. Try again.";
+"pathmemory.close" = "Close";
+"memory.game.comingsoon" = "Coming Soon";
+"numberflash.instructions" = "Remember the numbers in order.";
+"numberflash.input.instructions" = "Enter the numbers you saw, separated by spaces.";
+"numberflash.input.placeholder" = "e.g. 3 7 2 9";
+"numberflash.submit" = "Submit";
+"numberflash.correct" = "Correct!";
+"numberflash.restart" = "Restart";
+"numberflash.show" = "Show Numbers";
 "highScores.bestOverall" = "Best Overall Score";
 "highScores.clearAll" = "Clear All Scores";
 "highScores.tip1" = "• Complete games to earn points";
@@ -54,7 +97,7 @@
 "menu.habits" = "Habits";
 "menu.health" = "Health";
 "menu.meditation" = "Meditation";
-"menu.memoryGame" = "Memory Game";
+"menu.memoryGame" = "Game";
 "menu.settings" = "Settings";
 "menu.comingSoon" = "Coming Soon";
 
@@ -435,6 +478,10 @@
 
 //Memory Game
 "memory.game.title" = "Memory Game";
+"memory.game.numberflash" = "Number Flash";
+"memory.game.soundmemory" = "Sound Memory";
+"memory.game.pathmemory" = "Path Memory";
+"memory.game.back" = "Back to Games";
 "memoryGame.title" = "Memory Game";
 "memoryGame.singlePlayer" = "Single Player";
 "memoryGame.time" = "Time";

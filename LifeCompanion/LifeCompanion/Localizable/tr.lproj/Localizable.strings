@@ -1,3 +1,46 @@
+"memory.game.memorygame" = "Hafıza Oyunu";
+"memory.game.memorygame.desc" = "Hafızanı eğlenceli mini oyunlarla zorla!";
+"memory.game.stop.title" = "Stop Oyunu";
+"memory.game.stop.desc" = "Eğlenceli bir dikkat ve tepki oyunu. Doğru anda durmaya çalış!";
+"memory.game.stroop.title" = "Stroop Test";
+"memory.game.stroop.desc" = "Dikkat, tepki süresi ve bilişsel kontrolü ölçer. Hem eğlenceli hem de nöropsikolojik olarak anlamlı bir test/oyun.";
+"memory.game.title" = "Hafıza Mini Oyunları";
+"memory.game.subtitle" = "Hafızanı eğlenceli mini oyunlarla zorla! Her tur daha da zorlaşır.";
+"memory.game.nback.title" = "N-Back";
+"nback.n" = "N: %d";
+"memory.game.numberflash.desc" = "Sayıları sırayla aklında tut ve aşağıya gir.";
+"memory.game.soundmemory.desc" = "Ses dizisini dinle ve tekrar et.";
+"memory.game.pathmemory.desc" = "Gridde gösterilen yolu ezberle ve tekrar et.";
+"memory.game.nback.desc" = "Çalışan hafızanı N-Back ile test et.";
+"memory.game.comingsoon.desc" = "Yeni oyun yakında!";
+"nback.title" = "N-Back";
+"nback.score" = "Skor:";
+"nback.n" = "N: %d";
+"nback.match" = "Eşleşme";
+"nback.nomatch" = "Eşleşmiyor";
+"nback.hint" = "Tüyo";
+"nback.hint.letters" = "Son 5 Harf";
+"nback.finished" = "Bitti!";
+"nback.restart" = "Yeniden Başla";
+"pathmemory.restart" = "Yeniden Başla";
+"pathmemory.title" = "Yol Hafızası";
+"pathmemory.level" = "Seviye: %d";
+"pathmemory.step" = "Adım: %d/%d";
+"pathmemory.attempts" = "Hak: %d";
+"pathmemory.correct" = "Doğru!";
+"pathmemory.wrong" = "Yanlış!";
+"pathmemory.wrongAttempts" = "Yanlış! Kalan hak: %d";
+"pathmemory.failed" = "Başarısız!";
+"pathmemory.failedMessage" = "Haklarınız bitti. Tekrar deneyebilirsiniz.";
+"pathmemory.close" = "Kapat";
+"memory.game.comingsoon" = "Çok Yakında";
+"numberflash.instructions" = "Sayıları sırayla aklında tut.";
+"numberflash.input.instructions" = "Gördüğün sayıları aralarına boşluk koyarak gir.";
+"numberflash.input.placeholder" = "örn. 3 7 2 9";
+"numberflash.submit" = "Gönder";
+"numberflash.correct" = "Doğru!";
+"numberflash.restart" = "Yeniden Başlat";
+"numberflash.show" = "Sayıları Göster";
 "highScores.bestOverall" = "En İyi Genel Skor";
 "highScores.clearAll" = "Tüm Skorları Temizle";
 "highScores.tip1" = "• Oyunları tamamlayarak puan kazan";
@@ -53,7 +96,7 @@
 "menu.habits" = "Alışkanlıklar";
 "menu.health" = "Sağlık";
 "menu.meditation" = "Meditasyon";
-"menu.memoryGame" = "Hafıza Oyunu";
+"menu.memoryGame" = "Oyun";
 "menu.settings" = "Ayarlar";
 "menu.comingSoon" = "Yakında";
 //Habits
@@ -434,6 +477,10 @@
 
 //Memory Game
 "memory.game.title" = "Hafıza Oyunu";
+"memory.game.numberflash" = "Sayı Flaş";
+"memory.game.soundmemory" = "Ses Hafızası";
+"memory.game.pathmemory" = "Yol Hafızası";
+"memory.game.back" = "Oyunlara Dön";
 "memoryGame.title" = "Hafıza Oyunu";
 "memoryGame.singlePlayer" = "Tek Kişi";
 "memoryGame.time" = "Süre";

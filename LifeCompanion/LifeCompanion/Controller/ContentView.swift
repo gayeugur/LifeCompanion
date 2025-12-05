@@ -89,7 +89,7 @@ struct ContentView: View {
         case "menu.meditation".localized:
             MeditationView()
         case "menu.memoryGame".localized:
-            WorkingMemoryGameView()
+            MemoryGameMenuView()
         case "menu.settings".localized: 
             SettingsView()
         default:

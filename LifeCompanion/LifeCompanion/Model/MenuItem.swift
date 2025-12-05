@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import SwiftUICore
+import SwiftUI
 
 // MARK: - Models
 struct MenuItem: Identifiable {
