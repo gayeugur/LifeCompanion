@@ -11,7 +11,7 @@ import UserNotifications
 import UniformTypeIdentifiers
 
 struct SettingsView: View {
-        @State private var showingPrivacyPolicy = false
+    @State private var showingPrivacyPolicy = false
     @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var modelContext
     @EnvironmentObject var themeManager: ThemeManager
@@ -41,33 +41,40 @@ struct SettingsView: View {
     private let gridSizeOptions = [3, 4, 5, 6]
     
     var body: some View {
-            settingsContent
-                .navigationTitle("menu.settings".localized)
-                .navigationBarTitleDisplayMode(.large)
-        .onAppear { }
-        .alert(LanguageManager.shared.getLocalizedString(for: "settings.export.format.title"), isPresented: $showingExportFormatAlert) {
-            exportFormatAlert
-        } message: {
-            Text("settings.export.format.message".localized)
-        }
-        .alert("Export Error", isPresented: $showingExportError) {
-            Button("OK", role: .cancel) { }
-        } message: {
-            Text("Unable to export your data. Please try again.")
-        }
-        .alert("settings.support.email.failed.title".localized, isPresented: $showingEmailAlert) {
-            Button("common.copy".localized) {
-                UIPasteboard.general.string = "gayeugur00@gmail.com"
-                feedbackManager.successHaptic()
+        settingsContent
+            .navigationTitle("menu.settings".localized)
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .principal) {
+                    Text("menu.settings".localized)
+                        .font(.headline)
+                        .foregroundColor(.primary)
+                }
             }
-            Button("common.ok".localized, role: .cancel) { }
-        } message: {
-            #if targetEnvironment(simulator)
-            Text("In simulator: Contact gayeugur00@gmail.com for support")
-            #else
-            Text("settings.support.email.failed.message".localized)
-            #endif
-        }
+            .onAppear { }
+            .alert(LanguageManager.shared.getLocalizedString(for: "settings.export.format.title"), isPresented: $showingExportFormatAlert) {
+                exportFormatAlert
+            } message: {
+                Text("settings.export.format.message".localized)
+            }
+            .alert("Export Error", isPresented: $showingExportError) {
+                Button("OK", role: .cancel) { }
+            } message: {
+                Text("Unable to export your data. Please try again.")
+            }
+            .alert("settings.support.email.failed.title".localized, isPresented: $showingEmailAlert) {
+                Button("common.copy".localized) {
+                    UIPasteboard.general.string = "gayeugur00@gmail.com"
+                    feedbackManager.successHaptic()
+                }
+                Button("common.ok".localized, role: .cancel) { }
+            } message: {
+                #if targetEnvironment(simulator)
+                Text("In simulator: Contact gayeugur00@gmail.com for support")
+                #else
+                Text("settings.support.email.failed.message".localized)
+                #endif
+            }
     }
     
     @ViewBuilder
@@ -94,7 +101,7 @@ struct SettingsView: View {
                     // Habits Settings
                     habitsSection
                     
-                    // Health Settings  
+                    // Health Settings
                     healthSection
                         
                     // Memory Game Settings
@@ -125,6 +132,20 @@ struct SettingsView: View {
         .sheet(isPresented: $showingAbout) {
             aboutSheet
         }
+        .sheet(isPresented: $showingPrivacyPolicy) {
+            NavigationStack {
+                WebView(url: Bundle.main.url(forResource: "PrivacyPolicy", withExtension: "html")!)
+                    .navigationTitle(languageManager.currentLanguage == "tr" ? "Gizlilik Politikası" : "Privacy Policy")
+                    .navigationBarTitleDisplayMode(.inline)
+                    .toolbar {
+                        ToolbarItem(placement: .cancellationAction) {
+                            Button(languageManager.currentLanguage == "tr" ? "Kapat" : "Done") {
+                                showingPrivacyPolicy = false
+                            }
+                        }
+                    }
+            }
+        }
         .alert("settings.notification.permission.title".localized, isPresented: $showingNotificationPermissionAlert) {
             Button("settings.notification.permission.settings".localized) {
                 openAppSettings()
@@ -143,7 +164,7 @@ struct SettingsView: View {
         }
     }
     
-    @ViewBuilder 
+    @ViewBuilder
     private var exportFormatAlert: some View {
         Button(LanguageManager.shared.getLocalizedString(for: "settings.export.format.pdf")) {
             showingExportFormatAlert = false
@@ -180,9 +201,9 @@ struct SettingsView: View {
                 Divider()
                 
                 // Language Selection
-                Button(action: { 
+                Button(action: {
                     feedbackManager.buttonTap()
-                    showingLanguageSheet = true 
+                    showingLanguageSheet = true
                 }) {
                     HStack(spacing: 16) {
                         // Language icon with background
@@ -337,8 +358,8 @@ struct SettingsView: View {
                     
                     if !gridSizeOptions.isEmpty {
                         Picker("", selection: Binding(
-                            get: { 
-                                gridSizeOptions.contains(settingsManager.memoryGameDefaultSize) ? 
+                            get: {
+                                gridSizeOptions.contains(settingsManager.memoryGameDefaultSize) ?
                                 settingsManager.memoryGameDefaultSize : gridSizeOptions.first ?? 4
                             },
                             set: { newValue in
@@ -367,7 +388,7 @@ struct SettingsView: View {
     private var privacySection: some View {
         SettingsCard(title: "settings.privacy.title".localized, icon: "lock.shield") {
             VStack(spacing: 16) {
-                // Privacy Policy Button (TR/EN)
+                // Privacy Policy Button
                 Button(action: {
                     feedbackManager.buttonTap()
                     showingPrivacyPolicy = true
@@ -382,7 +403,10 @@ struct SettingsView: View {
                     }
                 }
                 .buttonStyle(PlainButtonStyle())
+                
                 Divider()
+                
+                // Export Data
                 Button(action: {
                     feedbackManager.buttonTap()
                     showingExportFormatAlert = true
@@ -396,36 +420,18 @@ struct SettingsView: View {
                                 .scaleEffect(0.8)
                                 .foregroundColor(.secondary)
                         } else {
-                            Button(action: {
-                                feedbackManager.buttonTap()
-                                showingExportFormatAlert = true
-                            }) {
-                                Image(systemName: "chevron.right")
-                                    .foregroundColor(.secondary)
-                                    .font(.caption)
-                            }
-                            .buttonStyle(PlainButtonStyle())
+                            Image(systemName: "chevron.right")
+                                .foregroundColor(.secondary)
+                                .font(.caption)
                         }
                     }
                 }
                 .disabled(isExporting)
                 .buttonStyle(PlainButtonStyle())
                 
-                                // Added Privacy Policy Sheet
-                                .sheet(isPresented: $showingPrivacyPolicy) {
-                                    NavigationStack {
-                                        WebView(url: Bundle.main.url(forResource: "PrivacyPolicy", withExtension: "html")!)
-                                            .navigationTitle(languageManager.currentLanguage == "tr" ? "Gizlilik Politikası" : "Privacy Policy")
-                                            .navigationBarTitleDisplayMode(.inline)
-                                            .toolbar {
-                                                ToolbarItem(placement: .cancellationAction) {
-                                                    Button(languageManager.currentLanguage == "tr" ? "Kapat" : "Done") { showingPrivacyPolicy = false }
-                                                }
-                                            }
-                                    }
-                                }
                 Divider()
                 
+                // Delete All Data
                 Button(action: {
                     feedbackManager.warningHaptic()
                     showingDeleteConfirmation = true
@@ -462,7 +468,6 @@ struct SettingsView: View {
                 }
                 .buttonStyle(PlainButtonStyle())
                 
-                
                 Divider()
                 
                 Button(action: { openSupportEmail() }) {
@@ -484,7 +489,6 @@ struct SettingsView: View {
     private var languageSelectionSheet: some View {
         NavigationStack {
             ZStack {
-                // Gradient background
                 LinearGradient(
                     colors: [
                         Color.blue.opacity(0.08),
@@ -499,7 +503,6 @@ struct SettingsView: View {
                 
                 ScrollView {
                     LazyVStack(spacing: 16) {
-                        // Header description
                         VStack(alignment: .leading, spacing: 8) {
                             HStack {
                                 Image(systemName: "globe")
@@ -514,7 +517,6 @@ struct SettingsView: View {
                         .padding(.horizontal, 20)
                         .padding(.top, 10)
                         
-                        // Language options
                         ForEach(languages, id: \.0) { code, englishName, turkishName in
                             languageOptionCard(
                                 code: code,
@@ -547,23 +549,17 @@ struct SettingsView: View {
     @ViewBuilder
     private func languageOptionCard(code: String, englishName: String, turkishName: String) -> some View {
         Button(action: {
-            // Update settings first
             settingsManager.selectedLanguage = code
-            
-            // Update language manager (this will trigger UI refresh)
             languageManager.currentLanguage = code
-            
             showingLanguageSheet = false
             feedbackManager.successHaptic()
             
-            // Force complete UI refresh
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
                 languageManager.objectWillChange.send()
                 settingsManager.objectWillChange.send()
             }
         }) {
             HStack(spacing: 16) {
-                // Language flag/icon
                 Text(getLanguageFlag(for: code))
                     .font(.system(size: 32))
                     .frame(width: 50, height: 50)
@@ -573,7 +569,6 @@ struct SettingsView: View {
                             .shadow(color: .black.opacity(0.1), radius: 2, x: 0, y: 1)
                     )
                 
-                // Language info
                 VStack(alignment: .leading, spacing: 4) {
                     Text(settingsManager.selectedLanguage == "tr" ? turkishName : englishName)
                         .font(.system(size: 17, weight: .medium))
@@ -586,7 +581,6 @@ struct SettingsView: View {
                 
                 Spacer()
                 
-                // Selection indicator
                 ZStack {
                     Circle()
                         .fill(settingsManager.selectedLanguage == code ? Color.blue : Color.clear)
@@ -611,7 +605,7 @@ struct SettingsView: View {
                     .overlay(
                         RoundedRectangle(cornerRadius: 16)
                             .stroke(
-                                settingsManager.selectedLanguage == code 
+                                settingsManager.selectedLanguage == code
                                 ? LinearGradient(colors: [.blue, .purple], startPoint: .topLeading, endPoint: .bottomTrailing)
                                 : LinearGradient(colors: [Color.clear], startPoint: .topLeading, endPoint: .bottomTrailing),
                                 lineWidth: settingsManager.selectedLanguage == code ? 2 : 0
@@ -624,44 +618,12 @@ struct SettingsView: View {
         .buttonStyle(PlainButtonStyle())
     }
     
-    // MARK: - Language Helpers
-    private func getLanguageFlag(for code: String) -> String {
-        switch code {
-        case "system":
-            return "🌐"
-        case "en":
-            return "🇺🇸"
-        case "tr":
-            return "🇹🇷"
-        default:
-            return "🌐"
-        }
-    }
-    
-    private func getLanguageSubtitle(for code: String) -> String {
-        switch code {
-        case "system":
-            return "settings.language.system.subtitle".localized
-        case "en":
-            return "English (United States)"
-        case "tr":
-            return "Turkish (Türkiye)"
-        default:
-            return ""
-        }
-    }
-    
-    private func getCurrentLanguageFlag() -> String {
-        return getLanguageFlag(for: settingsManager.selectedLanguage)
-    }
-    
     // MARK: - About Sheet
     @ViewBuilder
     private var aboutSheet: some View {
-        NavigationView {
+        NavigationStack {
             ScrollView {
                 VStack(spacing: 24) {
-                    // App Icon
                     Image(systemName: "heart.circle.fill")
                         .font(.system(size: 100))
                         .foregroundColor(.red)
@@ -706,6 +668,7 @@ struct SettingsView: View {
                 }
                 .padding()
             }
+            .background(Color(.systemGroupedBackground))
             .navigationTitle("settings.about.title".localized)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
@@ -752,6 +715,29 @@ struct SettingsView: View {
         return "System Default"
     }
     
+    // MARK: - Language Helpers
+    private func getLanguageFlag(for code: String) -> String {
+        switch code {
+        case "system": return "🌐"
+        case "en": return "🇺🇸"
+        case "tr": return "🇹🇷"
+        default: return "🌐"
+        }
+    }
+    
+    private func getLanguageSubtitle(for code: String) -> String {
+        switch code {
+        case "system": return "settings.language.system.subtitle".localized
+        case "en": return "English (United States)"
+        case "tr": return "Turkish (Türkiye)"
+        default: return ""
+        }
+    }
+    
+    private func getCurrentLanguageFlag() -> String {
+        return getLanguageFlag(for: settingsManager.selectedLanguage)
+    }
+    
     // MARK: - Helper Methods
     private func loadTimeDefaults() {
         autoResetTime = settingsManager.autoResetTime
@@ -761,7 +747,6 @@ struct SettingsView: View {
         settingsManager.autoResetTime = time
         feedbackManager.lightHaptic()
         
-        // Notify HealthViewModel about reset time change
         NotificationCenter.default.post(
             name: NSNotification.Name("ResetTimeUpdated"),
             object: modelContext,
@@ -784,26 +769,19 @@ struct SettingsView: View {
     }
     
     private func exportUserData(format: ExportFormat = .pdf) {
-        // Immediate feedback for better UX
         feedbackManager.buttonTap()
-        
-        // Show loading state immediately
         isExporting = true
         
-        // Run export in background to avoid UI blocking
         Task {
             let context = modelContext
             let result = await Task.detached(priority: .userInitiated) {
                 return dataManager.exportUserData(context: context, format: format)
             }.value
             
-            // Update UI on main thread
             await MainActor.run {
-                // Hide loading state
                 isExporting = false
                 
                 if let url = result {
-                    // Verify file exists
                     if FileManager.default.fileExists(atPath: url.path) {
                         showShareSheet(url: url)
                         feedbackManager.successHaptic()
@@ -820,8 +798,6 @@ struct SettingsView: View {
     }
     
     private func showShareSheet(url: URL) {
-        
-        // Ensure we're on main thread for UI operations
         DispatchQueue.main.async {
             let activityVC = UIActivityViewController(activityItems: [url], applicationActivities: nil)
             activityVC.excludedActivityTypes = [
@@ -831,7 +807,6 @@ struct SettingsView: View {
                 .postToVimeo
             ]
             
-            // iPad support
             if let popover = activityVC.popoverPresentationController,
                let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
                let window = windowScene.windows.first {
@@ -840,7 +815,6 @@ struct SettingsView: View {
                 popover.permittedArrowDirections = []
             }
             
-            // Find the topmost presented view controller
             guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
                   let window = windowScene.windows.first,
                   let rootVC = window.rootViewController else {
@@ -861,7 +835,6 @@ struct SettingsView: View {
         do {
             try dataManager.deleteAllUserData(context: modelContext)
             feedbackManager.successHaptic()
-            // Optionally dismiss settings or show success message
         } catch {
             feedbackManager.errorHaptic()
         }

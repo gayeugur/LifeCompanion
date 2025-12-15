@@ -1,6 +1,9 @@
 import SwiftUI
 
 struct TetroMemoryGameView: View {
+    @Binding var showMainMenu: Bool
+    @Environment(\.dismiss) private var dismiss
+    // ...existing code...
     @State private var grid: [[Int]] = Array(repeating: Array(repeating: 0, count: 10), count: 20)
     @State private var currentPiece: Tetromino = Tetromino.random()
     @State private var piecePosition: (x: Int, y: Int) = (4, 0)
@@ -16,7 +19,14 @@ struct TetroMemoryGameView: View {
                 endPoint: .bottomTrailing
             ).ignoresSafeArea()
             VStack(spacing: 16) {
-                // ...existing code...
+                Button(action: { showMainMenu = true }) {
+                    Text("Ana Menüye Dön")
+                        .font(.headline)
+                        .padding(.horizontal, 16)
+                        .padding(.vertical, 8)
+                        .background(Color.blue.opacity(0.15))
+                        .cornerRadius(10)
+                }
                 Text("TetroMemory")
                     .font(.largeTitle)
                     .bold()
@@ -50,24 +60,17 @@ struct TetroMemoryGameView: View {
                     Text("Game Over!")
                         .font(.title)
                         .foregroundColor(.red)
-                    Button("Restart") { restartGame() }
+                }
+                Button(action: { restartGame() }) {
+                    Text("Restart")
+                        .font(.headline)
+                        .padding(.horizontal, 12)
+                        .padding(.vertical, 6)
+                        .background(Color.blue.opacity(0.15))
+                        .cornerRadius(8)
                 }
                 Spacer()
-                Button(action: {  }) {
-                    HStack {
-                        Image(systemName: "arrow.left.circle.fill")
-                            .font(.title2)
-                        Text("Back to Games")
-                            .font(.title3)
-                            .fontWeight(.semibold)
-                    }
-                    .padding(10)
-                    .background(Color.blue)
-                    .foregroundColor(.white)
-                    .cornerRadius(16)
-                    .shadow(color: Color.blue.opacity(0.25), radius: 6, x: 0, y: 3)
-                }
-                .padding(.bottom, 16)
+                // Back button kaldırıldı
             }
             .padding(.top, 16)
             
@@ -238,12 +241,5 @@ struct Tetromino {
             }
         }
         return result
-    }
-}
-
-struct TetroMemoryGameView_Previews: PreviewProvider {
-    @State static var selectedGame: String? = nil
-    static var previews: some View {
-        TetroMemoryGameView()
     }
 }

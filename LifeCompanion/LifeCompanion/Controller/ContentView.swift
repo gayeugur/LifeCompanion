@@ -17,6 +17,8 @@ struct ContentView: View {
     @EnvironmentObject private var dataManager: DataManager
     @EnvironmentObject private var languageManager: LanguageManager
     @State private var refreshKey = UUID()
+    @State private var navigationPath = NavigationPath()
+    @StateObject private var appNavState = AppNavigationState()
     @StateObject private var habitViewModel = HabitListViewModel()
     
     // Performance optimization: Cache menu items to avoid repeated localization calls
@@ -31,55 +33,71 @@ struct ContentView: View {
         ]
     }
     
+    @State private var showMainMenu = true
+
     var body: some View {
-        NavigationStack {
-            GeometryReader { geometry in
-                ScrollView {
-                    let spacing: CGFloat = 20
-                    let columns = [
-                        GridItem(.adaptive(minimum: geometry.size.width / 2 - spacing * 1.5))
-                    ]
-                    
-                    LazyVGrid(columns: columns, spacing: spacing) {
-                        ForEach(menuItems) { item in
-                            NavigationLink(destination: destinationView(for: item)) {
-                                MenuItemView(item: item, size: geometry.size.width / 2 - spacing * 1.5)
+        NavigationStack(path: $navigationPath) {
+            if showMainMenu {
+                GeometryReader { geometry in
+                    ScrollView {
+                        let spacing: CGFloat = 20
+                        let columns = [
+                            GridItem(.adaptive(minimum: geometry.size.width / 2 - spacing * 1.5))
+                        ]
+                        LazyVGrid(columns: columns, spacing: spacing) {
+                            ForEach(menuItems, id: \ .title) { item in
+                                Button(action: {
+                                    navigationPath.append(item.title)
+                                }) {
+                                    MenuItemView(item: item, size: geometry.size.width / 2 - spacing * 1.5)
+                                }
                             }
                         }
+                        .padding(spacing)
                     }
-                    .padding(spacing)
                 }
-            }
-            .navigationTitle("app.title".localized)
-            .id(refreshKey)
-            .onReceive(NotificationCenter.default.publisher(for: .languageDidChange)) { _ in
-                refreshKey = UUID()
-            }
-            .onChange(of: scenePhase) { _, newPhase in
-                switch newPhase {
-                case .active:
+                .navigationTitle("app.title".localized)
+                .id(refreshKey)
+                .onReceive(NotificationCenter.default.publisher(for: .languageDidChange)) { _ in
+                    refreshKey = UUID()
+                }
+                .onChange(of: scenePhase) { _, newPhase in
+                    switch newPhase {
+                    case .active:
+                        habitViewModel.configure(settingsManager: settingsManager)
+                        habitViewModel.fetchHabits(from: modelContext)
+                        habitViewModel.checkAutoReset(in: modelContext, settingsManager: settingsManager)
+                    case .background:
+                        break
+                    case .inactive:
+                        break
+                    @unknown default:
+                        break
+                    }
+                }
+                .onAppear {
                     habitViewModel.configure(settingsManager: settingsManager)
                     habitViewModel.fetchHabits(from: modelContext)
                     habitViewModel.checkAutoReset(in: modelContext, settingsManager: settingsManager)
-                case .background:
-                    break
-                case .inactive:
-                    break
-                @unknown default:
-                    break
                 }
-            }
-            .onAppear {
-                habitViewModel.configure(settingsManager: settingsManager)
-                habitViewModel.fetchHabits(from: modelContext)
-                habitViewModel.checkAutoReset(in: modelContext, settingsManager: settingsManager)
+                .navigationDestination(for: String.self) { title in
+                    destinationView(for: title)
+                }
+            } else {
+                TetroMemoryGameView(showMainMenu: $showMainMenu)
             }
         }
+        .environmentObject(appNavState) // 🔥 BURASI KRİTİK
+                .onChange(of: appNavState.showMainMenu) { _, newValue in
+                    if newValue {
+                        navigationPath = NavigationPath() // 🔥 POP TO ROOT
+                    }
+                }
     }
     
     @ViewBuilder
-    private func destinationView(for item: MenuItem) -> some View {
-        switch item.title {
+    private func destinationView(for title: String) -> some View {
+        switch title {
         case "menu.todos".localized:
             TodoListView()
         case "menu.habits".localized:
@@ -89,8 +107,8 @@ struct ContentView: View {
         case "menu.meditation".localized:
             MeditationView()
         case "menu.memoryGame".localized:
-            MemoryGameMenuView()
-        case "menu.settings".localized: 
+            MemoryGameMenuView(showMainMenu: $showMainMenu)
+        case "menu.settings".localized:
             SettingsView()
         default:
             Text("menu.comingSoon".localized)

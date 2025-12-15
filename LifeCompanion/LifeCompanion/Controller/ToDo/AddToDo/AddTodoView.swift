@@ -18,6 +18,7 @@ struct AddTodoView: View {
     @State private var subtitle: String = ""
     @State private var priority: TodoItem.Priority = .medium
     @State private var dueDate: Date = Date().addingTimeInterval(60 * 60)
+    @State private var taskDate: Date = Calendar.current.startOfDay(for: Date())
     @State private var enableReminder: Bool = false
     @State private var showValidationAlert: Bool = false
     @State private var showingSuggestionsSheet: Bool = false
@@ -107,6 +108,22 @@ struct AddTodoView: View {
                                     Text("priority.high".localized).tag(TodoItem.Priority.high)
                                 }
                                 .pickerStyle(.segmented)
+                            }
+                        }
+
+                        // Görev Tarihi (ana tarih)
+                        card {
+                            VStack(alignment: .leading, spacing: 10) {
+                                Text("Görev Tarihi")
+                                    .font(.callout)
+                                    .foregroundStyle(.secondary)
+                                DatePicker("Görev Tarihi", selection: $taskDate, in: Date()..., displayedComponents: [.date])
+                                    .datePickerStyle(.compact)
+                                    .onChange(of: taskDate) { newDate in
+                                        // Bildirim tarihi de aynı günün varsayılan saatine ayarlanır
+                                        let defaultReminder = Calendar.current.date(bySettingHour: 9, minute: 0, second: 0, of: newDate) ?? newDate
+                                        dueDate = defaultReminder
+                                    }
                             }
                         }
 
@@ -237,10 +254,12 @@ struct AddTodoView: View {
             return
         }
 
+        // Save both taskDate and reminder (dueDate)
         let todo = TodoItem(
             title: trimmed,
             isCompleted: false,
             dueDate: enableReminder ? dueDate : nil,
+            taskDate: taskDate,
             priority: priority,
             notes: subtitle.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? nil : subtitle
         )
@@ -291,7 +310,9 @@ struct AddTodoView: View {
 
         UNUserNotificationCenter.current().add(request) { error in
             if let error = error {
+                print("Bildirim hatası: \(error.localizedDescription)")
             } else {
+                print("Bildirim başarıyla planlandı: \(todo.title) - \(date)")
             }
         }
     }

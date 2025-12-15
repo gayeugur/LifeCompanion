@@ -15,6 +15,7 @@ import Helper
 #endif
 
 struct WorkingMemoryGameView: View {
+    @Binding var showMainMenu: Bool
     @Environment(\.modelContext) private var modelContext
     @EnvironmentObject var settingsManager: SettingsManager
     @EnvironmentObject var feedbackManager: FeedbackManager
@@ -55,6 +56,14 @@ struct WorkingMemoryGameView: View {
             .ignoresSafeArea()
             
             VStack(spacing: 20) {
+                Button(action: { showMainMenu = true }) {
+                    Text("Ana Menüye Dön")
+                        .font(.headline)
+                        .padding(.horizontal, 16)
+                        .padding(.vertical, 8)
+                        .background(Color.blue.opacity(0.15))
+                        .cornerRadius(10)
+                }
                 // Header
                 VStack {
                     Text("🧠" + "memoryGame.title".localized)

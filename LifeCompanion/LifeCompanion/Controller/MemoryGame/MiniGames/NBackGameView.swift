@@ -31,7 +31,7 @@ fileprivate struct InfoCard: View {
 
 
 public struct NBackGameView: View {
-    @Environment(\.dismiss) private var dismiss
+    @Binding var showMainMenu: Bool
     @EnvironmentObject private var languageManager: LanguageManager
     @State private var sequence: [String] = []
     @State private var defaultHintLetters: [String] = []
@@ -57,6 +57,14 @@ public struct NBackGameView: View {
             )
             .ignoresSafeArea()
             VStack(spacing: 32) {
+                Button(action: { showMainMenu = true }) {
+                    Text("Ana Menüye Dön")
+                        .font(.headline)
+                        .padding(.horizontal, 16)
+                        .padding(.vertical, 8)
+                        .background(Color.blue.opacity(0.15))
+                        .cornerRadius(10)
+                }
                 HStack(spacing: 12) {
                     Image(systemName: "circle.grid.cross")
                         .font(.system(size: 32, weight: .bold))
@@ -201,23 +209,7 @@ public struct NBackGameView: View {
                     }
                 }
                 Spacer()
-                Button(action: {
-                    dismiss()
-                }) {
-                    HStack {
-                        Image(systemName: "arrow.left.circle.fill")
-                            .font(.title2)
-                        Text(languageManager.getLocalizedString(for: "memory.game.back"))
-                            .font(.title3)
-                            .fontWeight(.semibold)
-                    }
-                    .padding(10)
-                    .background(Color.blue)
-                    .foregroundColor(.white)
-                    .cornerRadius(16)
-                    .shadow(color: Color.blue.opacity(0.25), radius: 6, x: 0, y: 3)
-                }
-                .padding(.bottom, 16)
+                // Back button kaldırıldı
             }
             .padding()
         }

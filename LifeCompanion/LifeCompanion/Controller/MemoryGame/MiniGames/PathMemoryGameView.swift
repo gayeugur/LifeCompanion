@@ -1,7 +1,12 @@
+struct PathMemoryGameView_Previews: PreviewProvider {
+    static var previews: some View {
+        PathMemoryGameView(showMainMenu: .constant(false))
+    }
+}
 import SwiftUI
 
 public struct PathMemoryGameView: View {
-    @Environment(\.dismiss) private var dismiss
+    @Binding var showMainMenu: Bool
     @EnvironmentObject private var languageManager: LanguageManager
 
     @State private var path: [Int] = []
@@ -31,6 +36,14 @@ public struct PathMemoryGameView: View {
             .ignoresSafeArea()
 
             VStack(spacing: 24) {
+                Button(action: { showMainMenu = true }) {
+                    Text("Ana Menüye Dön")
+                        .font(.headline)
+                        .padding(.horizontal, 16)
+                        .padding(.vertical, 8)
+                        .background(Color.blue.opacity(0.15))
+                        .cornerRadius(10)
+                }
                 // TITLE
                 Text(languageManager.getLocalizedString(for: "pathmemory.title"))
                     .font(.system(size: 34, weight: .bold))
@@ -121,7 +134,6 @@ public struct PathMemoryGameView: View {
                 // BUTTONS
                 HStack(spacing: 16) {
                     restartButton
-                    backButton
                 }
 
                 Spacer()
@@ -160,21 +172,7 @@ private extension PathMemoryGameView {
         }
     }
 
-    var backButton: some View {
-        Button(action: { dismiss() }) {
-            HStack {
-                Image(systemName: "arrow.left.circle.fill").font(.title2)
-                Text(languageManager.getLocalizedString(for: "memory.game.back"))
-                    .font(.title3)
-                    .fontWeight(.semibold)
-            }
-            .frame(maxWidth: .infinity, minHeight: 48)
-            .background(Color.blue)
-            .foregroundColor(.white)
-            .cornerRadius(16)
-            .shadow(color: Color.blue.opacity(0.25), radius: 6, x: 0, y: 3)
-        }
-    }
+    // backButton kaldırıldı
 
     var resultSection: some View {
         Group {
