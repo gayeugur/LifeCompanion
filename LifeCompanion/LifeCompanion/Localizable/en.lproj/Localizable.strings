@@ -60,7 +60,8 @@
 "add.subtitle.placeholder" = "Subtitle (optional)";
 "add.priority" = "Priority";
 "add.reminder" = "Add reminder";
-"add.section.details" = "Task Details";
+"add.reminder.date" = "Task Date";
+"add.section.details" = "  Details";
 "add.section.reminder" = "Reminder";
 "add.datetime" = "Date & Time";
 "add.validation.title" = "Title required";

@@ -111,13 +111,12 @@ struct AddTodoView: View {
                             }
                         }
 
-                        // Görev Tarihi (ana tarih)
                         card {
                             VStack(alignment: .leading, spacing: 10) {
-                                Text("Görev Tarihi")
+                                Text("add.reminder.date".localized)
                                     .font(.callout)
                                     .foregroundStyle(.secondary)
-                                DatePicker("Görev Tarihi", selection: $taskDate, in: Date()..., displayedComponents: [.date])
+                                DatePicker("add.reminder.date".localized, selection: $taskDate, in: Date()..., displayedComponents: [.date])
                                     .datePickerStyle(.compact)
                                     .onChange(of: taskDate) { newDate in
                                         // Bildirim tarihi de aynı günün varsayılan saatine ayarlanır
