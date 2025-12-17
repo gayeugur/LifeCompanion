@@ -14,4 +14,5 @@ struct MenuItem: Identifiable {
     let title: String
     let icon: String
     let color: Color
+    let route: AppRoute
 }

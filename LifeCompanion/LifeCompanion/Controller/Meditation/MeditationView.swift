@@ -18,121 +18,119 @@ struct MeditationView: View {
     @State private var manualSessionDuration = ""
 
     var body: some View {
-        NavigationStack {
-            ZStack {
-                // Theme-adaptive purple gradient background
-                LinearGradient(
-                    colors: [
-                        Color.primaryBackground,
-                        Color.purple.opacity(0.1),
-                        Color.secondaryBackground.opacity(0.6),
-                        Color.clear
-                    ],
-                    startPoint: .topLeading,
-                    endPoint: .bottomTrailing
-                )
-                .ignoresSafeArea()
-                
-                ScrollView {
-                    VStack(spacing: 20) {
+        ZStack {
+            // Theme-adaptive purple gradient background
+            LinearGradient(
+                colors: [
+                    Color.primaryBackground,
+                    Color.purple.opacity(0.1),
+                    Color.secondaryBackground.opacity(0.6),
+                    Color.clear
+                ],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+            .ignoresSafeArea()
+
+            ScrollView {
+                VStack(spacing: 20) {
                     // Header Stats
                     statsCard
-                    
+
                     // Daily Progress
                     dailyProgressCard
-                    
+
                     // Timer Section
                     timerCard
-                    
+
                     // Breathing Exercises
                     breathingExercisesCard
-                    
+
                     // Ambient Sounds
                     ambientSoundsCard
-                    
+
                     // Progress Tracking
                     progressCard
                 }
                 .padding()
-                }
-                
-                // Floating Action Button
-                VStack {
+            }
+
+            // Floating Action Button
+            VStack {
+                Spacer()
+                HStack {
                     Spacer()
-                    HStack {
-                        Spacer()
-                        Button(action: {
-                            showManualSessionEntry()
-                        }) {
-                            Image(systemName: "plus")
-                                .font(.title2)
-                                .fontWeight(.semibold)
-                                .foregroundColor(.white)
-                                .frame(width: 56, height: 56)
-                                .background(
-                                    Circle()
-                                        .fill(
-                                            LinearGradient(
-                                                colors: [Color.purple, Color.indigo],
-                                                startPoint: .topLeading,
-                                                endPoint: .bottomTrailing
-                                            )
+                    Button(action: {
+                        showManualSessionEntry()
+                    }) {
+                        Image(systemName: "plus")
+                            .font(.title2)
+                            .fontWeight(.semibold)
+                            .foregroundColor(.white)
+                            .frame(width: 56, height: 56)
+                            .background(
+                                Circle()
+                                    .fill(
+                                        LinearGradient(
+                                            colors: [Color.purple, Color.indigo],
+                                            startPoint: .topLeading,
+                                            endPoint: .bottomTrailing
                                         )
-                                        .overlay(
-                                            Circle()
-                                                .stroke(Color.white.opacity(0.2), lineWidth: 1)
-                                        )
-                                )
-                                .shadow(
-                                    color: Color.black.opacity(0.15),
-                                    radius: 12,
-                                    x: 0,
-                                    y: 6
-                                )
-                                .scaleEffect(1.0)
-                        }
-                        .buttonStyle(FloatingButtonStyle())
-                        .padding(.trailing, 20)
-                        .padding(.bottom, 20)
+                                    )
+                                    .overlay(
+                                        Circle()
+                                            .stroke(Color.white.opacity(0.2), lineWidth: 1)
+                                    )
+                            )
+                            .shadow(
+                                color: Color.black.opacity(0.15),
+                                radius: 12,
+                                x: 0,
+                                y: 6
+                            )
+                            .scaleEffect(1.0)
                     }
+                    .buttonStyle(FloatingButtonStyle())
+                    .padding(.trailing, 20)
+                    .padding(.bottom, 20)
                 }
             }
-            .navigationTitle("menu.meditation".localized)
-            .navigationBarTitleDisplayMode(.large)
-            .onDisappear {
-                viewModel.cleanup()
-            }
-            .onReceive(NotificationCenter.default.publisher(for: UIApplication.willResignActiveNotification)) { _ in
-                viewModel.handleAppWillResignActive()
-            }
-            .onReceive(NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)) { _ in
-                viewModel.handleAppDidBecomeActive()
-            }
-            .alert("meditation.goal.alert.title".localized, isPresented: $showingGoalAlert) {
-                TextField("meditation.goal.alert.placeholder".localized, text: $newGoalText)
-                    .keyboardType(.numberPad)
-                Button("add.cancel".localized, role: .cancel) { }
-                Button("add.save".localized) {
-                    if let newGoal = Int(newGoalText), newGoal > 0 {
-                        viewModel.updateDailyGoal(newGoal)
-                    }
+        }
+        .navigationTitle("menu.meditation".localized)
+        .navigationBarTitleDisplayMode(.large)
+        .onDisappear {
+            viewModel.cleanup()
+        }
+        .onReceive(NotificationCenter.default.publisher(for: UIApplication.willResignActiveNotification)) { _ in
+            viewModel.handleAppWillResignActive()
+        }
+        .onReceive(NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)) { _ in
+            viewModel.handleAppDidBecomeActive()
+        }
+        .alert("meditation.goal.alert.title".localized, isPresented: $showingGoalAlert) {
+            TextField("meditation.goal.alert.placeholder".localized, text: $newGoalText)
+                .keyboardType(.numberPad)
+            Button("add.cancel".localized, role: .cancel) { }
+            Button("add.save".localized) {
+                if let newGoal = Int(newGoalText), newGoal > 0 {
+                    viewModel.updateDailyGoal(newGoal)
                 }
-            } message: {
-                Text("meditation.goal.alert.message".localized)
             }
-            .alert("meditation.add.session.title".localized, isPresented: $showingManualSessionAlert) {
-                TextField("meditation.add.session.placeholder".localized, text: $manualSessionDuration)
-                    .keyboardType(.numberPad)
-                Button("common.cancel".localized, role: .cancel) { }
-                Button("common.save".localized) {
-                    if let duration = Int(manualSessionDuration), duration > 0 {
-                        viewModel.addManualSession(duration: duration)
-                        manualSessionDuration = ""
-                    }
+        } message: {
+            Text("meditation.goal.alert.message".localized)
+        }
+        .alert("meditation.add.session.title".localized, isPresented: $showingManualSessionAlert) {
+            TextField("meditation.add.session.placeholder".localized, text: $manualSessionDuration)
+                .keyboardType(.numberPad)
+            Button("common.cancel".localized, role: .cancel) { }
+            Button("common.save".localized) {
+                if let duration = Int(manualSessionDuration), duration > 0 {
+                    viewModel.addManualSession(duration: duration)
+                    manualSessionDuration = ""
                 }
-            } message: {
-                Text("meditation.add.session.message".localized)
             }
+        } message: {
+            Text("meditation.add.session.message".localized)
         }
         .onAppear {
             viewModel.configure(settingsManager: settingsManager)
@@ -237,8 +235,8 @@ struct MeditationView: View {
                         RoundedRectangle(cornerRadius: 8)
                             .fill(
                                 LinearGradient(
-                                    colors: viewModel.todayMeditationTime >= viewModel.dailyGoal 
-                                        ? [.green, .mint] 
+                                    colors: viewModel.todayMeditationTime >= viewModel.dailyGoal
+                                        ? [.green, .mint]
                                         : [.purple, .pink],
                                     startPoint: .leading,
                                     endPoint: .trailing
@@ -730,8 +728,8 @@ struct MeditationView: View {
                 Image(systemName: sound.icon)
                     .font(.title2)
                     .foregroundColor(
-                        viewModel.selectedAmbientSound == sound && viewModel.isAmbientSoundPlaying 
-                            ? .white 
+                        viewModel.selectedAmbientSound == sound && viewModel.isAmbientSoundPlaying
+                            ? .white
                             : sound.color
                     )
                 
@@ -739,8 +737,8 @@ struct MeditationView: View {
                     .font(.caption)
                     .fontWeight(.medium)
                     .foregroundColor(
-                        viewModel.selectedAmbientSound == sound && viewModel.isAmbientSoundPlaying 
-                            ? .white 
+                        viewModel.selectedAmbientSound == sound && viewModel.isAmbientSoundPlaying
+                            ? .white
                             : .primary
                     )
                     .multilineTextAlignment(.center)
@@ -757,7 +755,7 @@ struct MeditationView: View {
                     .overlay(
                         RoundedRectangle(cornerRadius: 12)
                             .stroke(
-                                sound.color.opacity(viewModel.selectedAmbientSound == sound && viewModel.isAmbientSoundPlaying ? 0.8 : 0.3), 
+                                sound.color.opacity(viewModel.selectedAmbientSound == sound && viewModel.isAmbientSoundPlaying ? 0.8 : 0.3),
                                 lineWidth: viewModel.selectedAmbientSound == sound && viewModel.isAmbientSoundPlaying ? 2 : 1
                             )
                     )

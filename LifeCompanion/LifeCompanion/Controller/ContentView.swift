@@ -24,12 +24,12 @@ struct ContentView: View {
     // Performance optimization: Cache menu items to avoid repeated localization calls
     private var menuItems: [MenuItem] {
         [
-            MenuItem(title: "menu.todos".localized, icon: "checklist", color: .blue),
-            MenuItem(title: "menu.habits".localized, icon: "chart.bar", color: .green),
-            MenuItem(title: "menu.health".localized, icon: "heart.fill", color: .red),
-            MenuItem(title: "menu.meditation".localized, icon: "leaf.fill", color: .purple),
-            MenuItem(title: "menu.memoryGame".localized, icon: "gamecontroller.fill", color: .orange),
-            MenuItem(title: "menu.settings".localized, icon: "gearshape.fill", color: .gray)
+            MenuItem(title: "menu.todos".localized, icon: "checklist", color: .blue, route: .todos),
+            MenuItem(title: "menu.habits".localized, icon: "chart.bar", color: .green, route: .habits),
+            MenuItem(title: "menu.health".localized, icon: "heart.fill", color: .red, route: .health),
+            MenuItem(title: "menu.meditation".localized, icon: "leaf.fill", color: .purple, route: .meditation),
+            MenuItem(title: "menu.memoryGame".localized, icon: "gamecontroller.fill", color: .orange, route: .memoryGame),
+            MenuItem(title: "menu.settings".localized, icon: "gearshape.fill", color: .gray, route: .settings)
         ]
     }
     
@@ -47,7 +47,7 @@ struct ContentView: View {
                         LazyVGrid(columns: columns, spacing: spacing) {
                             ForEach(menuItems, id: \ .title) { item in
                                 Button(action: {
-                                    navigationPath.append(item.title)
+                                    navigationPath.append(item.route)
                                 }) {
                                     MenuItemView(item: item, size: geometry.size.width / 2 - spacing * 1.5)
                                 }
@@ -80,8 +80,8 @@ struct ContentView: View {
                     habitViewModel.fetchHabits(from: modelContext)
                     habitViewModel.checkAutoReset(in: modelContext, settingsManager: settingsManager)
                 }
-                .navigationDestination(for: String.self) { title in
-                    destinationView(for: title)
+                .navigationDestination(for: AppRoute.self) { route in
+                    destinationView(for: route)
                 }
             } else {
                 TetroMemoryGameView(showMainMenu: $showMainMenu)
@@ -96,22 +96,20 @@ struct ContentView: View {
     }
     
     @ViewBuilder
-    private func destinationView(for title: String) -> some View {
-        switch title {
-        case "menu.todos".localized:
+    private func destinationView(for route: AppRoute) -> some View {
+        switch route {
+        case .todos:
             TodoListView()
-        case "menu.habits".localized:
+        case .habits:
             HabitsView()
-        case "menu.health".localized:
+        case .health:
             HealthView()
-        case "menu.meditation".localized:
+        case .meditation:
             MeditationView()
-        case "menu.memoryGame".localized:
+        case .memoryGame:
             MemoryGameMenuView(showMainMenu: $showMainMenu)
-        case "menu.settings".localized:
+        case .settings:
             SettingsView()
-        default:
-            Text("menu.comingSoon".localized)
         }
     }
 }

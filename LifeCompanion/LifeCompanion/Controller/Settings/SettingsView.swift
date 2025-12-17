@@ -42,15 +42,6 @@ struct SettingsView: View {
     
     var body: some View {
         settingsContent
-            .navigationTitle("menu.settings".localized)
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .principal) {
-                    Text("menu.settings".localized)
-                        .font(.headline)
-                        .foregroundColor(.primary)
-                }
-            }
             .onAppear { }
             .alert(LanguageManager.shared.getLocalizedString(for: "settings.export.format.title"), isPresented: $showingExportFormatAlert) {
                 exportFormatAlert
