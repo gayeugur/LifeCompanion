@@ -1,8 +1,8 @@
-
 import SwiftUI
 
 struct MemoryGameMenuView: View {
     @Binding var showMainMenu: Bool
+    @EnvironmentObject private var languageManager: LanguageManager
     var body: some View {
         ZStack {
             LinearGradient(
@@ -12,7 +12,7 @@ struct MemoryGameMenuView: View {
             ).ignoresSafeArea()
 
             VStack(spacing: 28) {
-                Text("Memory Games")
+                Text(languageManager.getLocalizedString(for: "memory.menu.title"))
                     .font(.system(size: 36, weight: .bold))
                     .foregroundColor(.blue)
                     .padding(.top, 36)
@@ -24,32 +24,32 @@ struct MemoryGameMenuView: View {
                         GameCardButton(
                             icon: "map",
                             color: .green,
-                            titleKey: "Path Memory",
-                            descriptionKey: "Follow the path!"
+                            titleKey: languageManager.getLocalizedString(for: "memory.path.title"),
+                            descriptionKey: languageManager.getLocalizedString(for: "memory.path.desc")
                         )
                     }
                     NavigationLink(destination: WorkingMemoryGameView(showMainMenu: $showMainMenu)) {
                         GameCardButton(
                             icon: "brain.head.profile",
                             color: .yellow,
-                            titleKey: "Working Memory",
-                            descriptionKey: "Train your memory"
+                            titleKey: languageManager.getLocalizedString(for: "memory.working.title"),
+                            descriptionKey: languageManager.getLocalizedString(for: "memory.working.desc")
                         )
                     }
                     NavigationLink(destination: NBackGameView(showMainMenu: $showMainMenu)) {
                         GameCardButton(
                             icon: "circle.grid.cross",
                             color: .purple,
-                            titleKey: "N-back",
-                            descriptionKey: "Cognitive challenge"
+                            titleKey: languageManager.getLocalizedString(for: "memory.nback.title"),
+                            descriptionKey: languageManager.getLocalizedString(for: "memory.nback.desc")
                         )
                     }
                     NavigationLink(destination: TetroMemoryGameView(showMainMenu: $showMainMenu)) {
                         GameCardButton(
                             icon: "square.grid.3x3.fill",
                             color: .blue,
-                            titleKey: "Tetro Memory",
-                            descriptionKey: "Tetris-style memory"
+                            titleKey: languageManager.getLocalizedString(for: "memory.tetro.title"),
+                            descriptionKey: languageManager.getLocalizedString(for: "memory.tetro.desc")
                         )
                     }
                 }

@@ -44,6 +44,8 @@ public struct NBackGameView: View {
     @State private var finished: Bool = false
     @State private var showHint: Bool = false
     @State private var hintLetters: [String] = []
+    @State private var wrongCount: Int = 0
+    @State private var showResetAlert: Bool = false
     let sequenceLength = 20
     let possibleN = [1, 2, 3]
     let possibleItems = ["A", "B", "C", "D", "E", "F", "G", "H"]
@@ -57,14 +59,6 @@ public struct NBackGameView: View {
             )
             .ignoresSafeArea()
             VStack(spacing: 32) {
-                Button(action: { showMainMenu = true }) {
-                    Text("Ana Menüye Dön")
-                        .font(.headline)
-                        .padding(.horizontal, 16)
-                        .padding(.vertical, 8)
-                        .background(Color.blue.opacity(0.15))
-                        .cornerRadius(10)
-                }
                 HStack(spacing: 12) {
                     Image(systemName: "circle.grid.cross")
                         .font(.system(size: 32, weight: .bold))
@@ -122,6 +116,8 @@ public struct NBackGameView: View {
                                     .font(.title3)
                                 Text(languageManager.getLocalizedString(for: "nback.nomatch"))
                                     .font(.headline)
+                                    .minimumScaleFactor(0.6)
+                                    .lineLimit(1)
                             }
                             .frame(maxWidth: 110)
                             .padding(.vertical, 10)
@@ -216,6 +212,16 @@ public struct NBackGameView: View {
         .onAppear {
             startGame()
         }
+        .alert(isPresented: $showResetAlert) {
+            Alert(
+                title: Text("3 kez yanlış cevap!"),
+                message: Text("Oyun sıfırlandı. Skorunuz 0 oldu."),
+                dismissButton: .default(Text("Tamam")) {
+                    restartGame()
+                    showResetAlert = false
+                }
+            )
+        }
     }
 
     func startGame() {
@@ -248,6 +254,15 @@ public struct NBackGameView: View {
         }
         if isMatch == match {
             score += 1
+            wrongCount = 0 // reset wrong count on correct answer
+        } else {
+            wrongCount += 1
+            if wrongCount >= 3 {
+                showResetAlert = true
+                score = 0
+                // restartGame() will be called after alert is dismissed
+                return
+            }
         }
         userAnswers.append(isMatch)
         if currentIndex == sequence.count - 1 {

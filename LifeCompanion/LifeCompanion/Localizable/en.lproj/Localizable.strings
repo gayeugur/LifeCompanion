@@ -669,3 +669,19 @@
 "common.ok" = "OK";
 
 "coming.soon" = "Coming Soon!";
+
+"tetro.title" = "Tetris";
+"tetro.score" = "Score";
+"tetro.gameover" = "Game Over!";
+"memory.menu.title" = "Memory Games";
+"memory.path.title" = "Path Memory";
+"memory.path.desc" = "Follow the path!";
+"memory.working.title" = "Working Memory";
+"memory.working.desc" = "Train your memory";
+"memory.nback.title" = "N-back";
+"memory.nback.desc" = "Cognitive challenge";
+"memory.tetro.title" = "Tetris";
+"memory.tetro.desc" = "Classic Tetris game";
+"pathmemory.level" = "Level";
+"pathmemory.step" = "Step";
+"pathmemory.attempts" = "Attempts";

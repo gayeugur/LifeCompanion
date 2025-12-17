@@ -669,3 +669,20 @@
 "common.ok" = "Tamam";
 
 "coming.soon" = "Çok Yakında!";
+
+"tetro.title" = "Tetris";
+"tetro.score" = "Skor";
+"tetro.gameover" = "Oyun Bitti!";
+"memory.menu.title" = "Hafıza Oyunları";
+"memory.path.title" = "Yol Hafızası";
+"memory.path.desc" = "Yolu takip et!";
+"memory.working.title" = "Çalışan Hafıza";
+"memory.working.desc" = "Hafızanı geliştir";
+"memory.nback.title" = "N-back";
+"memory.nback.desc" = "Bilişsel meydan okuma";
+"memory.tetro.title" = "Tetris";
+"memory.tetro.desc" = "Klasik Tetris oyunu";
+
+"pathmemory.level" = "Seviye";
+"pathmemory.step" = "Adım";
+"pathmemory.attempts" = "Hak";

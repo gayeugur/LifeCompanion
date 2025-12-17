@@ -36,14 +36,6 @@ public struct PathMemoryGameView: View {
             .ignoresSafeArea()
 
             VStack(spacing: 24) {
-                Button(action: { showMainMenu = true }) {
-                    Text("Ana Menüye Dön")
-                        .font(.headline)
-                        .padding(.horizontal, 16)
-                        .padding(.vertical, 8)
-                        .background(Color.blue.opacity(0.15))
-                        .cornerRadius(10)
-                }
                 // TITLE
                 Text(languageManager.getLocalizedString(for: "pathmemory.title"))
                     .font(.system(size: 34, weight: .bold))
@@ -52,11 +44,11 @@ public struct PathMemoryGameView: View {
 
                 // INFO CARDS
                 HStack(spacing: 18) {
-                    InfoCard(title: "Level",
+                    InfoCard(title: languageManager.getLocalizedString(for: "pathmemory.level"),
                              value: "Level \(round)", color: .green)
-                    InfoCard(title: "Step",
+                    InfoCard(title: languageManager.getLocalizedString(for: "pathmemory.step"),
                              value: "\(userPath.count) / \(path.count)", color: .orange)
-                    InfoCard(title: "Attempts",
+                    InfoCard(title: languageManager.getLocalizedString(for: "pathmemory.attempts"),
                              value: "\(remainingAttempts)", color: .red)
                 }
 
@@ -161,14 +153,29 @@ private extension PathMemoryGameView {
 
     var restartButton: some View {
         Button(action: restartGame) {
-            Text(languageManager.getLocalizedString(for: "pathmemory.restart"))
-                .font(.title3)
-                .fontWeight(.semibold)
-                .frame(maxWidth: .infinity, minHeight: 48)
-                .background(Color(.systemGreen).opacity(0.85))
-                .foregroundColor(.white)
-                .cornerRadius(16)
-                .shadow(color: Color(.systemGreen).opacity(0.18), radius: 4, x: 0, y: 2)
+            HStack(spacing: 10) {
+                Image(systemName: "arrow.clockwise")
+                    .font(.title2)
+                Text(languageManager.getLocalizedString(for: "pathmemory.restart"))
+                    .font(.title3)
+                    .fontWeight(.bold)
+            }
+            .frame(maxWidth: .infinity, minHeight: 52)
+            .padding(.horizontal, 8)
+            .background(
+                LinearGradient(
+                    colors: [Color.green.opacity(0.95), Color.green.opacity(0.7), Color.green.opacity(0.5)],
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                )
+            )
+            .foregroundColor(.white)
+            .cornerRadius(18)
+            .shadow(color: Color.green.opacity(0.22), radius: 8, x: 0, y: 4)
+            .overlay(
+                RoundedRectangle(cornerRadius: 18)
+                    .stroke(Color.white.opacity(0.18), lineWidth: 1)
+            )
         }
     }
 
@@ -235,7 +242,9 @@ private extension PathMemoryGameView {
     func startRound() {
         userPath = []
         result = ""
-        path = (0..<(round + 2)).map { _ in Int.random(in: 0..<(gridSize * gridSize)) }
+        // 3 adım ile başla, her 5 levelde bir adım sayısını 1 artır
+        let pathLength = 3 + (round / 5)
+        path = (0..<pathLength).map { _ in Int.random(in: 0..<(gridSize * gridSize)) }
         showPath = true
         currentShowIndex = 0
         showNextPathStep()
@@ -259,15 +268,23 @@ private extension PathMemoryGameView {
             result = "Correct!"
             round += 1
             remainingAttempts = 3
+            // Otomatik devam: kısa bir gecikmeden sonra yeni round başlat
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
+                startRound()
+            }
         } else {
             remainingAttempts -= 1
-
             if remainingAttempts > 0 {
                 result = "Yanlış! Kalan hak: \(remainingAttempts)"
             } else {
                 result = "Wrong!"
                 gameOver = true
                 showFailAlert = true
+                // Hatalı durumda path ve userPath temizlensin
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
+                    userPath = []
+                    path = []
+                }
             }
         }
     }

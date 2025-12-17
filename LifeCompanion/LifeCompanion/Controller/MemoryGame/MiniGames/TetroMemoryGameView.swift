@@ -3,7 +3,7 @@ import SwiftUI
 struct TetroMemoryGameView: View {
     @Binding var showMainMenu: Bool
     @Environment(\.dismiss) private var dismiss
-    // ...existing code...
+    @EnvironmentObject private var languageManager: LanguageManager
     @State private var grid: [[Int]] = Array(repeating: Array(repeating: 0, count: 10), count: 20)
     @State private var currentPiece: Tetromino = Tetromino.random()
     @State private var piecePosition: (x: Int, y: Int) = (4, 0)
@@ -19,19 +19,13 @@ struct TetroMemoryGameView: View {
                 endPoint: .bottomTrailing
             ).ignoresSafeArea()
             VStack(spacing: 16) {
-                Button(action: { showMainMenu = true }) {
-                    Text("Ana Menüye Dön")
-                        .font(.headline)
-                        .padding(.horizontal, 16)
-                        .padding(.vertical, 8)
-                        .background(Color.blue.opacity(0.15))
-                        .cornerRadius(10)
-                }
-                Text("TetroMemory")
+                Text(languageManager.getLocalizedString(for: "tetro.title"))
                     .font(.largeTitle)
                     .bold()
                     .foregroundColor(.blue)
-                Text("Score: \(score)")
+                Text(languageManager.getLocalizedString(for: "tetro.score"))
+                    .font(.title2)
+                Text("\(score)")
                     .font(.title2)
                 ZStack {
                     Rectangle()
@@ -51,23 +45,50 @@ struct TetroMemoryGameView: View {
                 }
                 HStack(spacing: 24) {
                     Button("◀️") { movePiece(dx: -1) }
+                        .font(.system(size: 36))
+                        .frame(width: 60, height: 60)
                     Button("🔄") { rotatePiece() }
+                        .font(.system(size: 36))
+                        .frame(width: 60, height: 60)
                     Button("▶️") { movePiece(dx: 1) }
+                        .font(.system(size: 36))
+                        .frame(width: 60, height: 60)
                     Button("⬇️") { dropPiece() }
+                        .font(.system(size: 36))
+                        .frame(width: 60, height: 60)
                 }
                 .font(.title)
                 if isGameOver {
-                    Text("Game Over!")
+                    Text(languageManager.getLocalizedString(for: "tetro.gameover"))
                         .font(.title)
                         .foregroundColor(.red)
                 }
                 Button(action: { restartGame() }) {
-                    Text("Restart")
-                        .font(.headline)
-                        .padding(.horizontal, 12)
-                        .padding(.vertical, 6)
-                        .background(Color.blue.opacity(0.15))
-                        .cornerRadius(8)
+                    HStack(spacing: 8) {
+                        Image(systemName: "arrow.clockwise")
+                            .font(.title3)
+                        Text("Restart")
+                            .font(.headline)
+                            .fontWeight(.semibold)
+                    }
+                    .frame(maxWidth: 220, minHeight: 44)
+                    .background(
+                        LinearGradient(
+                            colors: [Color.green.opacity(0.85), Color.green.opacity(0.65)],
+                            startPoint: .top,
+                            endPoint: .bottom
+                        )
+                    )
+                    .foregroundColor(.white)
+                    .cornerRadius(14)
+                    .shadow(color: Color.green.opacity(0.13), radius: 4, x: 0, y: 2)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 14)
+                            .stroke(Color.white.opacity(0.12), lineWidth: 0.5)
+                    )
+                    .padding(.top, 8)
+                    .scaleEffect(isGameOver ? 1.05 : 1.0)
+                    .animation(.spring(response: 0.4, dampingFraction: 0.7), value: isGameOver)
                 }
                 Spacer()
                 // Back button kaldırıldı
