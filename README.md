@@ -94,11 +94,11 @@ gem install xcpretty
 
 ## Screenshots
 
-<img src="LifeCompanion/Simulator%20Screenshot%20-%20iPhone%2017%20-%202026-03-28%20at%2022.20.48.png" width="300" alt="Home screen" />
-<img src="LifeCompanion/Simulator%20Screenshot%20-%20iPhone%2017%20-%202026-03-28%20at%2022.20.55.png" width="300" alt="Feature screen 1" />
-<img src="LifeCompanion/Simulator%20Screenshot%20-%20iPhone%2017%20-%202026-03-28%20at%2022.21.03.png" width="300" alt="Feature screen 2" />
-<img src="LifeCompanion/Simulator%20Screenshot%20-%20iPhone%2017%20-%202026-03-28%20at%2022.31.54.png" width="300" alt="Feature screen 3" />
-<img src="LifeCompanion/Simulator%20Screenshot%20-%20iPhone%2017%20-%202026-03-28%20at%2022.32.09.png" width="300" alt="Feature screen 4" />
+<img src="LifeCompanion/mainScreen.png" width="300" alt="Main screen" />
+<img src="LifeCompanion/todoListScreen.png" width="300" alt="To-do list screen" />
+<img src="LifeCompanion/healthScreen.png" width="300" alt="Health screen" />
+<img src="LifeCompanion/meditationScreen.png" width="300" alt="Meditation screen" />
+<img src="LifeCompanion/gamesScreen.png" width="300" alt="Games screen" />
 
 ## Contributing
 
