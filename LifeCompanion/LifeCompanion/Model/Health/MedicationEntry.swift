@@ -148,7 +148,7 @@ final class MedicationEntry: Identifiable {
         // Schedule notifications for each scheduled time
         for scheduledTime in self.scheduledTimes {
             let content = UNMutableNotificationContent()
-            content.title = NSLocalizedString("medication.notification.title", comment: "")
+            content.title = "medication.notification.title".localized
             content.body = String(format: NSLocalizedString("medication.notification.body", comment: ""), self.medicationName, self.dosage)
             content.sound = .default
             content.categoryIdentifier = "MEDICATION_REMINDER"
@@ -194,15 +194,15 @@ enum MedicationFrequency: String, CaseIterable, Codable {
     var localizedName: String {
         switch self {
         case .once:
-            return NSLocalizedString("medication.frequency.once", comment: "")
+            return "medication.frequency.once".localized
         case .twice:
-            return NSLocalizedString("medication.frequency.twice", comment: "")
+            return "medication.frequency.twice".localized
         case .thrice:
-            return NSLocalizedString("medication.frequency.thrice", comment: "")
+            return "medication.frequency.thrice".localized
         case .twiceWeekly:
-            return NSLocalizedString("medication.frequency.twiceWeekly", comment: "")
+            return "medication.frequency.twiceWeekly".localized
         case .thriceWeekly:
-            return NSLocalizedString("medication.frequency.thriceWeekly", comment: "")
+            return "medication.frequency.thriceWeekly".localized
         }
     }
     

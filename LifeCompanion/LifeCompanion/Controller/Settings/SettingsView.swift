@@ -32,9 +32,10 @@ struct SettingsView: View {
     @State private var isExporting = false
     
     private let languages = [
-        ("system", "🌐 System Default", "Sistem Varsayılanı"),
-        ("en", "🇺🇸 English", "English"),
-        ("tr", "🇹🇷 Türkçe", "Türkçe")
+        ("system", "🌐 System Default", "Sistem Varsayılanı", "Predeterminado del sistema"),
+        ("en", "🇺🇸 English", "İngilizce", "Inglés"),
+        ("tr", "🇹🇷 Turkish", "Türkçe", "Turco"),
+        ("es", "🇪🇸 Spanish", "İspanyolca", "Español")
     ]
     
     private let waterGoalOptions = [1500, 2000, 2500, 3000, 3500, 4000]
@@ -126,11 +127,11 @@ struct SettingsView: View {
         .sheet(isPresented: $showingPrivacyPolicy) {
             NavigationStack {
                 WebView(url: Bundle.main.url(forResource: "PrivacyPolicy", withExtension: "html")!)
-                    .navigationTitle(languageManager.currentLanguage == "tr" ? "Gizlilik Politikası" : "Privacy Policy")
+                    .navigationTitle("settings.about.privacy".localized)
                     .navigationBarTitleDisplayMode(.inline)
                     .toolbar {
                         ToolbarItem(placement: .cancellationAction) {
-                            Button(languageManager.currentLanguage == "tr" ? "Kapat" : "Done") {
+                            Button("common.done".localized) {
                                 showingPrivacyPolicy = false
                             }
                         }
@@ -508,11 +509,12 @@ struct SettingsView: View {
                         .padding(.horizontal, 20)
                         .padding(.top, 10)
                         
-                        ForEach(languages, id: \.0) { code, englishName, turkishName in
+                        ForEach(languages, id: \.0) { code, englishName, turkishName, spanishName in
                             languageOptionCard(
                                 code: code,
                                 englishName: englishName,
-                                turkishName: turkishName
+                                turkishName: turkishName,
+                                spanishName: spanishName
                             )
                         }
                     }
@@ -538,7 +540,7 @@ struct SettingsView: View {
     
     // MARK: - Language Option Card
     @ViewBuilder
-    private func languageOptionCard(code: String, englishName: String, turkishName: String) -> some View {
+    private func languageOptionCard(code: String, englishName: String, turkishName: String, spanishName: String) -> some View {
         Button(action: {
             settingsManager.selectedLanguage = code
             languageManager.currentLanguage = code
@@ -561,7 +563,11 @@ struct SettingsView: View {
                     )
                 
                 VStack(alignment: .leading, spacing: 4) {
-                    Text(settingsManager.selectedLanguage == "tr" ? turkishName : englishName)
+                        Text(localizedLanguageName(
+                            englishName: englishName,
+                            turkishName: turkishName,
+                            spanishName: spanishName
+                        ))
                         .font(.system(size: 17, weight: .medium))
                         .foregroundColor(.primary)
                     
@@ -701,9 +707,35 @@ struct SettingsView: View {
     // MARK: - Helper Properties
     private var currentLanguageDisplayName: String {
         if let language = languages.first(where: { $0.0 == languageManager.currentLanguage }) {
-            return languageManager.currentLanguage == "tr" ? language.2 : language.1
+            return localizedLanguageName(
+                englishName: language.1,
+                turkishName: language.2,
+                spanishName: language.3
+            )
         }
-        return "System Default"
+        return localizedLanguageName(
+            englishName: "System Default",
+            turkishName: "Sistem Varsayılanı",
+            spanishName: "Predeterminado del sistema"
+        )
+    }
+
+    private var currentDisplayLanguageCode: String {
+        if languageManager.currentLanguage == "system" {
+            return Locale.preferredLanguages.first?.components(separatedBy: "-").first ?? "en"
+        }
+        return languageManager.currentLanguage
+    }
+
+    private func localizedLanguageName(englishName: String, turkishName: String, spanishName: String) -> String {
+        switch currentDisplayLanguageCode {
+        case "tr":
+            return turkishName
+        case "es":
+            return spanishName
+        default:
+            return englishName
+        }
     }
     
     // MARK: - Language Helpers
@@ -712,6 +744,7 @@ struct SettingsView: View {
         case "system": return "🌐"
         case "en": return "🇺🇸"
         case "tr": return "🇹🇷"
+        case "es": return "🇪🇸"
         default: return "🌐"
         }
     }
@@ -720,7 +753,8 @@ struct SettingsView: View {
         switch code {
         case "system": return "settings.language.system.subtitle".localized
         case "en": return "English (United States)"
-        case "tr": return "Turkish (Türkiye)"
+        case "tr": return "Türkçe (Türkiye)"
+        case "es": return "Español (España)"
         default: return ""
         }
     }

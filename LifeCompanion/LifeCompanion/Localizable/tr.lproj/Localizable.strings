@@ -109,7 +109,7 @@
 "addHabit.montly" = "Aylık";
 "addHabit.targetLabel" = "Hedef";
 "addHabit.times" = "kere";
-"add.reminder.date" = "Görev Tarihi";
+"add.reminder.date" = "Task Date";
 "addHabit.reminderLabel" = "Hatırlatma";
 "addHabit.saveButton" = "Kaydet";
 "habits.title" = "Alışkanlıklar";

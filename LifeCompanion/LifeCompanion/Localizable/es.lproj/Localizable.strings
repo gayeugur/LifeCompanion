@@ -1,0 +1,688 @@
+"memory.game.memorygame" = "Juego de memoria";
+"memory.game.memorygame.desc" = "Pon a prueba tu memoria con divertidos minijuegos.";
+"memory.game.stop.title" = "Juego de parar";
+"memory.game.stop.desc" = "Un divertido juego de reacción y atención. Intenta parar en el momento exacto.";
+"memory.game.stroop.title" = "Prueba de Stroop";
+"memory.game.stroop.desc" = "Mide la atención, el tiempo de reacción y el control cognitivo. Divertido y neuropsicológicamente útil.";
+"memory.game.title" = "Minijuegos de memoria";
+"memory.game.subtitle" = "Pon a prueba tu memoria con divertidos minijuegos. Cada ronda se vuelve más difícil.";
+"memory.game.nback.title" = "N-Back";
+"nback.n" = "N: %d";
+"memory.game.numberflash.desc" = "Recuerda los números en orden e introdúcelos abajo.";
+"memory.game.soundmemory.desc" = "Escucha la secuencia de sonidos y repítela.";
+"memory.game.pathmemory.desc" = "Memoriza y repite el camino mostrado en la cuadrícula.";
+"memory.game.nback.desc" = "Pon a prueba tu memoria de trabajo con el desafío N-Back.";
+"memory.game.comingsoon.desc" = "Pronto llegará un nuevo juego.";
+"nback.title" = "N-Back";
+"nback.score" = "Puntuación:";
+"nback.n" = "N: %d";
+"nback.match" = "Coincide";
+"nback.nomatch" = "No coincide";
+"nback.hint" = "Pista";
+"nback.hint.letters" = "Últimas 5 letras";
+"nback.finished" = "Terminado";
+"nback.restart" = "Reiniciar";
+"pathmemory.restart" = "Reiniciar";
+"pathmemory.title" = "Memoria de caminos";
+"pathmemory.level" = "Nivel: %d";
+"pathmemory.step" = "Paso: %d/%d";
+"pathmemory.attempts" = "Intentos: %d";
+"pathmemory.correct" = "Correcto";
+"pathmemory.wrong" = "Incorrecto";
+"pathmemory.wrongAttempts" = "Incorrecto. Intentos restantes: %d";
+"pathmemory.failed" = "Has fallado";
+"pathmemory.failedMessage" = "No te quedan intentos. Inténtalo de nuevo.";
+"pathmemory.close" = "Cerrar";
+"memory.game.comingsoon" = "Próximamente";
+"numberflash.instructions" = "Recuerda los números en orden.";
+"numberflash.input.instructions" = "Introduce los números que viste, separados por espacios.";
+"numberflash.input.placeholder" = "p. ej. 3 7 2 9";
+"numberflash.submit" = "Enviar";
+"numberflash.correct" = "Correcto";
+"numberflash.restart" = "Reiniciar";
+"numberflash.show" = "Mostrar números";
+"highScores.bestOverall" = "Mejor puntuación general";
+"highScores.clearAll" = "Borrar todas las puntuaciones";
+"highScores.tip1" = "• Completa juegos para ganar puntos";
+"highScores.tip2" = "• Cuanto más rápido termines, mayor puntuación";
+"highScores.tip3" = "• Menos movimientos = más puntos";
+"highScores.tip4" = "• Prueba distintos niveles de dificultad";
+"highScores.difficulty.custom" = "Personalizado";
+"todo.title" = "Tareas";
+"empty.title" = "Aún no hay tareas";
+"empty.subtitle" = "Pulsa + para añadir una nueva tarea";
+
+"add.title" = "Nueva tarea";
+"add.cancel" = "Cancelar";
+"add.save" = "Guardar";
+"add.ok" = "OK";
+"add.title.placeholder" = "Título (obligatorio)";
+"add.subtitle.placeholder" = "Subtítulo (opcional)";
+"add.priority" = "Prioridad";
+"add.reminder" = "Añadir recordatorio";
+"add.reminder.date" = "Fecha de la tarea";
+"add.section.details" = "  Detalles";
+"add.section.reminder" = "Recordatorio";
+"add.datetime" = "Fecha y hora";
+"add.validation.title" = "Se requiere un título";
+"add.validation.message" = "Introduce un título para la tarea.";
+"add.habit.swipe" = "Añadir tarea";
+
+"edit.title" = "Editar tarea";
+"edit.save" = "Actualizar";
+"edit.ok" = "OK";
+"edit.title.placeholder" = "Título (obligatorio)";
+"edit.subtitle.placeholder" = "Subtítulo (opcional)";
+"edit.priority" = "Prioridad";
+"edit.reminder" = "Editar recordatorio";
+"edit.section.details" = "Detalles de la tarea";
+"edit.datetime" = "Fecha y hora";
+"edit.datetime" = "Fecha y hora";
+"edit.validation.title" = "Se requiere un título";
+"edit.validation.message" = "Introduce un título para la tarea.";
+
+"priority.low" = "Baja";
+"priority.medium" = "Media";
+"priority.high" = "Alta";
+"filter.time.all" = "Todas las tareas";
+"filter.time.today" = "Hoy";
+"filter.time.thisWeek" = "Programadas";
+"filter.time.overdue" = "Atrasadas";
+"filter.status.all" = "Todas";
+"filter.status.completed" = "Completadas";
+"filter.status.incomplete" = "Incompletas";
+"empty.noTasks" = "Aún no has agregado tareas";
+"empty.addTaskPrompt" = "Toca el botón + para comenzar";
+"app.title" = "MindMate Hub";
+"menu.todos" = "Lista de tareas";
+"menu.habits" = "Hábitos";
+"menu.health" = "Salud";
+"menu.meditation" = "Meditación";
+"menu.memoryGame" = "Juego";
+"menu.settings" = "Ajustes";
+"menu.comingSoon" = "Próximamente";
+
+//Habits
+"addHabit.title" = "Nuevo hábito";
+"addHabit.nameLabel" = "Título";
+"addHabit.namePlaceholder" = "Nombre del hábito";
+"addHabit.frequencyLabel" = "Frecuencia";
+"addHabit.daily" = "Diario";
+"addHabit.weekly" = "Semanal";
+"addHabit.montly" = "Mensual";
+"addHabit.targetLabel" = "Objetivo";
+"addHabit.times" = "veces";
+"addHabit.reminderLabel" = "Recordatorio";
+"addHabit.saveButton" = "Guardar";
+"habits.title" = "Hábitos";
+"habit.completed" = "Completado ✅";
+"habit.increment" = "Incrementar";
+"habit.delete" = "Eliminar";
+"habit.edit" = "Editar";
+"habits.title" = "Hábitos";
+"habits.empty.title" = "Aún no hay hábitos";
+"habits.empty.subtitle" = "Pulsa + para añadir un hábito";
+"history.title" = "Historial";
+"history.empty" = "No hay historial disponible";
+
+"history.add.title" = "Añadir entrada al historial";
+"history.add.date" = "Fecha";
+"history.add.habit" = "Hábito";
+"history.add.select.habit" = "Selecciona un hábito";
+"history.add.status" = "Estado";
+"history.add.completed" = "Completado";
+"history.add.not.completed" = "No completado";
+"history.add.save" = "Guardar";
+
+"todo.title" = "Tareas";
+"habit.status.done" = "Completado";
+"habit.status.active" = "Hacer";
+"habit.frequency.daily" = "Diario";
+"habit.frequency.weekly" = "Semanal";
+"habit.frequency.monthly" = "Mensual";
+"habit.add.title" = "Añadir hábito";
+"habit.add.subtitle" = "Crea constancia";
+"habit.field.title" = "Título";
+"habit.title.placeholder" = "p. ej. Beber agua";
+"habit.field.frequency" = "Frecuencia";
+"habit.field.target" = "Objetivo";
+"habit.target.count" = "Veces";
+"habit.field.reminder" = "Recordatorio";
+"habit.field.color" = "Color";
+"habit.cancel" = "Cancelar";
+"habit.save" = "Guardar";
+"action.delete" = "Eliminar";
+
+//Edit Habit
+"editHabit.title" = "Editar hábito";
+"editHabit.nameLabel" = "Título";
+"editHabit.namePlaceholder" = "Nombre del hábito";
+"editHabit.frequencyLabel" = "Frecuencia";
+"editHabit.targetLabel" = "Objetivo";
+"editHabit.times" = "veces";
+"editHabit.reminderLabel" = "Recordatorio";
+"editHabit.updateButton" = "Actualizar";
+
+//Confirmation Dialog
+"confirm.yes" = "Sí";
+"confirm.cancel" = "Cancelar";
+"confirm.delete" = "Eliminar";
+"confirm.delete.habit.title" = "Eliminar hábito";
+"confirm.delete.habit.message" = "¿Seguro que quieres eliminar este hábito? Esta acción no se puede deshacer.";
+"confirm.delete.todo.title" = "Eliminar tarea";
+"confirm.delete.todo.message" = "¿Seguro que quieres eliminar esta tarea? Esta acción no se puede deshacer.";
+
+//Habit Suggestions
+"habit.suggestions.title" = "Hábitos populares";
+"habit.suggestions.subtitle" = "Elige una sugerencia para empezar";
+"habit.suggestions.button" = "Sugerencias";
+"habit.suggestions.navigation.title" = "Sugerencias de hábitos";
+"habit.category.health" = "Salud";
+"habit.category.personal" = "Desarrollo personal";
+"habit.category.productivity" = "Productividad";
+"habit.category.social" = "Social";
+
+//Habit Templates
+"habit.template.drink.water" = "Beber agua";
+"habit.template.brush.teeth" = "Cepillarse los dientes";
+"habit.template.exercise" = "Hacer ejercicio";
+"habit.template.sleep.early" = "Dormir temprano";
+"habit.template.vitamins" = "Tomar vitaminas";
+"habit.template.read.book" = "Leer un libro (min)";
+"habit.template.meditation" = "Meditación";
+"habit.template.journal" = "Escribir un diario";
+"habit.template.learn.language" = "Aprender un idioma (min)";
+"habit.template.no.social.media" = "Sin redes sociales";
+"habit.template.plan.day" = "Planificar el día";
+"habit.template.clean.room" = "Limpiar la habitación";
+"habit.template.call.family" = "Llamar a la familia";
+"habit.template.meet.friends" = "Quedar con amigos";
+
+//History Section
+"history.title" = "Historial";
+"history.empty" = "Aún no hay entradas en el historial";
+"history.add.title" = "Añadir entrada al historial";
+"history.add.date" = "Fecha";
+"history.add.habit" = "Hábito";
+"history.add.select.habit" = "Seleccionar hábito";
+"history.add.status" = "Estado";
+"history.add.completed" = "Completado";
+"history.add.not.completed" = "No completado";
+"history.add.save" = "Guardar entrada";
+
+//Habit Frequency
+"habit.frequency.daily" = "Diario";
+"habit.frequency.weekly" = "Semanal";
+"habit.frequency.monthly" = "Mensual";
+
+//Add Habit Section
+"addHabit.title" = "Nuevo hábito";
+"addHabit.nameLabel" = "Nombre del hábito";
+"addHabit.namePlaceholder" = "Introduce el nombre del hábito";
+"addHabit.frequencyLabel" = "Frecuencia";
+"addHabit.targetLabel" = "Objetivo diario";
+"addHabit.times" = "veces";
+"addHabit.reminderLabel" = "Recordatorios";
+"addHabit.saveButton" = "Crear hábito";
+
+//Edit Habit Section
+"editHabit.title" = "Editar hábito";
+"editHabit.nameLabel" = "Nombre del hábito";
+"editHabit.namePlaceholder" = "Introduce el nombre del hábito";
+"editHabit.frequencyLabel" = "Frecuencia";
+"editHabit.targetLabel" = "Objetivo diario";
+"editHabit.times" = "veces";
+"editHabit.reminderLabel" = "Recordatorios";
+"editHabit.updateButton" = "Actualizar hábito";
+
+//Todo Suggestions
+"todo.suggestions.title" = "Ideas de tareas";
+"todo.suggestions.subtitle" = "Elige una plantilla para empezar";
+"todo.suggestions.button" = "Ideas";
+"todo.suggestions.navigation.title" = "Plantillas de tareas";
+"todo.category.daily" = "Tareas diarias";
+"todo.category.work" = "Trabajo";
+"todo.category.personal" = "Personal";
+"todo.category.entertainment" = "Entretenimiento y aficiones";
+"todo.reminder" = "Recordatorio";
+
+//Todo Templates
+"todo.template.buy.groceries" = "Comprar comestibles";
+"todo.template.buy.groceries.subtitle" = "Compra semanal";
+"todo.template.pay.bills" = "Pagar facturas";
+"todo.template.pay.bills.subtitle" = "Pagos mensuales";
+"todo.template.clean.house" = "Limpiar la casa";
+"todo.template.clean.house.subtitle" = "Limpieza semanal";
+"todo.template.walk.dog" = "Pasear al perro";
+"todo.template.walk.dog.subtitle" = "Ejercicio diario";
+"todo.template.meeting.prep" = "Preparar reunión";
+"todo.template.meeting.prep.subtitle" = "Revisar la agenda";
+"todo.template.email.check" = "Revisar correos";
+"todo.template.email.check.subtitle" = "Revisión diaria de la bandeja de entrada";
+"todo.template.project.review" = "Revisar proyecto";
+"todo.template.project.review.subtitle" = "Revisión del progreso";
+"todo.template.call.client" = "Llamar al cliente";
+"todo.template.call.client.subtitle" = "Hacer seguimiento";
+"todo.template.doctor.appointment" = "Cita médica";
+"todo.template.doctor.appointment.subtitle" = "Chequeo anual";
+"todo.template.book.vacation" = "Reservar vacaciones";
+"todo.template.book.vacation.subtitle" = "Planificar vacaciones";
+"todo.template.birthday.gift" = "Comprar regalo de cumpleaños";
+"todo.template.birthday.gift.subtitle" = "Para un familiar/amigo";
+"todo.template.car.maintenance" = "Mantenimiento del coche";
+"todo.template.car.maintenance.subtitle" = "Cita de servicio";
+"todo.template.movie.night" = "Noche de cine";
+"todo.template.movie.night.subtitle" = "Planificar entretenimiento";
+"todo.template.gym.session" = "Sesión de gimnasio";
+"todo.template.gym.session.subtitle" = "Rutina de entrenamiento";
+"todo.template.read.book" = "Leer un libro";
+"todo.template.read.book.subtitle" = "Seguir leyendo";
+
+//Health Section
+"health.water.title" = "Consumo de agua";
+"health.water.remaining" = "restante";
+"health.water.goal.reached" = "Objetivo alcanzado";
+"health.water.add.glass" = "Añadir agua";
+"health.daily.goal" = "Objetivo diario";
+"health.quick.actions" = "Acciones rápidas";
+"health.action.coffee" = "Café";
+"health.action.walk" = "Caminar";
+"health.action.sleep" = "Dormir";
+"health.weekly.progress" = "Progreso semanal";
+"health.tips.title" = "Consejos de salud";
+"health.tip.water" = "Bebe agua nada más levantarte";
+"health.tip.morning" = "Toma luz solar en los primeros 30 minutos tras despertarte";
+"health.tip.breathing" = "Haz 3 respiraciones profundas cada hora";
+
+//Days of Week
+"health.day.mon" = "Lun";
+"health.day.tue" = "Mar";
+"health.day.wed" = "Mié";
+"health.day.thu" = "Jue";
+"health.day.fri" = "Vie";
+"health.day.sat" = "Sáb";
+"health.day.sun" = "Dom";
+
+//Motivational Messages
+"health.water.start.title" = "Empecemos";
+"health.water.start.message" = "Comienza tu camino de hidratación";
+"health.water.beginning.title" = "Buen comienzo";
+"health.water.beginning.message" = "Vas por buen camino";
+"health.water.quarter.title" = "Sigue así";
+"health.water.quarter.message" = "Estás avanzando muy bien";
+"health.water.half.title" = "Ya vas por la mitad";
+"health.water.half.message" = "Lo estás haciendo genial";
+"health.water.almost.title" = "Casi terminas";
+"health.water.almost.message" = "Solo un poco más de agua";
+"health.water.completed.title" = "Objetivo conseguido";
+"health.water.completed.message" = "Excelente hidratación hoy";
+"health.water.exceeded.title" = "Superestrella";
+"health.water.exceeded.message" = "Has superado tu objetivo";
+
+//Quick Actions Status
+"health.completed" = "Hecho";
+"health.logged" = "Registrado";
+"health.steps" = "pasos";
+
+//Meditation Section
+"meditation.today" = "Hoy";
+"meditation.streak" = "Racha";
+"meditation.total" = "Total";
+"meditation.minutes" = "min";
+"meditation.days" = "días";
+"meditation.timer" = "Temporizador de meditación";
+"meditation.meditating" = "Meditando...";
+"meditation.ready" = "Listo para empezar";
+"meditation.start" = "Iniciar";
+"meditation.pause" = "Pausar";
+"meditation.stop" = "Detener";
+"meditation.breathing" = "Ejercicios de respiración";
+"meditation.cycle" = "Ciclo:";
+"meditation.ambient.sounds" = "Sonidos ambientales";
+"meditation.coming.soon" = "Próximamente";
+"meditation.progress" = "Progreso semanal";
+
+//Breathing Techniques
+"meditation.breathing.478" = "Técnica 4-7-8";
+"meditation.breathing.478.desc" = "Inhala 4 s, mantén 7 s, exhala 8 s";
+"meditation.breathing.box" = "Respiración cuadrada";
+"meditation.breathing.box.desc" = "Inhala 4 s, mantén 4 s, exhala 4 s, mantén 4 s";
+"meditation.breathing.belly" = "Respiración abdominal";
+"meditation.breathing.belly.desc" = "Respiración diafragmática profunda";
+
+//Breathing Instructions
+"meditation.breathe.in" = "Inhala";
+"meditation.breathe.hold" = "Mantén";
+"meditation.breathe.out" = "Exhala";
+
+//Ambient Sounds
+"meditation.sound.none" = "Silencio";
+"meditation.sound.rain" = "Lluvia";
+"meditation.sound.ocean" = "Océano";
+"meditation.sound.forest" = "Bosque";
+"meditation.sound.whitenoise" = "Ruido blanco";
+"meditation.sound.birds" = "Pájaros";
+"meditation.sound.ambient" = "Pad ambiental";
+"meditation.volume" = "Volumen";
+"meditation.now.playing" = "Sonando ahora";
+
+//Days of Week for Meditation
+"meditation.day.mon" = "Lun";
+"meditation.day.tue" = "Mar";
+"meditation.day.wed" = "Mié";
+"meditation.day.thu" = "Jue";
+"meditation.day.fri" = "Vie";
+"meditation.day.sat" = "Sáb";
+"meditation.day.sun" = "Dom";
+
+//Daily Progress
+"meditation.daily.progress" = "Progreso diario";
+"meditation.goal" = "Objetivo";
+"meditation.progress.today" = "Progreso de hoy";
+"meditation.sessions.today" = "Sesiones de hoy";
+"meditation.sessions" = "sesiones";
+"meditation.no.sessions" = "Aún no hay sesiones hoy";
+"meditation.goal.completed" = "Objetivo diario completado 🎉";
+"meditation.minutes.remaining" = "minutos restantes para el objetivo";
+
+//Add Habits Section (in ToDo)
+"add.habits.title" = "Añadir hábitos";
+"add.habits.placeholder" = "Introduce el nombre del hábito...";
+"add.habits.info" = "Los hábitos se crearán como diarios con objetivo de 1";
+"add.habit.swipe" = "Añadir hábito";
+
+//Goal Setting
+"meditation.goal.alert.title" = "Establecer objetivo diario";
+"meditation.goal.alert.message" = "Introduce tu objetivo diario de meditación en minutos";
+"meditation.goal.alert.placeholder" = "Minutos";
+
+//Manual Session Entry
+"meditation.add.session.title" = "Añadir sesión de meditación";
+"meditation.add.session.message" = "Introduce la duración de tu sesión de meditación en minutos";
+"meditation.add.session.placeholder" = "Duración en minutos";
+
+//Health - Body Metrics
+"health.body.metrics" = "Medidas corporales";
+"health.height" = "Altura";
+"health.weight" = "Peso";
+"health.bmi" = "IMC";
+"health.edit" = "Editar";
+"health.water.goal" = "Ajustes del objetivo de agua";
+"health.use.calculated" = "Usar objetivo calculado";
+"health.calculated.goal" = "Objetivo calculado";
+"health.manual.goal" = "Objetivo manual";
+"health.bmi.underweight" = "Bajo peso";
+"health.bmi.normal" = "Normal";
+"health.bmi.overweight" = "Sobrepeso";
+"health.bmi.obese" = "Obesidad";
+
+//Health - Medications
+"health.medications" = "Medicamentos";
+"health.no.medications" = "Aún no se han añadido medicamentos";
+"health.next.dose" = "Próxima dosis";
+"medication.frequency.once" = "1 vez al día";
+"medication.frequency.twice" = "2 veces al día";
+"medication.frequency.thrice" = "3 veces al día";
+"medication.frequency.asNeeded" = "Según necesidad";
+"medication.frequency.twiceWeekly" = "Dos veces por semana (Lun, Jue)";
+"medication.frequency.thriceWeekly" = "Tres veces por semana (Lun, Mié, Vie)";
+"medication.notTakenToday" = "Este medicamento no se tomará hoy.";
+
+//Habit Notifications
+"habit.notification.reminder.title" = "Recordatorio de hábito";
+"habit.notification.reminder.body" = "Es hora de completar tu hábito %@.";
+"habit.notification.celebration.title" = "🎉 Logro de racha";
+"habit.notification.celebration.body" = "Increíble. Has alcanzado una racha de %d días para %@. %@";
+"habit.notification.completed.title" = "✅ Hábito completado";
+"habit.notification.completed.body" = "Buen trabajo. Has completado '%@' hoy.";
+
+"meditation.timer.completed.title" = "🧘 Meditación completada";
+"meditation.timer.completed.body" = "Bien hecho. Has completado tu sesión de meditación de %d minutos.";
+
+//Medication Notifications
+"medication.notification.title" = "Recordatorio de medicación";
+"medication.notification.body" = "Es hora de tomar tu %@ (%@)";
+
+//Overdose Warnings
+"health.overdose.warning.title" = "Dosis diaria completada";
+"health.overdose.warning.message" = "Ya has tomado la dosis diaria recomendada de %@. Tomar dosis extra puede ser perjudicial.";
+"health.take.anyway" = "Tomar de todos modos";
+
+//Body Metrics Editing
+"health.edit.body.metrics" = "Editar medidas corporales";
+"health.edit.body.description" = "Actualiza tu altura y peso para calcular automáticamente tu IMC y tu objetivo diario de agua";
+"health.preview" = "Vista previa";
+"common.cancel" = "Cancelar";
+"common.save" = "Guardar";
+
+//Manual Water Goal
+"health.change" = "Cambiar";
+"health.set.manual.goal" = "Establecer objetivo manual";
+"health.goal.placeholder" = "Objetivo en ml";
+"health.manual.goal.description" = "Introduce tu objetivo diario de agua en mililitros";
+
+//Add Medication
+"health.add.medication.title" = "Añadir medicamento";
+"health.add.medication.subtitle" = "Sigue tu horario de medicación";
+"health.medication.name" = "Nombre del medicamento";
+"health.medication.name.placeholder" = "p. ej. Aspirina";
+"health.medication.dosage" = "Dosis";
+"health.medication.dosage.placeholder" = "p. ej. 500 mg";
+"health.medication.frequency" = "Frecuencia";
+"health.medication.reminder" = "Recordatorio";
+"health.medication.reminder.time" = "Hora del recordatorio";
+
+//Delete Confirmation
+"health.delete.confirmation.title" = "Eliminar medicamento";
+"health.delete.confirmation.message" = "¿Seguro que quieres eliminar %@? Se cancelarán todos los recordatorios programados.";
+"common.delete" = "Eliminar";
+
+//Memory Game
+"memory.game.title" = "Juego de memoria";
+"memory.game.numberflash" = "Destello numérico";
+"memory.game.soundmemory" = "Memoria de sonidos";
+"memory.game.pathmemory" = "Memoria de caminos";
+"memory.game.back" = "Volver a los juegos";
+"memoryGame.title" = "Juego de memoria";
+"memoryGame.singlePlayer" = "Un jugador";
+"memoryGame.time" = "Tiempo";
+"memoryGame.moves" = "Movimientos";
+"memoryGame.matches" = "Parejas";
+"memoryGame.newGame" = "Nuevo juego";
+"memoryGame.settings" = "Ajustes";
+"memoryGame.scores" = "🏆 Puntuaciones";
+"memoryGame.gameComplete" = "🎉 Juego completado";
+"memoryGame.viewScores" = "Ver puntuaciones";
+"memoryGame.congratulations" = "Enhorabuena. Has completado el juego en";
+"memoryGame.movesCount" = "movimientos y";
+"memoryGame.score" = "Tu puntuación:";
+"memoryGame.points" = "puntos";
+"memoryGame.easy" = "3x3 (Fácil)";
+"memoryGame.medium" = "4x4 (Medio)";
+"memoryGame.hard" = "5x5 (Difícil)";
+"memoryGame.expert" = "6x6 (Experto)";
+"memoryGame.gameSettings" = "Ajustes del juego";
+"memoryGame.gridSize" = "Tamaño de la cuadrícula";
+"memoryGame.cards" = "%d cartas";
+"memory.game.welcome" = "Bienvenido al juego de memoria";
+"memory.game.description" = "Empareja cartas para ganar. Da la vuelta a dos cartas cada vez e intenta recordar sus posiciones.";
+"memory.game.start" = "Iniciar juego";
+"memory.game.pause" = "Pausar";
+"memory.game.resume" = "Reanudar";
+"memory.game.reset" = "Restablecer";
+"memory.game.new" = "Nuevo juego";
+"memory.game.settings" = "Ajustes";
+"memory.game.complete.title" = "Juego completado";
+"memory.game.complete.message" = "Enhorabuena. Has completado el juego en %@ y %@ movimientos.\n\nTu puntuación: %@ puntos";
+"memory.game.winner" = "%@ gana";
+"memory.game.tie" = "Empate";
+
+//Memory Game Stats
+"memory.stats.time" = "Tiempo";
+"memory.stats.moves" = "Movimientos";
+"memory.stats.accuracy" = "Precisión";
+"memory.stats.matches" = "Parejas";
+"memory.game.scores" = "Puntuaciones";
+"memory.game.highscores" = "Mejores puntuaciones";
+"memory.cards" = "cartas";
+
+//Memory Game Players
+"memory.player.one" = "Jugador 1";
+"memory.player.two" = "Jugador 2";
+
+//Memory Game Grid Sizes
+"memory.grid.small" = "3x2 (Fácil)";
+"memory.grid.medium" = "3x4 (Medio)";
+"memory.grid.large" = "4x4 (Difícil)";
+"memory.grid.extraLarge" = "4x5 (Experto)";
+"memory.grid.huge" = "5x6 (Maestro)";
+
+//Memory Game Difficulties
+"memory.difficulty.easy" = "Fácil";
+"memory.difficulty.medium" = "Medio";
+"memory.difficulty.hard" = "Difícil";
+"memory.difficulty.expert" = "Experto";
+"memory.difficulty.master" = "Maestro";
+
+//Memory Game Modes
+"memory.mode.single" = "Un jugador";
+"memory.mode.two" = "Dos jugadores";
+"memory.mode.single.desc" = "Juega contra el tiempo e intenta conseguir la mejor puntuación";
+"memory.mode.two.desc" = "Turnaos con un amigo para ver quién consigue más parejas";
+
+//Memory Game Settings
+"memory.settings.title" = "Ajustes del juego";
+"memory.settings.description" = "Personaliza tu experiencia en el juego de memoria";
+"memory.settings.gamemode" = "Modo de juego";
+"memory.settings.gridsize" = "Tamaño de la cuadrícula";
+"memory.settings.current.game" = "Partida actual";
+"memory.settings.active.warning" = "Cambiar los ajustes iniciará una nueva partida";
+"memory.settings.best.score" = "Mejor puntuación";
+"memory.settings.points" = "puntos";
+"memory.settings.no.score" = "Aún no hay mejor puntuación";
+"memory.settings.confirm.title" = "¿Iniciar una nueva partida?";
+"memory.settings.confirm.message" = "Tienes una partida activa. Si empiezas una nueva, perderás tu progreso actual.";
+"memory.settings.new.game" = "Iniciar nueva partida";
+
+
+//High Scores
+"highScores.title" = "Mejores puntuaciones";
+"highScores.subtitle" = "Tus mejores resultados";
+"highScores.empty.title" = "Aún no hay puntuaciones";
+"highScores.empty.message" = "Juega algunas partidas para ver aquí tus mejores puntuaciones.";
+"highScores.difficulty.easy" = "Fácil";
+"highScores.difficulty.medium" = "Medio";
+"highScores.difficulty.hard" = "Difícil";
+"highScores.difficulty.expert" = "Experto";
+"highScores.score" = "Puntuación";
+"highScores.moves" = "movimientos";
+"highScores.done" = "Listo";
+
+//Streaks
+"streak.start" = "Comienza tu racha";
+"streak.single" = "Racha de 1 día";
+"streak.days" = "Racha de %d días %@";
+"streak.longest" = "Máxima: %d";
+"streak.celebration.title" = "🎉 Logro de racha";
+"streak.celebration.message" = "Has completado una racha de %d días para %@. %@";
+"streak.celebration.button" = "Genial";
+
+//Settings
+"settings.title" = "Ajustes";
+"settings.welcome.title" = "Personaliza tu experiencia";
+"settings.welcome.subtitle" = "Adapta MindMate Hub a tu estilo de vida";
+"settings.general.title" = "General";
+"settings.general.darkmode" = "Modo oscuro";
+"settings.general.language" = "Idioma";
+"settings.general.notifications" = "Notificaciones";
+"settings.general.haptic_feedback" = "Respuesta háptica";
+"settings.habits.title" = "Hábitos";
+"settings.habits.reminder.time" = "Hora predeterminada del recordatorio";
+"settings.habits.show_streak_info" = "Mostrar información de racha";
+"settings.health.title" = "Salud";
+"settings.health.water.goal" = "Objetivo diario de agua";
+"settings.memory.title" = "Juego de memoria";
+"settings.memory.grid.size" = "Tamaño predeterminado de la cuadrícula";
+"settings.privacy.title" = "Privacidad y datos";
+"settings.privacy.data.export" = "Exportar mis datos";
+"settings.privacy.data.delete" = "Eliminar todos los datos";
+"settings.export.format.title" = "Selección del formato de exportación";
+"settings.export.format.message" = "Elige el formato de exportación. El informe de texto ofrece un resumen legible, mientras que JSON contiene los datos en bruto para copia de seguridad y restauración.\n\n⚠️ Los archivos se guardarán en tu dispositivo y podrán compartirse mediante la hoja del sistema.";
+"settings.export.format.pdf" = "Informe de texto";
+"settings.export.format.json" = "Formato JSON";
+
+// Export Options
+"choose_export_method" = "Elegir método de exportación";
+"save_to_files" = "Guardar en Archivos";
+"share" = "Compartir";
+"export_success_message" = "Tus datos se han guardado correctamente en la ubicación seleccionada.";
+"success" = "Éxito";
+"settings.about.title" = "Acerca de";
+"settings.about.app" = "Acerca de MindMate Hub";
+"settings.about.version" = "Versión";
+"settings.about.privacy" = "Política de privacidad";
+"settings.about.support" = "Ayuda y soporte";
+"settings.about.description" = "🌟 MindMate Hub es tu asistente personal para crear mejores hábitos, controlar tu salud y mantener el bienestar mental. ✨";
+"settings.about.features" = "Funciones";
+"settings.about.feature.habits" = "Seguimiento de hábitos con rachas";
+"settings.about.feature.health" = "Gestión de salud y medicación";
+"settings.about.feature.memory" = "Juegos de entrenamiento cerebral";
+"settings.about.feature.todos" = "Gestión inteligente de tareas";
+"settings.about.feature.meditation" = "Mindfulness y meditación";
+"settings.language.title" = "Seleccionar idioma";
+"settings.language.description" = "Elige tu idioma preferido";
+"settings.language.system.subtitle" = "Usar el idioma del dispositivo";
+"settings.notification.permission.title" = "Permiso de notificaciones";
+"settings.notification.permission.message" = "Activa las notificaciones en Ajustes para recibir recordatorios.";
+"settings.notification.permission.settings" = "Abrir Ajustes";
+"settings.privacy.delete.title" = "Eliminar todos los datos";
+"settings.privacy.delete.message" = "¿Seguro que quieres eliminar todos tus datos? Esta acción no se puede deshacer.";
+"settings.privacy.delete.confirm" = "Eliminar todo";
+"settings.support.email.failed.title" = "Correo no disponible";
+"settings.support.email.failed.message" = "No hay ninguna app de correo configurada en este dispositivo. Configura Mail o instala Gmail para contactar con soporte.";
+
+//Todo Notifications
+"todo.notification.body" = "No olvides completar esta tarea";
+
+//Reminder Types
+"reminder.none" = "Sin recordatorio";
+"reminder.daily" = "Diario";
+"reminder.specificDates" = "Fechas específicas";
+"reminder.type" = "Tipo de recordatorio";
+"reminder.daily.time" = "Hora del recordatorio diario:";
+"reminder.specificDates.select" = "Seleccionar fechas:";
+"reminder.dates.selected" = "fechas seleccionadas";
+"reminder.time" = "Hora del recordatorio:";
+"reminder.selectedDates" = "Fechas seleccionadas:";
+
+//Todo Filters
+"todo.filter.time" = "Filtro de tiempo";
+"todo.filter.status" = "Filtro de estado";
+"todo.filter.tasks" = "tareas";
+"todo.action.delete" = "Eliminar";
+
+//Common
+"common.back" = "Volver";
+"common.cancel" = "Cancelar";
+"common.save" = "Guardar";
+"common.done" = "Listo";
+"common.copy" = "Copiar";
+"common.ok" = "OK";
+
+"coming.soon" = "Próximamente";
+
+"tetro.title" = "Tetris";
+"tetro.score" = "Puntuación";
+"tetro.gameover" = "Fin de la partida";
+"memory.menu.title" = "Juegos de memoria";
+"memory.path.title" = "Memoria de caminos";
+"memory.path.desc" = "Sigue el camino";
+"memory.working.title" = "Memoria de trabajo";
+"memory.working.desc" = "Entrena tu memoria";
+"memory.nback.title" = "N-back";
+"memory.nback.desc" = "Desafío cognitivo";
+"memory.tetro.title" = "Tetris";
+"memory.tetro.desc" = "Juego clásico de Tetris";
+"pathmemory.level" = "Nivel";
+"pathmemory.step" = "Paso";
+"pathmemory.attempts" = "Intentos";
