@@ -401,6 +401,15 @@
 "meditation.add.session.message" = "Introduce la duración de tu sesión de meditación en minutos";
 "meditation.add.session.placeholder" = "Duración en minutos";
 
+//Pomodoro
+"pomodoro.title" = "Pomodoro";
+"pomodoro.work" = "Tiempo de enfoque";
+"pomodoro.short.break" = "Pausa corta";
+"pomodoro.long.break" = "Pausa larga";
+"pomodoro.round" = "Ronda";
+"pomodoro.skip" = "Saltar";
+"pomodoro.completed" = "rondas completadas";
+
 //Health - Body Metrics
 "health.body.metrics" = "Medidas corporales";
 "health.height" = "Altura";
@@ -622,6 +631,7 @@
 "settings.about.version" = "Versión";
 "settings.about.privacy" = "Política de privacidad";
 "settings.about.support" = "Ayuda y soporte";
+"settings.about.rate" = "Valorar esta app";
 "settings.about.description" = "🌟 MindMate Hub es tu asistente personal para crear mejores hábitos, controlar tu salud y mantener el bienestar mental. ✨";
 "settings.about.features" = "Funciones";
 "settings.about.feature.habits" = "Seguimiento de hábitos con rachas";
@@ -640,6 +650,23 @@
 "settings.privacy.delete.confirm" = "Eliminar todo";
 "settings.support.email.failed.title" = "Correo no disponible";
 "settings.support.email.failed.message" = "No hay ninguna app de correo configurada en este dispositivo. Configura Mail o instala Gmail para contactar con soporte.";
+"settings.rate.unavailable.title" = "Valoración no disponible";
+"settings.rate.unavailable.message" = "La página de valoración de App Store no está disponible ahora. Para abrirla directamente, añade APP_STORE_APP_ID en la configuración de la app.";
+
+"home.summary.title" = "Resumen diario";
+"home.summary.todos.completed" = "Tareas completadas";
+"home.summary.habits.completed" = "Hábitos completados";
+"home.summary.water" = "Agua";
+"home.summary.meditation" = "Meditación";
+
+"home.badges.title" = "Logros";
+"home.badges.empty" = "Completa algunas acciones hoy para desbloquear tu primera insignia.";
+
+"badge.todo3.title" = "Velocista de tareas";
+"badge.habit3.title" = "Guardián de hábitos";
+"badge.water.title" = "Meta de hidratación";
+"badge.streak7.title" = "Racha de 7 días";
+"badge.meditation10.title" = "10 min de enfoque";
 
 //Todo Notifications
 "todo.notification.body" = "No olvides completar esta tarea";

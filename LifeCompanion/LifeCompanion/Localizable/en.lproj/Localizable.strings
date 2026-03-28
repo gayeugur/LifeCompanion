@@ -622,6 +622,7 @@
 "settings.about.version" = "Version";
 "settings.about.privacy" = "Privacy Policy";
 "settings.about.support" = "Help & Support";
+"settings.about.rate" = "Rate This App";
 "settings.about.description" = "🌟 MindMate Hub is your personal assistant for building better habits, tracking health, and maintaining mental wellness. ✨";
 "settings.about.features" = "Features";
 "settings.about.feature.habits" = "Habit Tracking with Streaks";
@@ -640,6 +641,23 @@
 "settings.privacy.delete.confirm" = "Delete All";
 "settings.support.email.failed.title" = "Email Not Available";
 "settings.support.email.failed.message" = "No email app is configured on this device. Please set up Mail or install Gmail to contact support.";
+"settings.rate.unavailable.title" = "Rating Unavailable";
+"settings.rate.unavailable.message" = "App Store rating is currently unavailable. Add APP_STORE_APP_ID in your app settings to open your App Store review page directly.";
+
+"home.summary.title" = "Daily Mini Summary";
+"home.summary.todos.completed" = "Completed tasks";
+"home.summary.habits.completed" = "Completed habits";
+"home.summary.water" = "Water";
+"home.summary.meditation" = "Meditation";
+
+"home.badges.title" = "Achievements";
+"home.badges.empty" = "Complete a few actions today to unlock your first badge.";
+
+"badge.todo3.title" = "Task Sprinter";
+"badge.habit3.title" = "Habit Keeper";
+"badge.water.title" = "Hydration Goal";
+"badge.streak7.title" = "7-Day Streak";
+"badge.meditation10.title" = "10-Min Focus";
 
 //Todo Notifications
 "todo.notification.body" = "Don't forget to complete this task!";

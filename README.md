@@ -1,96 +1,114 @@
-A comprehensive iOS app for healthy, productive, and balanced living.
-
 # LifeCompanion
 
-LifeCompanion is a modern iOS app designed to help you manage your daily life in a healthier, more productive, and balanced way. It combines habit tracking, medication management, to-do lists, health metrics, meditation, and memory games in one place.
+LifeCompanion is an iOS app focused on healthy, productive, and balanced daily living. It brings together habits, medications, to-do planning, health tracking, meditation, and cognitive mini-games in a single app.
 
+## Overview
 
-## 🚀 Features
+LifeCompanion helps users manage everyday wellness with one unified experience:
 
-- To-Do List: Organize and complete your daily tasks easily
-- Habit Tracking: Build and track healthy habits
-- Medication Management: Plan your medications, get smart reminders, and track doses
-- Health Management: Record body metrics, water intake, and set goals
-- Meditation: Support your mental health with guided exercises
-- Memory Game: Fun mini-games to boost your memory
-- Comprehensive Notifications: Smart reminders for all important activities
+- Track and complete daily tasks.
+- Build healthy routines with habit tracking.
+- Plan medications and monitor adherence.
+- Record health-related metrics and progress.
+- Practice short meditation sessions.
+- Play memory games for mental stimulation.
+- Receive reminder notifications for key activities.
 
-## 🏗️ Technologies Used
+## Tech Stack
 
 - SwiftUI
 - SwiftData
 - UserNotifications
 - MVVM architecture
+- Swift Package Manager
 
-## 📸 Screenshots
-<img src="https://github.com/user-attachments/assets/2ed6467a-daed-467c-ba79-a6e285ed11da" width="300" />
-<img src="https://github.com/gayeugur/LifeCompanion/blob/develop/LifeCompanion/Simulator%20Screenshot%20-%20iPhone%2016%20Pro%20-%202025-11-20%20at%2019.55.02.png?raw=true" width="300" />
-<img src="https://github.com/gayeugur/LifeCompanion/blob/develop/LifeCompanion/Simulator%20Screenshot%20-%20iPhone%2016%20Pro%20-%202025-11-20%20at%2019.54.35.png?raw=true" width="300" />
-<img src="https://github.com/gayeugur/LifeCompanion/blob/develop/LifeCompanion/Simulator%20Screenshot%20-%20iPhone%2016%20Pro%20-%202025-11-20%20at%2019.54.45.png?raw=true" width="300" />
+## Minimum Requirements
 
-## 📂 Project Structure
+- Xcode 15 or later
+- iOS 17.0 or later
+- macOS with iOS Simulator support
 
-```
-LifeCompanion
-├── App/
-├── Controller/
-│   ├── ContentView.swift
-│   ├── Health/
-│   │   ├── HealthView.swift
-│   │   └── AddMedicationView.swift
-│   ├── ToDo/
-│   │   ├── TodoListView.swift
-│   │   └── TodoRowView.swift
-│   ├── Habits/
-│   ├── Meditation/
-│   ├── MemoryGame/
-│   └── Settings/
-├── Model/
-│   ├── Health/
-│   │   ├── MedicationEntry.swift
-│   │   └── WaterIntake.swift
-│   ├── Habits/
-│   ├── MemoryGame/
-│   ├── Meditation/
-│   └── MenuItem.swift
-├── ViewModel/
-├── Resources/
-├── Extension/
-├── Helper/
-├── LifeCompanionTests/
+## Project Structure
+
+Main project files live under `LifeCompanion/`:
+
+```text
+LifeCompanion/
+|- LifeCompanion/
+|  |- App/
+|  |- Controller/
+|  |- Extension/
+|  |- Helper/
+|  |- Localizable/
+|  |- Model/
+|  |- Resources/
+|  |- ViewModel/
+|  `- PrivacyPolicy.html
+|- LifeCompanion.xcodeproj/
+|- LifeCompanionTests/
+|- Package.swift
+`- run_tests.sh
 ```
 
+## Getting Started
 
-## ⚙️ Setup
+1. Clone the repository:
 
-Clone the project:
-
-```sh
-git clone https://github.com/yourusername/LifeCompanion.git
+```bash
+git clone https://github.com/gayeugur/LifeCompanion.git
+cd LifeCompanion
 ```
 
-Open with Xcode 15+:
+2. Open the Xcode project:
 
-```sh
-open LifeCompanion.xcodeproj
+```bash
+open LifeCompanion/LifeCompanion.xcodeproj
 ```
 
-Install dependencies via Swift Package Manager if needed.
+3. Select the `LifeCompanion` scheme and run on an iOS 17+ simulator or physical device.
 
-Run on iOS 17+ simulator or device.
+## Running Tests
 
-## 🧪 Testing
+From Xcode:
 
-Run tests with ⌘ + U or via the test navigator in Xcode.
+- Use `Cmd+U` to run the test suite.
 
+From terminal:
 
-## 🤝 Contributing
+```bash
+cd LifeCompanion
+./run_tests.sh
+```
 
-Pull requests are welcome.
-Open an issue for feature suggestions or bug reports.
+To run a specific test class or test method:
 
+```bash
+./run_tests.sh SimpleTests
+```
 
-## 📄 License
+Note: `run_tests.sh` uses `xcpretty`. If needed, install it with:
+
+```bash
+gem install xcpretty
+```
+
+## Screenshots
+
+<img src="LifeCompanion/Simulator%20Screenshot%20-%20iPhone%2017%20-%202026-03-28%20at%2022.20.48.png" width="300" alt="Home screen" />
+<img src="LifeCompanion/Simulator%20Screenshot%20-%20iPhone%2017%20-%202026-03-28%20at%2022.20.55.png" width="300" alt="Feature screen 1" />
+<img src="LifeCompanion/Simulator%20Screenshot%20-%20iPhone%2017%20-%202026-03-28%20at%2022.21.03.png" width="300" alt="Feature screen 2" />
+<img src="LifeCompanion/Simulator%20Screenshot%20-%20iPhone%2017%20-%202026-03-28%20at%2022.31.54.png" width="300" alt="Feature screen 3" />
+<img src="LifeCompanion/Simulator%20Screenshot%20-%20iPhone%2017%20-%202026-03-28%20at%2022.32.09.png" width="300" alt="Feature screen 4" />
+
+## Contributing
+
+Contributions are welcome.
+
+- Open an issue for bugs or feature ideas.
+- Create a branch for your change.
+- Submit a pull request with a clear description.
+
+## License
 
 This project is licensed under the MIT License.
 

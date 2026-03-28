@@ -3,44 +3,56 @@ import SwiftUI
 struct GameCardButton: View {
     let icon: String
     let color: Color
-    let titleKey: String
-    let descriptionKey: String
-    @EnvironmentObject private var languageManager: LanguageManager
+    let title: String
+    let description: String
+
     var body: some View {
-        VStack(spacing: 12) {
-            ZStack {
-                Circle()
-                    .fill(color.opacity(0.18))
-                    .frame(width: 56, height: 56)
-                    .shadow(color: color.opacity(0.18), radius: 8, x: 0, y: 4)
-                Image(systemName: icon)
-                    .resizable()
-                    .scaledToFit()
-                    .frame(height: 32)
-                    .foregroundColor(color)
+        VStack(alignment: .leading, spacing: 14) {
+            HStack(spacing: 10) {
+                ZStack {
+                    Circle()
+                        .fill(color.opacity(0.2))
+                        .frame(width: 54, height: 54)
+                    Image(systemName: icon)
+                        .font(.system(size: 24, weight: .semibold))
+                        .foregroundColor(color)
+                }
+
+                Spacer()
+
+                Image(systemName: "chevron.right")
+                    .font(.caption.weight(.bold))
+                    .foregroundColor(.secondary)
             }
-            Text(languageManager.getLocalizedString(for: titleKey))
-                .font(.headline)
-                .fontWeight(.semibold)
+
+            Text(title)
+                .font(.title3.weight(.bold))
                 .foregroundColor(.primary)
-            Text(languageManager.getLocalizedString(for: descriptionKey))
-                .font(.caption)
+
+            Text(description)
+                .font(.subheadline)
                 .foregroundColor(.secondary)
-                .multilineTextAlignment(.center)
+                .lineLimit(2)
+                .multilineTextAlignment(.leading)
+
+            Spacer(minLength: 0)
         }
-        .frame(width: 150, height: 150)
-        .padding()
+        .padding(16)
+        .frame(maxWidth: .infinity, minHeight: 168, alignment: .topLeading)
         .background(
             RoundedRectangle(cornerRadius: 22)
-                .fill(Color(.systemBackground).opacity(0.98))
-                .shadow(color: color.opacity(0.18), radius: 8, x: 0, y: 6)
+                .fill(
+                    LinearGradient(
+                        colors: [Color(.systemBackground), color.opacity(0.08)],
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    )
+                )
         )
         .overlay(
             RoundedRectangle(cornerRadius: 22)
-                .stroke(color.opacity(0.22), lineWidth: 2)
+                .stroke(color.opacity(0.26), lineWidth: 1.2)
         )
-        .scaleEffect(icon == "questionmark.circle" ? 0.95 : 1.0)
-        .opacity(icon == "questionmark.circle" ? 0.7 : 1.0)
-        .animation(.spring(), value: icon)
+        .shadow(color: color.opacity(0.16), radius: 12, x: 0, y: 8)
     }
 }

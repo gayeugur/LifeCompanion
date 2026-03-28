@@ -622,6 +622,7 @@
 "settings.about.version" = "Sürüm";
 "settings.about.privacy" = "Gizlilik Politikası";
 "settings.about.support" = "Yardım ve Destek";
+"settings.about.rate" = "Uygulamayı Değerlendir";
 "settings.about.description" = "🌟 MindMate Hub, daha iyi alışkanlıklar edinmek, sağlığı takip etmek ve zihinsel sağlığı korumak için kişisel asistanınızdır. ✨";
 "settings.about.features" = "Özellikler";
 "settings.about.feature.habits" = "Seri Takipli Alışkanlık Yönetimi";
@@ -640,6 +641,23 @@
 "settings.privacy.delete.confirm" = "Hepsini Sil";
 "settings.support.email.failed.title" = "E-posta Kullanılamıyor";
 "settings.support.email.failed.message" = "Bu cihazda e-posta uygulaması yapılandırılmamış. Desteğe ulaşmak için Mail uygulamasını ayarlayın veya Gmail yükleyin.";
+"settings.rate.unavailable.title" = "Değerlendirme Kullanılamıyor";
+"settings.rate.unavailable.message" = "App Store değerlendirme sayfası şu anda açılamıyor. Doğrudan yönlendirme için uygulama ayarlarına APP_STORE_APP_ID ekleyin.";
+
+"home.summary.title" = "Günlük Mini Özet";
+"home.summary.todos.completed" = "Tamamlanan görev";
+"home.summary.habits.completed" = "Tamamlanan alışkanlık";
+"home.summary.water" = "Su";
+"home.summary.meditation" = "Meditasyon";
+
+"home.badges.title" = "Başarı Rozetleri";
+"home.badges.empty" = "İlk rozetini açmak için bugün birkaç adım tamamla.";
+
+"badge.todo3.title" = "Görev Hızlısı";
+"badge.habit3.title" = "Alışkanlık Koruyucu";
+"badge.water.title" = "Su Hedefi";
+"badge.streak7.title" = "7 Gün Seri";
+"badge.meditation10.title" = "10 Dakika Odak";
 
 //Todo Notifications
 "todo.notification.body" = "Bu görevi tamamlamayı unutma!";

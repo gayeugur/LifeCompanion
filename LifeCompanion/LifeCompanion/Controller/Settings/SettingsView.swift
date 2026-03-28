@@ -9,6 +9,7 @@ import SwiftUI
 import SwiftData
 import UserNotifications
 import UniformTypeIdentifiers
+import StoreKit
 
 struct SettingsView: View {
     @State private var showingPrivacyPolicy = false
@@ -472,6 +473,19 @@ struct SettingsView: View {
                     }
                 }
                 .buttonStyle(PlainButtonStyle())
+
+                Divider()
+
+                Button(action: { openAppStoreReview() }) {
+                    HStack {
+                        Label("settings.about.rate".localized, systemImage: "star.bubble.fill")
+                        Spacer()
+                        Image(systemName: "chevron.right")
+                            .foregroundColor(.secondary)
+                            .font(.caption)
+                    }
+                }
+                .buttonStyle(PlainButtonStyle())
             }
         }
     }
@@ -874,6 +888,14 @@ struct SettingsView: View {
     private func cancelAllNotifications() {
         UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
         feedbackManager.successHaptic()
+    }
+
+    private func openAppStoreReview() {
+        feedbackManager.buttonTap()
+
+        if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
+            SKStoreReviewController.requestReview(in: windowScene)
+        }
     }
 }
 
